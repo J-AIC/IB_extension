@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | Chat Widget</title>
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        /* レイアウト構造 */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            flex-shrink: 0;
+            /* 追加 */
+        }
+
+        .main-content {
+            margin-left: 250px;
+            min-height: 100vh;
+            padding: 2rem;
+            background-color: #f8f9fa;
+            width: calc(100% - 250px);
+            /* 追加 */
+        }
+
+        .content-wrapper {
+            width: 70%;
+            margin: 0 auto;
+            max-width: 1000px;
+        }
+
+        /* ナビゲーション */
+        .nav-link {
+            color: #333;
+            padding: 0.5rem 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            background-color: #f8f9fa;
+        }
+
+        .nav-link.active {
+            background-color: #0d6efd;
+            color: white;
+        }
+
+        /* ステータスインジケーター */
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #ccc;
+        }
+
+        .status-dot.active {
+            background-color: #28a745;
+        }
+
+        /* ローディング */
+        .loading {
+            padding: 2rem;
+            text-align: center;
+            color: #6c757d;
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main-content {
+                margin-left: 200px;
+            }
+
+            .content-wrapper {
+                width: 90%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .content-wrapper {
+                width: 95%;
+            }
+        }
+
+        .icon-container {
+            margin-top: 30px;
+            text-align: center;
+            /* 中央揃え */
+            padding: 10px 0;
+            /* 上下に余白を追加 */
+        }
+
+        .icon-container img {
+            width: 80%;
+            /* 画像のサイズを80%に縮小 */
+            max-width: 200px;
+            /* 最大サイズを設定（適宜調整） */
+            height: auto;
+            /* 縦横比を維持 */
+            display: block;
+            /* 中央揃えを確実にする */
+            margin: 0 auto;
+            /* 左右中央揃え */
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+    <div class="d-flex">
+        <!-- サイドバー -->
+        <div class="sidebar bg-light border-end">
+            <div class="d-flex flex-column h-100">
+                <div class="icon-container">
+                    <img src="assets/IB_logo_name.png" alt="InsightBuddy Logo">
+                </div>
+                <div class="nav flex-column nav-pills mt-3">
+                    <a class="nav-link active" href="home.html">
+                        <i class="bi bi-house me-2"></i><span data-i18n="home"></span>
+                    </a>
+                    <a class="nav-link" href="guide_url.html">
+                        <i class="bi bi-search me-2"></i><span data-i18n="guideURL"></span>
+                    </a>
+                    <a class="nav-link" href="api_settings.html">
+                        <i class="bi bi-gear me-2"></i><span data-i18n="apiSettings"></span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- メインコンテンツ -->
+        <div class="main-content">
+            <div class="content-wrapper">
+                <div id="homeContent">
+                    <div class="loading"><span data-i18n="contentReload"></span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="lib/marked/marked.min.js"></script>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="common.js"></script>
+    <script src="home.js"></script>
+</body>
+
+</html>

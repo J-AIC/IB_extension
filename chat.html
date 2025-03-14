@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InsightBuddyチャット</title>
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <style>
+        /* ここでは質問文にあったスタイルをそのまま残しています */
+        #modelMismatchWarning {
+            position: fixed;
+            bottom: 40px;
+            z-index: 9999;
+        }
+
+        .form-reader-container {
+            padding: 8px 16px;
+            margin-bottom: 8px;
+        }
+
+        .form-reader-button {
+            width: 100%;
+            padding: 8px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .form-reader-button:hover {
+            background-color: #e9ecef;
+        }
+
+        /* フォーム内容表示用モーダル */
+        .form-content-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .form-content-modal.active {
+            display: block;
+        }
+
+        .form-content-modal .modal-content {
+            position: relative;
+            background: white;
+            margin: 15% auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 8px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .form-icon {
+            cursor: pointer;
+            color: #6c757d;
+            margin-left: 8px;
+            font-size: 0.9em;
+        }
+
+        .form-icon:hover {
+            color: #495057;
+        }
+
+        .history-item {
+            cursor: pointer;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+
+        .history-item:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .history-title {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .dropdown .btn-link {
+            color: #6c757d;
+            padding: 0;
+            border: none;
+        }
+
+        .dropdown .btn-link:hover {
+            color: #495057;
+        }
+
+        #historyList {
+            height: calc(100vh - 150px);
+            overflow-y: auto;
+        }
+
+        /* タブコンテンツのスタイル */
+        .tab-content {
+            height: 100%;
+            position: relative;
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.show.active {
+            display: block;
+            height: 100%;
+        }
+
+        /* 履歴リストのスタイル */
+        .history-list {
+            height: calc(100vh - 150px);
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .history-item {
+            cursor: pointer;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            background-color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .history-item:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .tab-pane {
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        /* チャットタブのスタイル */
+        #chatTab {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        /* 履歴タブのスタイル */
+        #historyTab {
+            display: block;
+            height: calc(100vh - 150px);
+            overflow-y: auto;
+        }
+
+        /* チャット入力エリアのスタイル */
+        .chat-input {
+            margin-top: auto;
+            padding: 1rem;
+            background: white;
+        }
+
+        /* HTML content viewer styles */
+        .view-html-btn {
+            color: #6c757d;
+            transition: color 0.2s;
+        }
+
+        .view-html-btn:hover {
+            color: #495057;
+        }
+
+        .view-html-btn i {
+            font-size: 0.9em;
+        }
+
+        #htmlContentModal .modal-body {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        #htmlContentModal pre {
+            margin: 0;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        #htmlContentModal code {
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        .message-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4px;
+        }
+
+        .site-info-btn {
+            background: none;
+            border: none;
+            padding: 4px;
+            color: #ffff;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .site-info-btn i {
+            font-size: 1rem;
+        }
+
+        .form-content-modal .modal-content {
+            max-width: 800px;
+            width: 75%;
+            max-height: 90vh;
+            margin: 20px auto;
+        }
+
+        .modal-header {
+            padding: 1rem;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 1rem;
+            max-height: calc(90vh - 130px);
+            overflow-y: auto;
+        }
+
+        .site-info-content {
+            height: 300px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .site-info-content pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .new-chat-btn {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            color: #007bff;
+            padding: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .new-chat-btn i {
+            font-size: 1.2rem;
+        }
+
+        .edit-message-btn {
+            background: none;
+            border: none;
+            padding: 4px;
+            color: #ffff;
+            cursor: pointer;
+            transition: color 0.2s;
+            margin-right: 8px;
+        }
+
+        .edit-message-btn i {
+            font-size: 1rem;
+        }
+
+        /* 編集モード時のスタイル */
+        .message.editing .message-text {
+            display: none;
+        }
+
+        .message.editing .edit-area {
+            display: block;
+        }
+
+        .edit-area {
+            display: none;
+            margin: 8px 0;
+        }
+
+        .edit-area textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            resize: vertical;
+        }
+
+        .edit-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="chatWidget" class="chat-widget open">
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="icon-container">
+                    <img src="assets/IB_logo_128.png" alt="InsightBuddy Logo">
+                </div>
+                <div>
+                    <div class="header-title" data-i18n="extensionName"></div>
+                    <div class="header-subtitle" id="apiStatus">
+                        <a href="api_settings.html" class="text-decoration-none" data-i18n="apiConfigRequired"></a>
+                    </div>
+                </div>
+                <button id="newChatButton" class="new-chat-btn" data-i18n-title="newChat">
+                    <i class="bi bi-plus-square"></i>
+                </button>
+            </div>
+
+            <div class="content-area">
+                <div class="tab-content">
+                    <!-- チャットタブ -->
+                    <div class="tab-pane fade d-none" id="chatTab" role="tabpanel" aria-labelledby="chat-tab">
+                        <div class="chat-messages" id="chatMessages"></div>
+                        <div class="feature-controls p-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="pageContextToggle">
+                                <label class="form-check-label" for="pageContextToggle"
+                                    data-i18n="getCurrentSite"></label>
+                            </div>
+                        </div>
+                        <div class="chat-input" id="chatInput">
+                            <div class="input-group">
+                                <textarea class="form-control message-input" data-i18n-placeholder="chatMessage"
+                                    id="messageInput" rows="1"></textarea>
+                                <button class="btn btn-primary" type="button" id="sendButton">
+                                    <i class="bi bi-send"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 履歴タブ -->
+                    <div class="tab-pane fade d-none" id="historyTab" role="tabpanel" aria-labelledby="history-tab">
+                        <div id="historyList" class="history-list">
+                            <!-- 履歴は history.js で動的に生成 -->
+                        </div>
+                    </div>
+
+                    <!-- フォームタブ (中身は非同期ロード予定) -->
+                    <div class="tab-pane fade d-none" id="formTab" role="tabpanel" aria-labelledby="form-tab">
+                        <!-- ここに popup.html の中身を挿入する -->
+                    </div>
+
+                    <!-- ▼ 追加: HTMLタブ本体 -->
+                    <div class="tab-pane fade d-none" id="htmlTab" role="tabpanel" aria-labelledby="html-tab">
+                        <!-- html_load.js が、Local APIから取得したHTMLなどを挿入する予定 -->
+                    </div>
+                </div>
+            </div>
+
+            <div id="modelMismatchWarning" class="alert alert-warning m-3" role="alert" style="display: none;">
+            </div>
+
+            <div class="bottom-tabs">
+                <ul class="nav nav-tabs" id="chatTabs" role="tablist">
+                    <!-- id="htmlTabItem" は display: none; で隠しておき、Local設定があれば後から表示 -->
+                    <li class="nav-item flex-fill" role="presentation" id="htmlTabItem" style="display: none;">
+                        <button class="nav-link text-center w-100" id="html-tab" data-bs-toggle="tab"
+                            data-bs-target="#htmlTab" type="button" role="tab" aria-controls="htmlTab"
+                            aria-selected="false">
+                            <i class="bi bi-card-heading"></i>
+                        </button>
+                    </li>
+                    <li class="nav-item flex-fill" role="presentation">
+                        <button class="nav-link active text-center w-100" id="chat-tab" data-bs-toggle="tab"
+                            data-bs-target="#chatTab" type="button" role="tab" aria-controls="chatTab"
+                            aria-selected="true">
+                            <i class="bi bi-chat"></i>
+                        </button>
+                    </li>
+                    <li class="nav-item flex-fill" role="presentation">
+                        <button class="nav-link text-center w-100" id="history-tab" data-bs-toggle="tab"
+                            data-bs-target="#historyTab" type="button" role="tab" aria-controls="historyTab"
+                            aria-selected="false">
+                            <i class="bi bi-clock-history"></i>
+                        </button>
+                    </li>
+                    <!-- ▼ 追加されたフォームタブ。Bootstrapのtabとして動くように data-bs-toggle="tab" に変更 -->
+                    <li class="nav-item flex-fill" role="presentation">
+                        <button class="nav-link text-center w-100" id="form-tab" data-bs-toggle="tab"
+                            data-bs-target="#formTab" type="button" role="tab" aria-controls="formTab"
+                            aria-selected="false">
+                            <i class="bi bi-clipboard2-data"></i>
+                        </button>
+                    </li>
+                    <li class="nav-item flex-fill" role="presentation">
+                        <a href="home.html" class="nav-link text-center w-100" id="home-tab" target="_blank">
+                            <i class="bi bi-house"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- フォーム内容表示用モーダル -->
+        <div id="formContentModal" class="form-content-modal">
+            <div class="modal-content">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="m-0" data-i18n="formContent"></h5>
+                    <button type="button" class="btn-close" id="closeModalButton" data-i18n-title="close"></button>
+                </div>
+                <div id="formContentBody" class="modal-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <!-- PDF.jsの読み込み -->
+    <script src="assets/js/Readability.js"></script>
+    <script src="assets/js/pdf.min.js"></script>
+    <script src="assets/js/pdf.worker.min.js"></script>
+    <script src="assets/js/crypto-js.js"></script>
+    <script src="common.js"></script>
+    <script src="assets/js/loader.js"></script>
+    <script src="chat_history.js"></script>
+    <script type="module" src="chat.js"></script>
+    <script src="form-reader.js"></script>
+    <script src="forms/form_load.js"></script>
+    <script src="html/html_load.js"></script>
+</body>
+
+</html>

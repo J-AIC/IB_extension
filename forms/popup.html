@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Form Control Extension</title>
+  <!-- ★ 例として hidden クラスを定義 -->
+  <style>
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="popup-container">
+    <!-- ===========================
+         プロンプト入力セクション 
+         =========================== -->
+    <section class="section">
+      <br>
+      <h2 class="section-title">設定</h2>
+      <div id="promptSection" class="card">
+        <div class="card-content">
+          <div class="space-y-4">
+
+            <!-- ▼ マニュアル・ルールPDF -->
+            <div class="form-group">
+              <label class="block text-sm font-medium text-gray-700">マニュアル・ルールPDF</label>
+
+              <!-- ▼ アップロードUI (ファイル未選択時に表示) -->
+              <div id="manualPdfUploadSection" class="mt-1 flex items-center">
+                <input
+                  type="file"
+                  id="manualPdf"
+                  accept=".pdf"
+                  class="form-input block w-full text-sm text-gray-500
+                         file:mr-4 file:py-2 file:px-4
+                         file:rounded-md file:border-0
+                         file:text-sm file:font-medium
+                         file:bg-blue-50 file:text-blue-700
+                         hover:file:bg-blue-100"
+                />
+              </div>
+
+              <!-- ▼ ファイル選択済みUI (ファイル選択後に表示) -->
+              <div id="manualPdfSelectedSection" class="mt-1 hidden">
+                <span id="manualPdfFileName" class="text-sm text-gray-700"></span>
+                <button id="manualPdfRemoveBtn" class="remove-button ml-2 text-red-500">×</button>
+              </div>
+            </div>
+
+            <!-- ▼ 手続き・処理PDF -->
+            <div class="form-group">
+              <label class="block text-sm font-medium text-gray-700">手続き・処理PDF</label>
+
+              <!-- ▼ アップロードUI (ファイル未選択時に表示) -->
+              <div id="processPdfUploadSection" class="mt-1 flex items-center">
+                <input
+                  type="file"
+                  id="processPdf"
+                  accept=".pdf, .jpg, .jpeg, .png"
+                  class="form-input block w-full text-sm text-gray-500
+                         file:mr-4 file:py-2 file:px-4
+                         file:rounded-md file:border-0
+                         file:text-sm file:font-medium
+                         file:bg-blue-50 file:text-blue-700
+                         hover:file:bg-blue-100"
+                />
+              </div>
+
+              <!-- ▼ ファイル選択済みUI (ファイル選択後に表示) -->
+              <div id="processPdfSelectedSection" class="mt-1 hidden">
+                <span id="processPdfFileName" class="text-sm text-gray-700"></span>
+                <button id="processPdfRemoveBtn" class="remove-button ml-2 text-red-500">×</button>
+              </div>
+            </div>
+
+            <!-- ▼ Web画面抽出ボタン -->
+            <div class="form-group">
+              <label class="block text-sm font-medium text-gray-700">Web画面抽出</label>
+              <div class="mt-1">
+                <button id="extractButton" class="btn btn-secondary w-full flex items-center justify-center gap-2">
+                  <i class="icon download"></i>
+                  Web画面から情報を抽出
+                </button>
+              </div>
+              <!-- ▼ 抽出結果表示（必要に応じて動的表示） -->
+              <div id="webPagesContainer" class="mt-4 space-y-2"></div>
+            </div>
+
+            <!-- ▼ プロンプト入力テキストエリア -->
+            <div class="form-group">
+              <label for="promptInput" class="block text-sm font-medium text-gray-700">プロンプト入力</label>
+              <div class="prompt-input-wrapper">
+                <textarea
+                  id="promptInput"
+                  class="form-textarea mt-1 block w-full rounded-md border-gray-300"
+                  placeholder="プロンプトを入力してください"
+                ></textarea>
+              </div>
+            </div>
+
+            <!-- ▼ GPT連携実行ボタン -->
+            <div class="flex justify-end">
+              <button id="gptButton" class="btn btn-primary flex items-center gap-2" disabled>
+                <i class="icon send"></i>
+                GPT連携実行
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===========================
+         ステータス表示 
+         =========================== -->
+    <div id="statusDisplay" class="mt-4 bg-gray-100 p-4 rounded-lg hidden">
+      <div class="flex items-center gap-2">
+        <i id="statusIcon" class="icon"></i>
+        <span id="statusText"></span>
+      </div>
+    </div>
+
+    <!-- ===========================
+         フォーム制御セクション 
+         =========================== -->
+    <!-- 
+      ★ ここを丸ごとラップして、デフォルトでは非表示に (class="hidden") 
+      フォームを検知したらJSから .hidden を外して表示する 
+    -->
+    <div id="formControlSection" class="hidden">
+      <section class="section">
+        <h2 class="section-title">フォーム制御</h2>
+
+        <!-- 動的に追加されるフォーム要素カード一覧 -->
+        <div id="formElementsContainer" class="space-y-4"></div>
+
+        <!-- 選択された値の表示と送信ボタン -->
+        <div id="selectedValuesSection" class="mt-6 space-y-4">
+          <div class="card">
+            <div class="card-content">
+              <h3 class="card-subtitle">選択された値</h3>
+              <div id="selectedValuesContainer" class="mt-4"></div>
+              <div class="flex justify-center mt-4">
+                <button
+                  id="applyFormButton"
+                  class="btn btn-primary w-48 flex items-center justify-center gap-2"
+                >
+                  <i class="icon send"></i>
+                  フォームに反映
+                </button>
+                <!-- ▼ フォーム入力クリア -->
+                <button
+                  id="clearFormDataButton"
+                  class="btn btn-danger w-48 flex items-center justify-center gap-2"
+                >
+                  <i class="icon trash"></i>
+                  クリア
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- ===========================
+       フォーム要素のテンプレート 
+       =========================== -->
+  <template id="formElementTemplate">
+    <div class="card mb-4">
+      <div class="card-content">
+        <!-- シンプル：識別子だけ表示する -->
+        <div class="text-lg font-medium mb-4 element-identifier"></div>
+
+        <!-- 入力候補セレクターと推薦理由 -->
+        <div class="space-y-4">
+          <div>
+            <div class="text-sm font-medium mb-2">入力候補:</div>
+            <select class="form-select w-full">
+              <option value="">候補を選択してください</option>
+            </select>
+          </div>
+          <!-- 推薦理由表示エリア -->
+          <div class="suggestion-reason hidden">
+            <div class="text-sm font-medium text-gray-700">推薦理由:</div>
+            <div class="mt-1 p-3 bg-gray-50 rounded-md text-sm text-gray-600 suggestion-reason-content"></div>
+          </div>
+          <!-- リモートフォーム用 prompt 編集欄 (デフォルト hidden) -->
+          <div class="prompt-wrapper hidden">
+            <label class="block text-sm font-medium text-gray-700">ユーザープロンプト</label>
+            <input
+              type="text"
+              class="prompt-input form-input w-full mt-1 rounded-md border-gray-300"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- ここで popup.js (または対応するJS) を読み込み -->
+  <script type="module" src="forms/popup.js"></script>
+</body>
+</html>

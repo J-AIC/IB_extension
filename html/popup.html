@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>html viewer Popup</title>
+  <style>
+    /* 必要に応じてCSSを適宜用意 */
+    #apiContent {
+      max-height: 400px;
+      overflow: auto;
+      border: 1px solid #ccc;
+      padding: 5px;
+    }
+
+    .error {
+      color: red;
+    }
+
+    .loading {
+      color: gray;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Form Helper</h1>
+
+  <!-- ステータス表示用 -->
+  <div id="statusArea"></div>
+
+  <!-- APIから取得したHTMLを表示する領域 -->
+  <div id="apiContent"></div>
+
+
+
+  <script src="popup.js"></script>
+</body>
+
+</html>

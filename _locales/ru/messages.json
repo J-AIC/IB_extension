@@ -1,0 +1,234 @@
+{
+    "extensionName": {
+      "message": "InsightBuddy Chat"
+    },
+    "extensionDescription": {
+      "message": "Чат-ассистент на базе ИИ, который можно использовать сразу, просто введя API-ключ вашего предпочитаемого поставщика ИИ без регистрации. Поддерживает основных поставщиков ИИ, таких как OpenAI, Anthropic и Google, обеспечивая точную поддержку за счёт понимания содержимого сайта."
+    },
+    "apiSettings": {
+      "message": "Настройки API"
+    },
+    "home": {
+      "message": "Главная"
+    },
+    "languageSettings": {
+      "message": "Настройки языка"
+    },
+    "displayLanguage": {
+      "message": "Язык отображения"
+    },
+    "systemDefault": {
+      "message": "Системный по умолчанию"
+    },
+    "apiKey": {
+      "message": "API-ключ"
+    },
+    "save": {
+      "message": "Сохранить"
+    },
+    "cancel": {
+      "message": "Отмена"
+    },
+    "modelName": {
+      "message": "Название модели"
+    },
+    "selectModel": {
+      "message": "Выбрать модель"
+    },
+    "loadingModels": {
+      "message": "Загрузка моделей..."
+    },
+    "noModelsFound": {
+      "message": "Модели не найдены"
+    },
+    "errorLoadingModels": {
+      "message": "Ошибка: не удалось загрузить модели"
+    },
+    "chatMessage": {
+      "message": "Введите сообщение"
+    },
+    "send": {
+      "message": "Отправить"
+    },
+    "readForm": {
+      "message": "Прочитать содержимое формы"
+    },
+    "insertForm": {
+      "message": "Вставить в форму"
+    },
+    "getCurrentSite": {
+      "message": "Получить текущий сайт"
+    },
+    "formContent": {
+      "message": "Содержимое формы"
+    },
+    "close": {
+      "message": "Закрыть"
+    },
+    "apiConfigRequired": {
+      "message": "Пожалуйста, настройте параметры API-поставщика"
+    },
+    "newChat": {
+      "message": "Новый чат"
+    },
+    "baseSettings": {
+      "message": "Настройки"
+    },
+    "english": {
+      "message": "Английский"
+    },
+    "japanese": {
+      "message": "Японский"
+    },
+    "languageSettingDescription": {
+      "message": "Изменения вступят в силу после перезагрузки страницы"
+    },
+    "contentReload": {
+      "message": "Загрузка содержимого"
+    },
+    "url": {
+      "message": "URL"
+    },
+    "error": {
+      "message": "Ошибка"
+    },
+    "notSet": {
+      "message": "Не установлено"
+    },
+    "invalidApiKeyPrefix": {
+      "message": "API-ключ должен начинаться с \"$prefix\""
+    },
+    "incompleteSettings": {
+      "message": "Настройки $provider неполные.\nПожалуйста, проверьте ваши настройки."
+    },
+    "newConversation": {
+      "message": "Новый разговор"
+    },
+    "untitledConversation": {
+      "message": "Без названия"
+    },
+    "noHistory": {
+      "message": "Нет истории"
+    },
+    "localApi": {
+      "message": "Локальный API"
+    },
+    "chatContinuationError": {
+      "message": "История этого чата создана с помощью $1 $2. Невозможно продолжить чат с текущими настройками: $3 $4."
+    },
+    "localApiChatError": {
+      "message": "История этого чата создана с использованием локального API. Невозможно продолжить чат с текущими настройками: $1."
+    },
+    "providerChatError": {
+      "message": "История этого чата создана с помощью $1 $2. Невозможно продолжить чат с текущими настройками локального API."
+    },
+    "modelMismatchError": {
+      "message": "История этого чата создана с помощью $1 $2. Невозможно продолжить чат с текущими настройками, используя $3."
+    },
+    "loadingContent": {
+      "message": "Загрузка содержимого..."
+    },
+    "guideURL": {
+      "message": "URL руководства"
+    },
+    "extension_name": {
+      "message": "Менеджер URL руководств"
+    },
+    "extension_description": {
+      "message": "Управляйте URL руководствами и базовыми руководствами для вашего сайта"
+    },
+    "importButton": {
+      "message": "Импорт"
+    },
+    "exportButton": {
+      "message": "Экспорт"
+    },
+    "baseGuideTitle": {
+      "message": "Базовое руководство"
+    },
+    "urlGuideTitle": {
+      "message": "URL руководство"
+    },
+    "newRegistration": {
+      "message": "Новая регистрация"
+    },
+    "newUrlGuideRegistration": {
+      "message": "Новая регистрация URL руководства"
+    },
+    "confirm": {
+      "message": "Подтвердить"
+    },
+    "addGuide": {
+      "message": "Добавить руководство"
+    },
+    "guideUrl": {
+      "message": "URL руководства:"
+    },
+    "importExportTitle": {
+      "message": "Импорт/Экспорт"
+    },
+    "importExportData": {
+      "message": "Данные для импорта/экспорта"
+    },
+    "dropYamlFile": {
+      "message": "Перетащите YAML файл сюда или нажмите, чтобы выбрать"
+    },
+    "editBaseCard": {
+      "message": "Редактировать базовую карточку"
+    },
+    "newBaseCard": {
+      "message": "Новая базовая карточка"
+    },
+    "requiredFields": {
+      "message": "Пожалуйста, заполните обязательные поля"
+    },
+    "maxBaseCards": {
+      "message": "Разрешено максимум 5 базовых карточек"
+    },
+    "confirmDeleteBaseCard": {
+      "message": "Вы уверены, что хотите удалить эту базовую карточку?"
+    },
+    "confirmDeleteGuide": {
+      "message": "Вы уверены, что хотите удалить это URL руководство?"
+    },
+    "invalidUrlFormat": {
+      "message": "Неверный формат URL"
+    },
+    "duplicateUrl": {
+      "message": "Такой шаблон URL уже существует"
+    },
+    "minimumOneCard": {
+      "message": "Требуется как минимум одна карточка руководства"
+    },
+    "fillRequiredFields": {
+      "message": "Пожалуйста, заполните все обязательные поля"
+    },
+    "importComplete": {
+      "message": "Импорт завершён"
+    },
+    "importError": {
+      "message": "Ошибка импорта:"
+    },
+    "invalidYamlFormat": {
+      "message": "Пожалуйста, выберите YAML файл (.yml или .yaml)"
+    },
+    "guideDescription": {
+      "message": "Настройка руководства"
+    },
+    "baseGuideDescriptionTitle": {
+      "message": "Что такое базовое руководство?"
+    },
+    "baseGuideDescriptionContent": {
+      "message": "Базовое руководство — это шаблон для общих схем руководства. Вы можете зарегистрировать до 5 базовых руководств, которые можно использовать на разных URL. Они служат основными строительными блоками для ваших URL-специфичных руководств."
+    },
+    "urlGuideDescriptionTitle": {
+      "message": "Что такое URL руководство?"
+    },
+    "urlGuideDescriptionContent": {
+      "message": "URL руководство позволяет создавать специфические схемы руководства для различных URL. Вы можете задать шаблон URL и связать с ним несколько карточек руководства."
+    },
+    "guideListTitle": {
+      "message": "Список руководств для $1"
+    }
+  }
+  

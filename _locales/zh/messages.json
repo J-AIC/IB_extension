@@ -1,0 +1,233 @@
+{
+    "extensionName": {
+        "message": "InsightBuddy Chat"
+    },
+    "extensionDescription": {
+        "message": "一个无需注册，只需输入您首选 AI 提供商的 API 密钥即可立即使用的 AI 聊天助手。支持 OpenAI、Anthropic 和 Google 等主要 AI 提供商，通过理解网站内容提供准确的支持。"
+    },
+    "apiSettings": {
+        "message": "API 设置"
+    },
+    "home": {
+        "message": "主页"
+    },
+    "languageSettings": {
+        "message": "语言设置"
+    },
+    "displayLanguage": {
+        "message": "显示语言"
+    },
+    "systemDefault": {
+        "message": "系统默认"
+    },
+    "apiKey": {
+        "message": "API 密钥"
+    },
+    "save": {
+        "message": "保存"
+    },
+    "cancel": {
+        "message": "取消"
+    },
+    "modelName": {
+        "message": "模型名称"
+    },
+    "selectModel": {
+        "message": "选择模型"
+    },
+    "loadingModels": {
+        "message": "正在加载模型..."
+    },
+    "noModelsFound": {
+        "message": "未找到模型"
+    },
+    "errorLoadingModels": {
+        "message": "错误：加载模型失败"
+    },
+    "chatMessage": {
+        "message": "输入消息"
+    },
+    "send": {
+        "message": "发送"
+    },
+    "readForm": {
+        "message": "读取表单内容"
+    },
+    "insertForm": {
+        "message": "插入到表单"
+    },
+    "getCurrentSite": {
+        "message": "获取当前网站"
+    },
+    "formContent": {
+        "message": "表单内容"
+    },
+    "close": {
+        "message": "关闭"
+    },
+    "apiConfigRequired": {
+        "message": "请配置 API 提供商设置"
+    },
+    "newChat": {
+        "message": "新聊天"
+    },
+    "baseSettings": {
+        "message": "设置"
+    },
+    "english": {
+        "message": "英语"
+    },
+    "japanese": {
+        "message": "日语"
+    },
+    "languageSettingDescription": {
+        "message": "更改将在页面重新加载后生效"
+    },
+    "contentReload": {
+        "message": "正在加载内容"
+    },
+    "url": {
+        "message": "URL"
+    },
+    "error": {
+        "message": "错误"
+    },
+    "notSet": {
+        "message": "未设置"
+    },
+    "invalidApiKeyPrefix": {
+        "message": "API 密钥必须以 \"$prefix\" 开头"
+    },
+    "incompleteSettings": {
+        "message": "$provider 的设置不完整。\n请检查您的设置。"
+    },
+    "newConversation": {
+        "message": "新对话"
+    },
+    "untitledConversation": {
+        "message": "未命名对话"
+    },
+    "noHistory": {
+        "message": "没有历史记录"
+    },
+    "localApi": {
+        "message": "本地 API"
+    },
+    "chatContinuationError": {
+        "message": "此聊天记录由 $1 的 $2 创建。无法使用当前设置继续聊天：$3 $4"
+    },
+    "localApiChatError": {
+        "message": "此聊天记录是使用本地 API 创建的。无法使用当前设置继续聊天：$1"
+    },
+    "providerChatError": {
+        "message": "此聊天记录由 $1 的 $2 创建。无法使用当前本地 API 设置继续聊天。"
+    },
+    "modelMismatchError": {
+        "message": "此聊天记录由 $1 的 $2 创建。无法使用当前设置继续聊天，当前使用的是 $3"
+    },
+    "loadingContent": {
+        "message": "正在加载内容..."
+    },
+    "guideURL": {
+        "message": "指南 URL"
+    },
+    "extension_name": {
+        "message": "URL 指南管理器"
+    },
+    "extension_description": {
+        "message": "管理您网站的 URL 指南和基础指南"
+    },
+    "importButton": {
+        "message": "导入"
+    },
+    "exportButton": {
+        "message": "导出"
+    },
+    "baseGuideTitle": {
+        "message": "基础指南"
+    },
+    "urlGuideTitle": {
+        "message": "URL 指南"
+    },
+    "newRegistration": {
+        "message": "新注册"
+    },
+    "newUrlGuideRegistration": {
+        "message": "新建 URL 指南注册"
+    },
+    "confirm": {
+        "message": "确认"
+    },
+    "addGuide": {
+        "message": "添加指南"
+    },
+    "guideUrl": {
+        "message": "指南 URL:"
+    },
+    "importExportTitle": {
+        "message": "导入/导出"
+    },
+    "importExportData": {
+        "message": "导入/导出数据"
+    },
+    "dropYamlFile": {
+        "message": "将 YAML 文件拖放到这里或点击选择"
+    },
+    "editBaseCard": {
+        "message": "编辑基础卡片"
+    },
+    "newBaseCard": {
+        "message": "新建基础卡片"
+    },
+    "requiredFields": {
+        "message": "请填写必填字段"
+    },
+    "maxBaseCards": {
+        "message": "最多允许 5 个基础卡片"
+    },
+    "confirmDeleteBaseCard": {
+        "message": "确定要删除此基础卡片吗？"
+    },
+    "confirmDeleteGuide": {
+        "message": "确定要删除此 URL 指南吗？"
+    },
+    "invalidUrlFormat": {
+        "message": "无效的 URL 格式"
+    },
+    "duplicateUrl": {
+        "message": "该 URL 模式已存在"
+    },
+    "minimumOneCard": {
+        "message": "至少需要一个指南卡片"
+    },
+    "fillRequiredFields": {
+        "message": "请填写所有必填字段"
+    },
+    "importComplete": {
+        "message": "导入完成"
+    },
+    "importError": {
+        "message": "导入错误："
+    },
+    "invalidYamlFormat": {
+        "message": "请选择 YAML 文件（.yml 或 .yaml）"
+    },
+    "guideDescription": {
+        "message": "指南配置"
+    },
+    "baseGuideDescriptionTitle": {
+        "message": "什么是基础指南？"
+    },
+    "baseGuideDescriptionContent": {
+        "message": "基础指南是一种通用指导模式的模板。您可以注册最多 5 个基础指南，这些指南可以在不同 URL 中重复使用，作为 URL 指南的基本构建模块。"
+    },
+    "urlGuideDescriptionTitle": {
+        "message": "什么是 URL 指南？"
+    },
+    "urlGuideDescriptionContent": {
+        "message": "URL 指南允许您为不同的 URL 创建特定的指导模式。您可以指定 URL 模式并关联多个指南卡片。"
+    },
+    "guideListTitle": {
+        "message": "$1 的指南列表"
+    }
+}

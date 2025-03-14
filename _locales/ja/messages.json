@@ -1,0 +1,263 @@
+{
+  "extensionName": {
+    "message": "InsightBuddyチャット"
+  },
+  "extensionDescription": {
+    "message": "登録不要で、お好みのAIプロバイダーのAPIキーを入力するだけですぐに利用できるAIチャットアシスタント。OpenAI、Anthropic、Google など主要なAIプロバイダーに対応し、Webサイトの内容を理解した上で的確なサポートを提供します。"
+  },
+  "apiSettings": {
+    "message": "API設定"
+  },
+  "home": {
+    "message": "ホーム"
+  },
+  "languageSettings": {
+    "message": "言語設定"
+  },
+  "displayLanguage": {
+    "message": "表示言語"
+  },
+  "systemDefault": {
+    "message": "システムのデフォルト"
+  },
+  "apiKey": {
+    "message": "APIキー"
+  },
+  "save": {
+    "message": "保存"
+  },
+  "cancel": {
+    "message": "キャンセル"
+  },
+  "modelName": {
+    "message": "モデル名"
+  },
+  "selectModel": {
+    "message": "モデルを選択"
+  },
+  "loadingModels": {
+    "message": "モデルを読み込み中..."
+  },
+  "noModelsFound": {
+    "message": "モデルが見つかりません"
+  },
+  "errorLoadingModels": {
+    "message": "エラー: モデルの読み込みに失敗しました"
+  },
+  "chatMessage": {
+    "message": "メッセージを入力"
+  },
+  "send": {
+    "message": "送信"
+  },
+  "readForm": {
+    "message": "フォーム内容を読み取る"
+  },
+  "insertForm": {
+    "message": "フォームに挿入"
+  },
+  "getCurrentSite": {
+    "message": "今見ているサイトを取得する"
+  },
+  "formContent": {
+    "message": "フォーム内容"
+  },
+  "close": {
+    "message": "閉じる"
+  },
+  "apiConfigRequired": {
+    "message": "APIプロバイダー設定をしてください"
+  },
+  "newChat": {
+    "message": "新規チャット"
+  },
+  "baseSettings": {
+    "message": "設定"
+  },
+  "english": {
+    "message": "英語"
+  },
+  "japanese": {
+    "message": "日本語"
+  },
+  "languageSettingDescription": {
+    "message": "変更は再読み込み後に適用されます"
+  },
+  "contentReload": {
+    "message": "コンテンツを読み込み中"
+  },
+  "url": {
+    "message": "URL"
+  },
+  "error": {
+    "message": "エラー"
+  },
+  "notSet": {
+    "message": "未設定"
+  },
+  "invalidApiKeyPrefix": {
+    "message": "APIキーは \"$prefix\" で始まる必要があります"
+  },
+  "incompleteSettings": {
+    "message": "$providerの設定が不完全です。\n設定を確認してください。"
+  },
+  "newConversation": {
+    "message": "新しい会話"
+  },
+  "untitledConversation": {
+    "message": "無題の会話"
+  },
+  "noHistory": {
+    "message": "履歴はありません"
+  },
+  "localApi": {
+    "message": "Local API"
+  },
+  "chatContinuationError": {
+    "message": "このチャット履歴は $1 の $2 で作成されました。現在の設定は $3 の $4 のため、チャットを継続できません。"
+  },
+  "localApiChatError": {
+    "message": "このチャット履歴は Local API で作成されました。現在の設定は $1 のため、チャットを継続できません。"
+  },
+  "providerChatError": {
+    "message": "このチャット履歴は $1 の $2 で作成されました。現在の設定は Local API のため、チャットを継続できません。"
+  },
+  "modelMismatchError": {
+    "message": "このチャット履歴は $1 の $2 で作成されました。現在の設定は $3 のため、チャットを継続できません。"
+  },
+  "loadingContent": {
+    "message": "コンテンツを読み込み中..."
+  },
+  "guideURL": {
+    "message": "ガイドURL"
+  },
+  "extension_name": {
+    "message": "URLガイドマネージャー"
+  },
+  "extension_description": {
+    "message": "ウェブサイトのURLガイドとベースガイドを管理します"
+  },
+  "importButton": {
+    "message": "インポート"
+  },
+  "exportButton": {
+    "message": "エクスポート"
+  },
+  "baseGuideTitle": {
+    "message": "Base Guide"
+  },
+  "urlGuideTitle": {
+    "message": "URL Guide"
+  },
+  "newRegistration": {
+    "message": "新規登録"
+  },
+  "newUrlGuideRegistration": {
+    "message": "新規URL Guide登録"
+  },
+  "confirm": {
+    "message": "確認"
+  },
+  "addGuide": {
+    "message": "ガイドを追加する"
+  },
+  "guideUrl": {
+    "message": "guide_url:"
+  },
+  "importExportTitle": {
+    "message": "インポート/エクスポート"
+  },
+  "importExportData": {
+    "message": "インポート/エクスポート"
+  },
+  "dropYamlFile": {
+    "message": "YAMLファイルをドロップするか、クリックしてファイルを選択"
+  },
+  "editBaseCard": {
+    "message": "ベースカードの編集"
+  },
+  "newBaseCard": {
+    "message": "新規ベースカード"
+  },
+  "requiredFields": {
+    "message": "必須項目を入力してください"
+  },
+  "maxBaseCards": {
+    "message": "ベースカードは最大5件までです"
+  },
+  "confirmDeleteBaseCard": {
+    "message": "このベースカードを削除してもよろしいですか？"
+  },
+  "confirmDeleteGuide": {
+    "message": "このURLガイドを削除してもよろしいですか？"
+  },
+  "invalidUrlFormat": {
+    "message": "URLの形式が不正です"
+  },
+  "duplicateUrl": {
+    "message": "このURLパターンは既に存在します"
+  },
+  "minimumOneCard": {
+    "message": "少なくとも1つのガイドカードが必要です"
+  },
+  "fillRequiredFields": {
+    "message": "必須項目をすべて入力してください"
+  },
+  "importComplete": {
+    "message": "インポートが完了しました"
+  },
+  "importError": {
+    "message": "インポートエラー:"
+  },
+  "invalidYamlFormat": {
+    "message": "YAMLファイル(.yml または .yaml)を選択してください"
+  },
+  "guideTitle": {
+    "message": "guide_title:"
+  },
+  "guideMemo": {
+    "message": "guide_memo:"
+  },
+  "export": {
+    "message": "エクスポート"
+  },
+  "import": {
+    "message": "インポート"
+  },
+  "baseGuide": {
+    "message": "Base Guide"
+  },
+  "urlGuide": {
+    "message": "URL Guide"
+  },
+  "importExportModalTitle": {
+    "message": "インポート/エクスポート"
+  },
+  "exportError": {
+    "message": "エクスポート中にエラーが発生しました"
+  },
+  "invalidDataStructure": {
+    "message": "無効なYAML形式またはデータ構造です"
+  },
+  "duplicateUrlPatterns": {
+    "message": "重複するURLパターンが見つかりました"
+  },
+  "guideDescription": {
+    "message": "ガイド設定について"
+  },
+  "baseGuideDescriptionTitle": {
+    "message": "Base Guideとは"
+  },
+  "baseGuideDescriptionContent": {
+    "message": "Base Guideは、共通して使用できるガイドのテンプレートです。最大5つまで登録でき、異なるURLで再利用可能なガイドの基本パターンとして機能します。"
+  },
+  "urlGuideDescriptionTitle": {
+    "message": "URL Guideとは"
+  },
+  "urlGuideDescriptionContent": {
+    "message": "URL Guideでは、特定のURLパターンに対応したガイドを作成できます。URLパターンを指定し、複数のガイドカードを関連付けることができます。"
+  },
+  "guideListTitle": {
+    "message": "$1のガイド一覧"
+}
+}

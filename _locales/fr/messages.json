@@ -1,0 +1,234 @@
+{
+    "extensionName": {
+      "message": "InsightBuddy Chat"
+    },
+    "extensionDescription": {
+      "message": "Un assistant de chat IA qui peut être utilisé immédiatement en saisissant simplement la clé API de votre fournisseur d'IA préféré, sans inscription. Il prend en charge des fournisseurs d'IA majeurs tels qu'OpenAI, Anthropic et Google, et offre une assistance précise en comprenant le contenu du site web."
+    },
+    "apiSettings": {
+      "message": "Paramètres de l'API"
+    },
+    "home": {
+      "message": "Accueil"
+    },
+    "languageSettings": {
+      "message": "Paramètres de langue"
+    },
+    "displayLanguage": {
+      "message": "Langue d'affichage"
+    },
+    "systemDefault": {
+      "message": "Par défaut système"
+    },
+    "apiKey": {
+      "message": "Clé API"
+    },
+    "save": {
+      "message": "Enregistrer"
+    },
+    "cancel": {
+      "message": "Annuler"
+    },
+    "modelName": {
+      "message": "Nom du modèle"
+    },
+    "selectModel": {
+      "message": "Sélectionner le modèle"
+    },
+    "loadingModels": {
+      "message": "Chargement des modèles…"
+    },
+    "noModelsFound": {
+      "message": "Aucun modèle trouvé"
+    },
+    "errorLoadingModels": {
+      "message": "Erreur : Échec du chargement des modèles"
+    },
+    "chatMessage": {
+      "message": "Saisissez le message"
+    },
+    "send": {
+      "message": "Envoyer"
+    },
+    "readForm": {
+      "message": "Lire le contenu du formulaire"
+    },
+    "insertForm": {
+      "message": "Insérer dans le formulaire"
+    },
+    "getCurrentSite": {
+      "message": "Obtenir le site actuel"
+    },
+    "formContent": {
+      "message": "Contenu du formulaire"
+    },
+    "close": {
+      "message": "Fermer"
+    },
+    "apiConfigRequired": {
+      "message": "Veuillez configurer les paramètres du fournisseur d'API"
+    },
+    "newChat": {
+      "message": "Nouveau chat"
+    },
+    "baseSettings": {
+      "message": "Paramètres"
+    },
+    "english": {
+      "message": "Anglais"
+    },
+    "japanese": {
+      "message": "Japonais"
+    },
+    "languageSettingDescription": {
+      "message": "Les modifications prendront effet après le rechargement de la page"
+    },
+    "contentReload": {
+      "message": "Chargement du contenu"
+    },
+    "url": {
+      "message": "URL"
+    },
+    "error": {
+      "message": "Erreur"
+    },
+    "notSet": {
+      "message": "Non défini"
+    },
+    "invalidApiKeyPrefix": {
+      "message": "La clé API doit commencer par \"$prefix\""
+    },
+    "incompleteSettings": {
+      "message": "Les paramètres de $provider sont incomplets.\nVeuillez vérifier vos paramètres."
+    },
+    "newConversation": {
+      "message": "Nouvelle conversation"
+    },
+    "untitledConversation": {
+      "message": "Conversation sans titre"
+    },
+    "noHistory": {
+      "message": "Aucun historique"
+    },
+    "localApi": {
+      "message": "API locale"
+    },
+    "chatContinuationError": {
+      "message": "Cet historique de chat a été créé avec $1 $2. La conversation ne peut pas être poursuivie avec la configuration actuelle : $3 $4."
+    },
+    "localApiChatError": {
+      "message": "Cet historique de chat a été créé avec l'API locale. La conversation ne peut pas être poursuivie avec la configuration actuelle : $1."
+    },
+    "providerChatError": {
+      "message": "Cet historique de chat a été créé avec $1 $2. La conversation ne peut pas être poursuivie avec la configuration actuelle de l'API locale."
+    },
+    "modelMismatchError": {
+      "message": "Cet historique de chat a été créé avec $1 $2. La conversation ne peut pas être poursuivie avec la configuration actuelle utilisant $3."
+    },
+    "loadingContent": {
+      "message": "Chargement du contenu…"
+    },
+    "guideURL": {
+      "message": "URL du guide"
+    },
+    "extension_name": {
+      "message": "Gestionnaire de guides URL"
+    },
+    "extension_description": {
+      "message": "Gérez les guides URL et les guides de base pour votre site web"
+    },
+    "importButton": {
+      "message": "Importer"
+    },
+    "exportButton": {
+      "message": "Exporter"
+    },
+    "baseGuideTitle": {
+      "message": "Guide de base"
+    },
+    "urlGuideTitle": {
+      "message": "Guide URL"
+    },
+    "newRegistration": {
+      "message": "Nouvelle inscription"
+    },
+    "newUrlGuideRegistration": {
+      "message": "Nouvelle inscription au guide URL"
+    },
+    "confirm": {
+      "message": "Confirmer"
+    },
+    "addGuide": {
+      "message": "Ajouter un guide"
+    },
+    "guideUrl": {
+      "message": "URL du guide :"
+    },
+    "importExportTitle": {
+      "message": "Importer/Exporter"
+    },
+    "importExportData": {
+      "message": "Données d'importation/exportation"
+    },
+    "dropYamlFile": {
+      "message": "Déposez le fichier YAML ici ou cliquez pour sélectionner"
+    },
+    "editBaseCard": {
+      "message": "Modifier la carte de base"
+    },
+    "newBaseCard": {
+      "message": "Nouvelle carte de base"
+    },
+    "requiredFields": {
+      "message": "Veuillez remplir les champs obligatoires"
+    },
+    "maxBaseCards": {
+      "message": "Maximum de 5 cartes de base autorisées"
+    },
+    "confirmDeleteBaseCard": {
+      "message": "Êtes-vous sûr de vouloir supprimer cette carte de base ?"
+    },
+    "confirmDeleteGuide": {
+      "message": "Êtes-vous sûr de vouloir supprimer ce guide URL ?"
+    },
+    "invalidUrlFormat": {
+      "message": "Format d'URL invalide"
+    },
+    "duplicateUrl": {
+      "message": "Ce modèle d'URL existe déjà"
+    },
+    "minimumOneCard": {
+      "message": "Au moins une carte de guide est requise"
+    },
+    "fillRequiredFields": {
+      "message": "Veuillez remplir tous les champs obligatoires"
+    },
+    "importComplete": {
+      "message": "Importation terminée"
+    },
+    "importError": {
+      "message": "Erreur d'importation :"
+    },
+    "invalidYamlFormat": {
+      "message": "Veuillez sélectionner un fichier YAML (.yml ou .yaml)"
+    },
+    "guideDescription": {
+      "message": "Configuration du guide"
+    },
+    "baseGuideDescriptionTitle": {
+      "message": "Qu'est-ce que le guide de base ?"
+    },
+    "baseGuideDescriptionContent": {
+      "message": "Le guide de base est un modèle pour des schémas d'orientation courants. Vous pouvez enregistrer jusqu'à 5 guides de base qui peuvent être réutilisés sur différentes URL. Ils servent de blocs fondamentaux pour vos guides spécifiques aux URL."
+    },
+    "urlGuideDescriptionTitle": {
+      "message": "Qu'est-ce que le guide URL ?"
+    },
+    "urlGuideDescriptionContent": {
+      "message": "Le guide URL vous permet de créer des schémas d'orientation spécifiques pour différentes URL. Vous pouvez définir le modèle d'URL et associer plusieurs cartes de guide."
+    },
+    "guideListTitle": {
+      "message": "Liste des guides pour $1"
+    }
+  }
+  

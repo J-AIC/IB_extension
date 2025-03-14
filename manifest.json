@@ -1,0 +1,70 @@
+{
+  "name": "__MSG_extensionName__",
+  "version": "1.303",
+  "manifest_version": 3,
+  "description": "__MSG_extensionDescription__",
+  "default_locale": "ja",
+  "author": "Japan AI Consluting Corporation",
+  "host_permissions": [
+    "*://*/*"
+  ],
+  "permissions": [
+    "storage",
+    "activeTab",
+    "tabs",
+    "contextMenus",
+    "scripting"
+  ],
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "js": ["content.js","forms/content.js","html/content.js"]
+  }],
+  "web_accessible_resources": [{
+    "resources": [
+      "api_settings.html",
+      "api_settings.js",
+      "api_settings.css",
+      "chat.html",
+      "chat.js",
+      "form_control_basic.js",
+      "form_control.js",
+      "guide_url.html",
+      "guide_url.js",
+      "history.js",
+      "form-reader.js",
+      "home.html",
+      "home.js",
+      "styles.css",
+      "assets/*",
+      "common.js",
+      "apiClient.js",
+      "forms/*",
+      "html/*",
+      "_locales/*/messages.json",
+      "docs/*/*.md",
+      "lib/marked/marked.min.js"
+    ],
+    "matches": ["<all_urls>"]
+  }],
+  "content_security_policy": {
+    "extension_pages": 
+      "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' *;"
+  },
+  "icons": {
+    "16": "assets/IB_logo_16.png",
+    "32": "assets/IB_logo_32.png",
+    "48": "assets/IB_logo_48.png",
+    "128": "assets/IB_logo_128.png"
+  },
+  "action": {
+    "default_icon": {
+      "16": "assets/IB_logo_16.png",
+      "32": "assets/IB_logo_32.png",
+      "48": "assets/IB_logo_48.png",
+      "128": "assets/IB_logo_128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}

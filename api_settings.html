@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Settings</title>
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        /* レイアウト構造 */
+        /* レイアウト構造 */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            flex-shrink: 0;  /* 追加 */
+        }
+
+        .main-content {
+            margin-left: 250px;
+            min-height: 100vh;
+            padding: 2rem;
+            background-color: #f8f9fa;
+            width: calc(100% - 250px);  /* 追加 */
+        }
+
+
+        .content-wrapper {
+            width: 70%;
+            margin: 0 auto;
+            max-width: 1000px;
+        }
+
+        /* ナビゲーション */
+        .nav-link {
+            color: #333;
+            padding: 0.5rem 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            background-color: #f8f9fa;
+        }
+
+        .nav-link.active {
+            background-color: #0d6efd;
+            color: white;
+        }
+
+        /* ステータスインジケーター */
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #ccc;
+        }
+
+        .status-dot.active {
+            background-color: #28a745;
+        }
+
+        /* API カード */
+        .api-card {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+            max-width: 80%;  /* 追加 */
+            margin: 0 auto;
+        }
+
+        /* フォームコントロール */
+        .form-switch .form-check-input {
+            width: 3em;
+            height: 1.5em;
+            cursor: pointer;
+        }
+
+        .form-switch .form-check-input:checked {
+            background-color: #198754;
+            border-color: #198754;
+        }
+
+        .key-input {
+            font-family: monospace;
+        }
+
+        /* モデルセレクター */
+        .model-selector {
+            transition: transform 0.2s;
+        }
+
+        .model-selector.open i {
+            transform: rotate(180deg);
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+            
+            .main-content {
+                margin-left: 200px;
+            }
+
+            .content-wrapper {
+                width: 90%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+
+            .content-wrapper {
+                width: 95%;
+            }
+        }
+        .icon-container {
+            margin-top: 30px;
+            text-align: center; /* 中央揃え */
+            padding: 10px 0; /* 上下に余白を追加 */
+        }
+
+        .icon-container img {
+            width: 80%;  /* 画像のサイズを80%に縮小 */
+            max-width: 200px;  /* 最大サイズを設定（適宜調整） */
+            height: auto;  /* 縦横比を維持 */
+            display: block;  /* 中央揃えを確実にする */
+            margin: 0 auto;  /* 左右中央揃え */
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="d-flex">
+                <!-- サイドバーのインクルード -->
+                <div class="sidebar bg-light border-end">
+                    <div class="d-flex flex-column h-100">
+                        <div class="icon-container">
+                            <img src="assets/IB_logo_name.png" alt="InsightBuddy Logo">
+                        </div>
+                        <div class="nav flex-column nav-pills mt-3">
+                            <a class="nav-link" href="home.html">
+                                <i class="bi bi-house me-2"></i><span data-i18n="home"></span>
+                            </a>
+                            <a class="nav-link" href="guide_url.html">
+                                <i class="bi bi-search me-2"></i><span data-i18n="guideURL"></span>
+                            </a>
+                            <a class="nav-link active" href="api_settings.html">
+                                <i class="bi bi-gear me-2"></i><span data-i18n="apiSettings"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+    <div class="main-content">
+        <div class="content-wrapper"></div>
+        <div class="row g-4">
+            <!-- API Cards will be dynamically inserted here -->
+        </div>
+    </div>
+    </div>
+
+    <template id="apiCardTemplate">
+        <div class="col-12">
+            <div class="api-card border">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <h3 class="h5 mb-0"></h3>
+                        <span class="text-muted small model-name"></span>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input type="checkbox" class="form-check-input api-toggle">
+                    </div>
+                </div>
+
+                <div class="settings-container">
+                    <div class="view-mode d-flex justify-content-between align-items-center">
+                        <span class="small"><span data-i18n="apiKey"></span>:</span>
+                        <div class="d-flex align-items-center gap-1">
+                            <span class="key-display font-monospace small"></span>
+                            <button class="btn btn-link btn-sm p-1 toggle-visibility">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button class="btn btn-link btn-sm p-1 toggle-edit">
+                                <i class="bi bi-gear"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="edit-mode d-none">
+                        <form class="bg-light rounded p-3">
+                            <div class="custom-url-container mb-2 d-none">
+                                <label class="form-label small fw-medium"><span data-i18n="url"></span>:</label>
+                                <input type="text" class="form-control form-control-sm url-input" placeholder="https://api.example.com/">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label small fw-medium"><span data-i18n="apiKey"></span>:</label>
+                                <input type="text" class="form-control form-control-sm key-input">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <div class="custom-model-container mb-2 d-none">
+                                <label class="form-label small fw-medium"><span data-i18n="modelName"></span>:</label>
+                                <input type="text" class="form-control form-control-sm model-input" placeholder="gpt-4-turbo">
+                            </div>
+                            <div class="text-end">
+                                <button type="button" class="btn btn-sm btn-outline-secondary cancel-edit"><span data-i18n="cancel"></span></button>
+                                <button type="submit" class="btn btn-sm btn-primary ms-2"><span data-i18n="save"></span></button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="model-selector-container mt-2 d-none">
+                        <button class="btn btn-link text-decoration-none p-1 w-100 text-start model-selector">
+                            <span data-i18n="selectModel"></span>
+                            <i class="bi bi-chevron-down float-end"></i>
+                        </button>
+                        <div class="models-list d-none ps-2 border-start mt-1">
+                            <div class="loading-state text-muted small p-1 d-none">
+                                <span data-i18n="loadingModels"></span>
+                            </div>
+                            <div class="error-state text-danger small p-1 d-none">
+                                <span data-i18n="error"></span>: <span class="error-message"></span>
+                            </div>
+                            <div class="empty-state text-muted small p-1 d-none">
+                                <span data-i18n="noModelsFound"></span>
+                            </div>
+                            <div class="models-container">
+                                <!-- Models will be dynamically inserted here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</div>
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="common.js"></script>
+<script src="api_settings.js"></script>
+</body>
+</html>

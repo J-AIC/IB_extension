@@ -1,0 +1,233 @@
+{
+    "extensionName": {
+        "message": "InsightBuddy Chat"
+    },
+    "extensionDescription": {
+        "message": "Ein KI-Chat-Assistent, der sofort verwendet werden kann, indem Sie einfach den API-Schlüssel Ihres bevorzugten KI-Anbieters eingeben – ganz ohne Registrierung. Unterstützt führende KI-Anbieter wie OpenAI, Anthropic und Google und bietet präzise Unterstützung durch das Verständnis von Webseiteninhalten."
+    },
+    "apiSettings": {
+        "message": "API-Einstellungen"
+    },
+    "home": {
+        "message": "Startseite"
+    },
+    "languageSettings": {
+        "message": "Spracheinstellungen"
+    },
+    "displayLanguage": {
+        "message": "Anzeigesprache"
+    },
+    "systemDefault": {
+        "message": "Systemstandard"
+    },
+    "apiKey": {
+        "message": "API-Schlüssel"
+    },
+    "save": {
+        "message": "Speichern"
+    },
+    "cancel": {
+        "message": "Abbrechen"
+    },
+    "modelName": {
+        "message": "Modellname"
+    },
+    "selectModel": {
+        "message": "Modell auswählen"
+    },
+    "loadingModels": {
+        "message": "Modelle werden geladen..."
+    },
+    "noModelsFound": {
+        "message": "Keine Modelle gefunden"
+    },
+    "errorLoadingModels": {
+        "message": "Fehler: Modelle konnten nicht geladen werden"
+    },
+    "chatMessage": {
+        "message": "Nachricht eingeben"
+    },
+    "send": {
+        "message": "Senden"
+    },
+    "readForm": {
+        "message": "Formularinhalt lesen"
+    },
+    "insertForm": {
+        "message": "In Formular einfügen"
+    },
+    "getCurrentSite": {
+        "message": "Aktuelle Seite abrufen"
+    },
+    "formContent": {
+        "message": "Formularinhalt"
+    },
+    "close": {
+        "message": "Schließen"
+    },
+    "apiConfigRequired": {
+        "message": "Bitte konfigurieren Sie die Einstellungen des API-Anbieters"
+    },
+    "newChat": {
+        "message": "Neuer Chat"
+    },
+    "baseSettings": {
+        "message": "Einstellungen"
+    },
+    "english": {
+        "message": "Englisch"
+    },
+    "japanese": {
+        "message": "Japanisch"
+    },
+    "languageSettingDescription": {
+        "message": "Änderungen werden nach dem Neuladen der Seite wirksam"
+    },
+    "contentReload": {
+        "message": "Inhalt wird geladen"
+    },
+    "url": {
+        "message": "URL"
+    },
+    "error": {
+        "message": "Fehler"
+    },
+    "notSet": {
+        "message": "Nicht gesetzt"
+    },
+    "invalidApiKeyPrefix": {
+        "message": "Der API-Schlüssel muss mit \"$prefix\" beginnen"
+    },
+    "incompleteSettings": {
+        "message": "$provider Einstellungen sind unvollständig.\nBitte überprüfen Sie Ihre Einstellungen."
+    },
+    "newConversation": {
+        "message": "Neues Gespräch"
+    },
+    "untitledConversation": {
+        "message": "Unbetiteltes Gespräch"
+    },
+    "noHistory": {
+        "message": "Keine Historie"
+    },
+    "localApi": {
+        "message": "Lokale API"
+    },
+    "chatContinuationError": {
+        "message": "Dieser Chat-Verlauf wurde mit $1 $2 erstellt. Der Chat kann mit den aktuellen Einstellungen nicht fortgesetzt werden: $3 $4."
+    },
+    "localApiChatError": {
+        "message": "Dieser Chat-Verlauf wurde mit der lokalen API erstellt. Der Chat kann mit den aktuellen Einstellungen nicht fortgesetzt werden: $1."
+    },
+    "providerChatError": {
+        "message": "Dieser Chat-Verlauf wurde mit $1 $2 erstellt. Der Chat kann mit den aktuellen lokalen API-Einstellungen nicht fortgesetzt werden."
+    },
+    "modelMismatchError": {
+        "message": "Dieser Chat-Verlauf wurde mit $1 $2 erstellt. Der Chat kann mit den aktuellen Einstellungen unter Verwendung von $currentModel nicht fortgesetzt werden."
+    },
+    "loadingContent": {
+        "message": "Inhalt wird geladen..."
+    },
+    "guideURL": {
+        "message": "Leitfaden-URL"
+    },
+    "extension_name": {
+        "message": "URL-Leitfaden-Manager"
+    },
+    "extension_description": {
+        "message": "Verwalten Sie URL-Leitfäden und Basis-Leitfäden für Ihre Website"
+    },
+    "importButton": {
+        "message": "Importieren"
+    },
+    "exportButton": {
+        "message": "Exportieren"
+    },
+    "baseGuideTitle": {
+        "message": "Basis-Leitfaden"
+    },
+    "urlGuideTitle": {
+        "message": "URL-Leitfaden"
+    },
+    "newRegistration": {
+        "message": "Neue Registrierung"
+    },
+    "newUrlGuideRegistration": {
+        "message": "Neue URL-Leitfaden-Registrierung"
+    },
+    "confirm": {
+        "message": "Bestätigen"
+    },
+    "addGuide": {
+        "message": "Leitfaden hinzufügen"
+    },
+    "guideUrl": {
+        "message": "Leitfaden-URL:"
+    },
+    "importExportTitle": {
+        "message": "Import/Export"
+    },
+    "importExportData": {
+        "message": "Daten importieren/exportieren"
+    },
+    "dropYamlFile": {
+        "message": "YAML-Datei hier ablegen oder klicken, um auszuwählen"
+    },
+    "editBaseCard": {
+        "message": "Basis-Karte bearbeiten"
+    },
+    "newBaseCard": {
+        "message": "Neue Basis-Karte"
+    },
+    "requiredFields": {
+        "message": "Bitte füllen Sie die Pflichtfelder aus"
+    },
+    "maxBaseCards": {
+        "message": "Es sind maximal 5 Basis-Karten erlaubt"
+    },
+    "confirmDeleteBaseCard": {
+        "message": "Möchten Sie diese Basis-Karte wirklich löschen?"
+    },
+    "confirmDeleteGuide": {
+        "message": "Möchten Sie diesen URL-Leitfaden wirklich löschen?"
+    },
+    "invalidUrlFormat": {
+        "message": "Ungültiges URL-Format"
+    },
+    "duplicateUrl": {
+        "message": "Dieses URL-Muster existiert bereits"
+    },
+    "minimumOneCard": {
+        "message": "Mindestens eine Leitfaden-Karte ist erforderlich"
+    },
+    "fillRequiredFields": {
+        "message": "Bitte füllen Sie alle Pflichtfelder aus"
+    },
+    "importComplete": {
+        "message": "Import abgeschlossen"
+    },
+    "importError": {
+        "message": "Importfehler:"
+    },
+    "invalidYamlFormat": {
+        "message": "Bitte wählen Sie eine YAML-Datei (.yml oder .yaml) aus"
+    },
+    "guideDescription": {
+        "message": "Leitfaden-Konfiguration"
+    },
+    "baseGuideDescriptionTitle": {
+        "message": "Was ist ein Basis-Leitfaden?"
+    },
+    "baseGuideDescriptionContent": {
+        "message": "Der Basis-Leitfaden ist eine Vorlage für allgemeine Anleitungsmuster. Sie können bis zu 5 Basis-Leitfäden registrieren, die auf verschiedenen URLs wiederverwendet werden können. Diese dienen als grundlegende Bausteine für Ihre URL-spezifischen Leitfäden."
+    },
+    "urlGuideDescriptionTitle": {
+        "message": "Was ist ein URL-Leitfaden?"
+    },
+    "urlGuideDescriptionContent": {
+        "message": "Mit dem URL-Leitfaden können Sie spezifische Anleitungsmuster für verschiedene URLs erstellen. Sie können das URL-Muster festlegen und mehrere Leitfaden-Karten damit verknüpfen."
+    },
+    "guideListTitle": {
+        "message": "Leitfadenliste für $1"
+    }
+}

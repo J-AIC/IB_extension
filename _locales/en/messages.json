@@ -1,0 +1,233 @@
+{
+    "extensionName": {
+        "message": "InsightBuddy Chat"
+    },
+    "extensionDescription": {
+        "message": "An AI chat assistant that can be used immediately by simply entering your preferred AI provider's API key without registration. Supports major AI providers such as OpenAI, Anthropic, and Google, providing accurate support by understanding website content."
+    },
+    "apiSettings": {
+        "message": "API Settings"
+    },
+    "home": {
+        "message": "Home"
+    },
+    "languageSettings": {
+        "message": "Language Settings"
+    },
+    "displayLanguage": {
+        "message": "Display Language"
+    },
+    "systemDefault": {
+        "message": "System Default"
+    },
+    "apiKey": {
+        "message": "API Key"
+    },
+    "save": {
+        "message": "Save"
+    },
+    "cancel": {
+        "message": "Cancel"
+    },
+    "modelName": {
+        "message": "Model Name"
+    },
+    "selectModel": {
+        "message": "Select Model"
+    },
+    "loadingModels": {
+        "message": "Loading models..."
+    },
+    "noModelsFound": {
+        "message": "No models found"
+    },
+    "errorLoadingModels": {
+        "message": "Error: Failed to load models"
+    },
+    "chatMessage": {
+        "message": "Enter message"
+    },
+    "send": {
+        "message": "Send"
+    },
+    "readForm": {
+        "message": "Read Form Content"
+    },
+    "insertForm": {
+        "message": "Insert to Form"
+    },
+    "getCurrentSite": {
+        "message": "Get Current Site"
+    },
+    "formContent": {
+        "message": "Form Content"
+    },
+    "close": {
+        "message": "Close"
+    },
+    "apiConfigRequired": {
+        "message": "Please configure API provider settings"
+    },
+    "newChat": {
+        "message": "New Chat"
+    },
+    "baseSettings": {
+        "message": "Settings"
+    },
+    "english": {
+        "message": "English"
+    },
+    "japanese": {
+        "message": "Japanese"
+    },
+    "languageSettingDescription": {
+        "message": "Changes will take effect after reloading the page"
+    },
+    "contentReload": {
+        "message": "Loading content"
+    },
+    "url": {
+        "message": "URL"
+    },
+    "error": {
+        "message": "Error"
+    },
+    "notSet": {
+        "message": "Not set"
+    },
+    "invalidApiKeyPrefix": {
+        "message": "API key must start with \"$prefix\""
+    },
+    "incompleteSettings": {
+        "message": "$provider settings are incomplete.\nPlease check your settings."
+    },
+    "newConversation": {
+        "message": "New conversation"
+    },
+    "untitledConversation": {
+        "message": "Untitled conversation"
+    },
+    "noHistory": {
+        "message": "No history"
+    },
+    "localApi": {
+        "message": "Local API"
+    },
+    "chatContinuationError": {
+        "message": "This chat history was created with $1 $2. Cannot continue chat with current settings: $3 $4."
+    },
+    "localApiChatError": {
+        "message": "This chat history was created with Local API. Cannot continue chat with current settings: $1."
+    },
+    "providerChatError": {
+        "message": "This chat history was created with $1 $2. Cannot continue chat with current Local API settings."
+    },
+    "modelMismatchError": {
+        "message": "This chat history was created with $1 $2. Cannot continue chat with current settings using $3."
+    },
+    "loadingContent": {
+        "message": "Loading content..."
+    },
+    "guideURL": {
+        "message": "Guide URL"
+    },
+    "extension_name": {
+        "message": "URL Guide Manager"
+    },
+    "extension_description": {
+        "message": "Manage URL guides and base guides for your website"
+    },
+    "importButton": {
+        "message": "Import"
+    },
+    "exportButton": {
+        "message": "Export"
+    },
+    "baseGuideTitle": {
+        "message": "Base Guide"
+    },
+    "urlGuideTitle": {
+        "message": "URL Guide"
+    },
+    "newRegistration": {
+        "message": "New Registration"
+    },
+    "newUrlGuideRegistration": {
+        "message": "New URL Guide Registration"
+    },
+    "confirm": {
+        "message": "Confirm"
+    },
+    "addGuide": {
+        "message": "Add Guide"
+    },
+    "guideUrl": {
+        "message": "Guide URL:"
+    },
+    "importExportTitle": {
+        "message": "Import/Export"
+    },
+    "importExportData": {
+        "message": "Import/Export Data"
+    },
+    "dropYamlFile": {
+        "message": "Drop YAML file here or click to select"
+    },
+    "editBaseCard": {
+        "message": "Edit Base Card"
+    },
+    "newBaseCard": {
+        "message": "New Base Card"
+    },
+    "requiredFields": {
+        "message": "Please fill in the required fields"
+    },
+    "maxBaseCards": {
+        "message": "Maximum of 5 base cards allowed"
+    },
+    "confirmDeleteBaseCard": {
+        "message": "Are you sure you want to delete this base card?"
+    },
+    "confirmDeleteGuide": {
+        "message": "Are you sure you want to delete this URL guide?"
+    },
+    "invalidUrlFormat": {
+        "message": "Invalid URL format"
+    },
+    "duplicateUrl": {
+        "message": "This URL pattern already exists"
+    },
+    "minimumOneCard": {
+        "message": "At least one guide card is required"
+    },
+    "fillRequiredFields": {
+        "message": "Please fill in all required fields"
+    },
+    "importComplete": {
+        "message": "Import completed"
+    },
+    "importError": {
+        "message": "Import error:"
+    },
+    "invalidYamlFormat": {
+        "message": "Please select a YAML file (.yml or .yaml)"
+    },
+    "guideDescription": {
+        "message": "Guide Configuration"
+    },
+    "baseGuideDescriptionTitle": {
+        "message": "What is Base Guide?"
+    },
+    "baseGuideDescriptionContent": {
+        "message": "Base Guide is a template for common guidance patterns. You can register up to 5 base guides that can be reused across different URLs. These serve as fundamental building blocks for your URL-specific guides."
+    },
+    "urlGuideDescriptionTitle": {
+        "message": "What is URL Guide?"
+    },
+    "urlGuideDescriptionContent": {
+        "message": "URL Guide allows you to create specific guidance patterns for different URLs. You can specify the URL pattern and associate multiple guide cards with it. "
+    },
+    "guideListTitle": {
+        "message": "Guide list for $1"
+    }
+}

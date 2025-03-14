@@ -1,0 +1,319 @@
+/* ----------------------------------------------------
+   基本のフォームハイライトやアニメーション
+   ---------------------------------------------------- */
+   .form-control-highlight {
+    outline: 2px solid #3b82f6 !important;
+    outline-offset: 2px !important;
+    transition: outline-offset 0.2s ease-in-out !important;
+  }
+  
+  .form-control-highlight:hover {
+    outline-offset: 4px !important;
+  }
+  
+  @keyframes form-highlight-pulse {
+    0% {
+      outline-color: rgba(59, 130, 246, 0.5);
+    }
+    50% {
+      outline-color: rgba(59, 130, 246, 1);
+    }
+    100% {
+      outline-color: rgba(59, 130, 246, 0.5);
+    }
+  }
+  
+  .form-control-highlight {
+    animation: form-highlight-pulse 2s infinite;
+  }
+  
+  /* ----------------------------------------------------
+     カラーテーマ・ベース設定
+     ---------------------------------------------------- */
+  :root {
+    --primary-color: #3b82f6;
+    --primary-hover: #2563eb;
+    --background-color: #f3f4f6;
+    --card-background: #ffffff;
+    --text-color: #1f2937;
+    --text-secondary: #6b7280;
+    --border-color: #e5e7eb;
+    --spacing-unit: 1rem;
+  }
+  
+  body {
+    margin: 0;
+    padding: 1rem;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    /* body自体は可変にしておき、コンテナ側で幅制限する */
+  }
+  
+  /* ----------------------------------------------------
+     ポップアップ全体 (popup-container) の幅を300pxに固定
+     ---------------------------------------------------- */
+  .popup-container {
+    /* 既存: popup.html の body 内にラッピングされる想定 */
+    max-width: 300px;
+    margin: 0 auto; /* 中央寄せ */
+  }
+  
+  /* ----------------------------------------------------
+     セクションやカード、フォームなど既存のスタイル
+     ---------------------------------------------------- */
+  .section {
+    margin-bottom: 2rem;
+  }
+  
+  .section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+  }
+  
+  .card {
+    background: var(--card-background);
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+  
+  .card-content {
+    padding: var(--spacing-unit);
+  }
+  
+  .card-subtitle {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  
+  /* ----------------------------------------------------
+     フォームや入力要素
+     ---------------------------------------------------- */
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+  
+  input[type="password"],
+  input[type="text"],
+  select,
+  .form-select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    transition: border-color 0.2s;
+  }
+  
+  input[type="password"]:focus,
+  input[type="text"]:focus,
+  select:focus,
+  .form-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+  }
+  
+  /* ----------------------------------------------------
+     ファイルアップロード系
+     ---------------------------------------------------- */
+  .file-upload {
+    margin-top: 0.5rem;
+  }
+  
+  .file-list {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
+  
+  /* ----------------------------------------------------
+     ボタン
+     ---------------------------------------------------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: 1px solid transparent;
+  }
+  
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  
+  .btn-primary:hover:not(:disabled) {
+    background-color: var(--primary-hover);
+  }
+  
+  .btn-secondary {
+    background-color: white;
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+  }
+  
+  .btn-secondary:hover:not(:disabled) {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  
+  /* ----------------------------------------------------
+     ステータス表示カードなど
+     ---------------------------------------------------- */
+  .status-card {
+    background: var(--card-background);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .status-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  /* ----------------------------------------------------
+     選択された値など
+     ---------------------------------------------------- */
+  .selected-values {
+    margin: 1rem 0;
+  }
+  
+  /* 隠し要素 */
+  .hidden {
+    display: none;
+  }
+  
+  /* ----------------------------------------------------
+     アコーディオンやモーダルなど
+     ---------------------------------------------------- */
+  .accordion {
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    background-color: var(--card-background);
+  }
+  
+  .accordion-header {
+    padding: var(--spacing-unit);
+    background-color: var(--background-color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .accordion-arrow {
+    font-size: 1.25rem;
+    display: inline-block;
+  }
+  
+/* アコーディオン本文で縦スクロール＋強制改行を有効にする */
+.accordion-content {
+  max-height: 150px;       /* 必要に応じて数値を調整 */
+  overflow-y: auto;
+  overflow-x: hidden; 
+}
+
+/* 文章を強制的に折り返すための設定 */
+.accordion-content pre {
+  white-space: pre-wrap;
+  word-break: break-word;      /* 古めのブラウザは break-all でも可 */
+  overflow-wrap: break-word;
+}
+  
+  .modal-content {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+  }
+  
+  /* スクロールバー */
+  .modal-content::-webkit-scrollbar {
+    width: 8px;
+  }
+  .modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+  .modal-content::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+  .modal-content::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  
+  /* ----------------------------------------------------
+     テキストエリアなどの大きさ
+     ---------------------------------------------------- */
+  #promptInput {
+    min-height: 100px;  /* 初期の高さ */
+    resize: vertical;   /* 縦方向のみリサイズ可能 */
+    width: 100%;
+    overflow-y: auto;   /* 縦スクロール可能 */
+    line-height: 1.5;
+    padding: 0.75rem;
+    box-sizing: border-box;
+    margin-bottom: 1rem;
+  }
+  
+  #apiKey {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  /* ----------------------------------------------------
+     webPagesContainer の横幅対策
+     ---------------------------------------------------- */
+  #webPagesContainer {
+    max-width: 100%;
+    /* 必要に応じて高さを固定するなら下記を追加:
+       max-height: 200px;
+       overflow-y: auto;
+    */
+    overflow-x: auto; /* 横スクロールできるように */
+  }
+  
+  /* もし #webPagesContainer が非常に長い要素を含む場合は
+     overflow: auto; etc. をつける */
+  
+  /* ----------------------------------------------------
+     追加の微調整 (例: .card や .prompt-input-wrapper など)
+     ---------------------------------------------------- */
+  .prompt-input-wrapper {
+    position: relative;
+    width: 100%;
+  }
+  /* モーダルヘッダー用のタイトルを一行で省略表示 */
+  .modal-title-ellipsis {
+    display: inline-block;       /* インラインブロックかブロック要素にする */
+    white-space: nowrap;         /* 折り返ししない */
+    overflow: hidden;            /* はみ出した部分を隠す */
+    text-overflow: ellipsis;     /* 省略記号(...) で表示 */
+    max-width: 150px;              /* ボタンが隠れない程度に幅を制限 (お好みで調整) */
+  }
+
+
