@@ -5,7 +5,7 @@ IB_extension is licensed under a modified version of the Apache License 2.0 with
 1. IB_extension may be used commercially, including as a backend service for other applications or as an application development platform for enterprises. However, a commercial license must be obtained from the producer if any of the following conditions are met:
 
 "a. Logo and Copyright Information
-When using the IB_extension frontend, if you modify the code and provide it to a third party, you must not use the logo. On the other hand, you may not remove the ""Powered by IB_extension"" notice from the UI.
+When using the IB_extension frontend, if you modify the code and provide it to a third party, you must not use the logo. On the other hand, you may not remove the ""Powered by InsightBuddy"" notice from the UI.
 
 ""Powered by InsightBuddy®""
 ""InsightBuddy is a registered trademark of Japan AI Consulting Corporation.""
