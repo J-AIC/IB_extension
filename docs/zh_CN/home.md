@@ -1,7 +1,7 @@
 # 1. 介绍
 
 无需注册，轻松设置！  
-InsightBuddy Chat 是一个可在网站上使用的 AI 聊天助手。只需为您首选的 AI 提供商（无论是 OpenAI、Anthropic、Google 还是其他）设置 API 密钥，即可立即开始使用。  
+IB_extension 是一个可在网站上使用的 AI 聊天助手。只需为您首选的 AI 提供商（无论是 OpenAI、Anthropic、Google 还是其他）设置 API 密钥，即可立即开始使用。  
 此外，它还可以连接到您自托管的兼容 OpenAI 的环境。
 
 - 截至 2025 年 2 月，Google 的 Gemini 部分功能免费，因此如果利用这一优势，您可以免费使用生成式 AI。

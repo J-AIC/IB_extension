@@ -1,7 +1,7 @@
 # 1. Introduction
 
 Aucune inscription n'est requise, configuration simple !  
-InsightBuddy Chat est un assistant de chat IA utilisable sur des sites web. En configurant simplement la clé API de votre fournisseur d'IA préféré — que ce soit OpenAI, Anthropic, Google ou un autre — vous pouvez l'utiliser immédiatement.  
+IB_extension est un assistant de chat IA utilisable sur des sites web. En configurant simplement la clé API de votre fournisseur d'IA préféré — que ce soit OpenAI, Anthropic, Google ou un autre — vous pouvez l'utiliser immédiatement.  
 De plus, il peut également se connecter à votre environnement auto-hébergé compatible avec OpenAI.
 
 - À partir de février 2025, le Gemini de Google est partiellement gratuit, ce qui vous permet d'utiliser l'IA générative gratuitement si vous en profitez.
