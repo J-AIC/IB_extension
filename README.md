@@ -1,320 +1,370 @@
-InsightBuddyチャット
-## 1. 概要
-Chromeの拡張機能として開発中のInsightBuddyチャット（仮称）のソースコードです。
-InsightBuddyチャット（仮称）は、Webサイト上で利用できるAIチャットアシスタントです。OpenAI、Anthropic、Google など、お好みのAIプロバイダーのAPIキーを設定するだけで、すぐに利用を開始できます。
-また、llama.cppやvllmなどでホストしたOpenAI互換のAPIサーバーでも接続が可能です。
+# 1. Introduction
 
-2025年2月現在、Google社のGeminiが一部無料となっており、これをご利用頂ければ無料で生成AIをお使い頂けます。
-下記記事にてアカウント設定方法をまとめています（ https://j-aic.com/techblog/-PSfeaXS ）
+No registration required, easy setup!  
+InsightBuddy Chat is an AI chat assistant that can be used on websites. By simply setting the API key for your preferred AI provider—whether it's OpenAI, Anthropic, Google, or another—you can start using it immediately.  
+Furthermore, it can also connect to your own self-hosted OpenAI-compatible environment.
 
-### 1.1 主な特徴
-- 複数のAIプロバイダーに対応
-- Webサイトの内容を理解した上での対話が可能
-- チャット履歴の保存機能
-- ガイド機能を使うことで特定のサイトで、特定ののアクションを実行することが可能です
+- As of February 2025, Google's Gemini is partially free, so you can use generative AI for free if you take advantage of it.
+- The following article summarizes how to set up an account ( https://j-aic.com/techblog/-PSfeaXS ).
 
-### 1.2 情報の取り扱い
-- APIキーやチャット履歴などは端末内のみ保存します
-- チャット機能を通じて送信されるデータの取り扱いは、各モデルプロバイダーの利用規約をご確認ください
-- 当社は本機能単独で、利用状況やデータを収集することはありません
+## 1.1 Key Features
 
-## 2. 初期設定
+- Supports multiple AI providers
+- Enables conversations that take website content into account
+- Includes a chat history saving feature
+- By using the guide feature, you can perform specific actions on designated sites.
 
-### 2.1 APIプロバイダーの設定手順
-1. **API設定画面を開く**
-   - 画面右下のチャットウィジェットを開く
-   - 下部メニューの「家」アイコンをクリック
-   - 左メニューの「API設定」をクリック
+## 1.2 Information Handling
 
-2. **プロバイダーの選択とAPIキーの設定**
-   - 利用したいAIプロバイダーのカードを探す
-   - 歯車アイコンをクリックして設定モードに入る
-   - APIキーを入力
-   - 「保存」をクリック
+- API keys and chat history are stored only locally on your device.
+- For details on how data sent via the chat feature is handled, please review each model provider’s terms of service.
+- Our company does not collect usage data or other information solely through this feature.
 
-3. **モデルの選択**
-   - プロバイダーカードの「モデルを選択」をクリック
-   - 利用可能なモデルのリストから選択
+---
 
-4. **プロバイダーの有効化**
-   - 設定完了後、トグルスイッチをオンにする
-   - 正しく設定されると、ステータス表示が更新される
+# 2. Initial Setup
 
-### 2.2 対応プロバイダー一覧
+## 2.1 Steps to Configure the API Provider
 
-#### OpenAI
-- キー形式: sk- で始まる文字列
-- 主要モデル: GPT-4, GPT-3.5-turbo
-- APIキーの取得: OpenAIのウェブサイトで取得可能
+1. **Open the API Settings Screen**  
+   - Open the chat widget at the bottom right of the screen  
+   - Click the "Home" icon in the bottom menu  
+   - Click "API Settings" in the left menu
+2. **Select the Provider and Set the API Key**  
+   - Locate the card for the desired AI provider  
+   - Click the gear icon to enter configuration mode  
+   - Enter your API key  
+   - Click "Save"
+3. **Select the Model**  
+   - Click "Select Model" on the provider card  
+   - Choose from the list of available models
+4. **Enable the Provider**  
+   - After configuration, turn on the toggle switch  
+   - The status display will update once properly configured
 
-#### Anthropic
-- キー形式: sk-ant-api で始まる文字列
-- 主要モデル: Claude-3-Opus, Claude-3-Sonnet
-- APIキーの取得: Anthropicのウェブサイトで取得可能
+## 2.2 Supported Providers
 
-#### Google Gemini
-- キー形式: AIza で始まる文字列
-- 主要モデル: gemini-pro
-- APIキーの取得: Google AI studioで取得可能
+### OpenAI
 
-#### Deepseek
-- キー形式: sk-ds-api で始まる文字列
-- 主要モデル: Deepseek-LLM, Deepseek-XL
-- APIキーの取得: Deepseekのウェブサイトで取得可能
+- Key format: A string starting with `sk-`
+- Main models: GPT-4, GPT-3.5-turbo
+- API key acquisition: Available on the OpenAI website
 
-#### OpenAI Compatible
-- キー形式: 任意の文字列（プロバイダーの仕様に準拠）
-- 主要モデル: プロバイダーが提供するOpenAI互換モデル
-- APIキーの取得: 各プロバイダーのウェブサイトで取得
-- 特記事項:
-  - カスタムエンドポイントURLの設定が必要
-  - 使用するモデル名の手動入力が必要
-  - OpenAI互換APIを提供する任意のサービスで利用可能
+### Anthropic
 
-#### Local API
-- InsightBuddy独自APIです
-- 別途ご契約頂くことでご利用頂けます
-- フォーム読み取り機能や、フォーム入力画面をご利用頂けます
+- Key format: A string starting with `sk-ant-api`
+- Main models: Claude-3-Opus, Claude-3-Sonnet
+- API key acquisition: Available on the Anthropic website
 
-## 3. 基本的な使い方
+### Google Gemini
 
-### 3.1 チャットの開始
-1. ブラウザの右端にある青いタブをクリック
-2. チャットウィジェットが開きます
-3. 下部の入力欄にメッセージを入力
-4. 送信ボタンをクリックまたはEnterキーで送信
+- Key format: A string starting with `AIza`
+- Main model: gemini-pro
+- API key acquisition: Available on Google Cloud Console
 
-### 3.2 チャット機能の活用
-- **新規チャットの開始**
-  - 右上の「＋」アイコンをクリック
-- **チャット履歴の確認**
-  - 下部メニューの「時計」アイコンをクリック
-  - 過去の会話を選択して表示
-- **ウェブページ内容の活用**
-  - 「今見ているサイトを取得する」をオンにすると、現在のページの内容を考慮した回答が得られます
+### Deepseek
 
-## 4. トラブルシューティング
+- Key format: A string starting with `sk-ds-api`
+- Main models: Deepseek-LLM, Deepseek-XL
+- API key acquisition: Available on the Deepseek website
 
-### 4.1 よくあるエラーと対処方法
+### OpenAI Compatible
 
-#### APIキーエラー
-- 症状: 「APIキーが無効です」というエラー
-- 対処:
-  - APIキーの形式が正しいか確認
-  - APIキーの有効期限を確認
-  - 必要に応じて新しいAPIキーを取得
+- Key format: Any string (in accordance with the provider's specifications)
+- Main models: OpenAI-compatible models provided by the provider
+- API key acquisition: Available on each provider's website
+- Special notes:
+  - Requires custom endpoint URL configuration
+  - Requires manual input of the model name
+  - Can be used with any service that offers an OpenAI-compatible API
 
-#### 接続エラー
-- 症状: メッセージが送信できない
-- 対処:
-  - インターネット接続を確認
-  - ブラウザのリロード
-  - APIプロバイダーのステータスを確認
+### Local API
 
-#### モデル選択エラー
-- 症状: モデルが選択できない
-- 対処:
-  - APIキーの権限を確認
-  - プロバイダーの利用制限を確認
-  - 別のモデルを試す
+- This is InsightBuddy’s proprietary API.
+- Available for use upon a separate agreement.
+- Offers features such as form reading and a form input interface.
 
-#### OpenAI Compatible接続エラー
-- 症状: 接続できない、応答がない
-- 対処:
-  - エンドポイントURLが正しいか確認
-  - 入力したモデル名がプロバイダーの仕様と一致しているか確認
-  - APIキーの形式がプロバイダーの要件を満たしているか確認
-  - プロバイダーのサービス状態を確認
+---
 
-### 4.2 設定のリセット
-1. API設定画面を開く
-2. 各プロバイダーの設定をオフに
-3. APIキーを再設定
-4. モデルを再選択
+# 3. Basic Usage
 
-## 5. セキュリティとプライバシー
+## 3.1 Starting a Chat
 
-### 5.1 データの取り扱い
-- APIキーは端末内に暗号化して保存
-- チャット履歴は端末内にのみ保存
-- サイト情報は必要な範囲でのみ使用
+1. Click the blue tab at the right edge of your browser.
+2. The chat widget will open.
+3. Enter your message in the input field at the bottom.
+4. Click the send button or press Enter to send.
 
-### 5.2 推奨されるセキュリティ対策
-- APIキーの定期的な更新
-- 使用しないプロバイダーの無効化
-- ブラウザのプライバシー設定の確認
+## 3.2 Using the Chat Feature
 
-### 5.3 更新情報の確認
-- Chrome拡張機能の自動更新を確認
-- 定期的な設定の見直しを推奨
+- **Start a New Chat**  
+  - Click the "+" icon in the top right.
+- **Review Chat History**  
+  - Click the clock icon in the bottom menu.  
+  - Select a past conversation to view it.
+- **Utilize Website Content**  
+  - When enabled, the "Retrieve current website content" option allows the assistant to consider the content of the current page when generating a response.
 
-## 6. 技術仕様
+---
 
-### 6.1 マルチターン対話システム
-#### 基本設計
-- 最大保持ターン数: 4ターン
-- トークン数の効率的利用のため制限
-- 1ターン = ユーザーメッセージ + AIレスポンス
-- 5ターン目以降は最古のターンから削除
+# 4. Troubleshooting
 
-#### 実装されている会話管理
-- Markdownフォーマットでの履歴管理
-  - Recent dialogue: 過去の会話履歴
-  - Current user message: 現在の入力
-  - Page Context: 現在のWebページ情報（オプション）
+## 4.1 Common Errors and Their Solutions
 
-#### markdown設定:
-```
-# Recent dialogue
-## Turn 1
-### User
-ユーザーの発言内容
-### Assistant
-AIの応答内容
+### API Key Error
 
-# Current user message
-現在のユーザー発言
+- **Symptom**: An error stating "API key is invalid."
+- **Solution**:
+  1. Verify that the API key format is correct.
+  2. Check the API key’s expiration date.
+  3. Obtain a new API key if necessary.
 
-# Page Context (オプション)
-Webページコンテンツ
-```
+### Connection Error
 
-- システムプロンプトは各リクエスト時に付与
-  - ユーザーの言語に合わせた応答
-  - デコレーション・マークダウンの使用制限
-  - 一貫性のある会話の維持
+- **Symptom**: Unable to send the message.
+- **Solution**:
+  1. Check your internet connection.
+  2. Reload the browser.
+  3. Check the status of the API provider.
 
-#### システムプロンプト設定:
-```
-You are a high-performance AI assistant. Please respond according to the following instructions:
+### Model Selection Error
 
-# Basic Behavior
-- The message posted by the user is stored in ("Current user message").
-- Respond in the same language used by the user in ("Current user message").
-- Keep your responses concise and accurate.
-- Do not use decorations or markdown.
+- **Symptom**: Unable to select a model.
+- **Solution**:
+  1. Verify the permissions of the API key.
+  2. Check the provider’s usage limitations.
+  3. Try selecting a different model.
 
-# Processing Conversation History
-- Understand the context by referring to the provided markdown formatted conversation history ("Recent dialogue").
-- Each turn is provided as "Turn X" and contains the conversation between the user and the assistant.
-- Aim for responses that remain consistent with the previous conversation.
+### OpenAI Compatible Connection Error
 
-# Processing Web Information
-- If a "Page Context" section exists, consider the content of that webpage when answering.
-- Use the webpage information as supplementary, referring only to parts directly related to the user's question.
-```
+- **Symptom**: Unable to connect or receive a response.
+- **Solution**:
+  1. Verify that the endpoint URL is correct.
+  2. Ensure that the input model name matches the provider’s specifications.
+  3. Confirm that the API key format meets the provider's requirements.
+  4. Check the provider's service status.
 
-### 6.2 コンテキスト処理システム
-#### Webページ情報取得
-- トークン効率化のための実装
-- 各質問時に都度取得（履歴には保存しない）
-- HTMLの最適化処理によるトークン削減
-- 不要要素の除去（script, style, iframe等）
+## 4.2 Resetting Configuration
 
-#### ページコンテキストトグル機能
-- ユーザーによる有効/無効の切り替え
-- Local API使用時は自動有効化
+1. Open the API settings screen.
+2. Turn off the settings for each provider.
+3. Re-enter the API keys.
+4. Re-select the models.
 
-#### フォーム読み取り機能
-- フォーム要素の自動認識
+---
 
-#### PDF解析機能
-- PDFファイルの自動検出
-- テキスト抽出処理
-- 元のフォームコンテキストとの統合
+# 5. Security and Privacy
 
-### 6.3 プロバイダー管理システム
-#### プロバイダー固有の実装
+## 5.1 Data Handling
+
+- API keys are stored encrypted locally on your device.
+- Chat history is stored only locally.
+- Website information is used only to the necessary extent.
+
+## 5.2 Recommended Security Measures
+
+- Regularly update API keys.
+- Disable providers that are not in use.
+- Review your browser’s privacy settings.
+
+## 5.3 Checking for Updates
+
+- Ensure that Chrome extension auto-updates are enabled.
+- Regularly review and update your settings.
+
+---
+
+# 6. Technical Specifications
+
+## 6.1 Multi-turn Dialogue System
+
+### Basic Design
+
+- **Maximum number of turns retained:** 4 turns
+  - Limited to optimize token usage.
+  - One turn = user message + AI response.
+  - From the 5th turn onward, the oldest turns are removed.
+
+### Implemented Conversation Management
+
+- **Conversation history managed in Markdown format**
+  - **Recent dialogue:** Past conversation history
+  - **Current user message:** The current input
+  - **Page Context:** Current webpage information (optional)
+  - **Markdown configuration:**
+
+    ```markdown
+    # Recent dialogue
+    ## Turn 1
+    ### User
+    User's message content
+    ### Assistant
+    AI's response content
+    # Current user message
+    Current user's message
+    # Page Context (optional)
+    Webpage content
+    ```
+
+- **A system prompt is appended with each request**
+  - Responses are provided in the user's language.
+  - There are restrictions on the use of decorations and markdown.
+  - Ensures consistency throughout the conversation.
+  - **System prompt configuration:**
+
+    ```text
+    You are a high-performance AI assistant. Please respond according to the following instructions:
+
+    # Basic Behavior
+    - The message posted by the user is stored in ("Current user message").
+    - Respond in the same language used by the user in ("Current user message").
+    - Keep your responses concise and accurate.
+    - Do not use decorations or markdown.
+
+    # Processing Conversation History
+    - Understand the context by referring to the provided markdown formatted conversation history ("Recent dialogue").
+    - Each turn is provided as "Turn X" and contains the conversation between the user and the assistant.
+    - Aim for responses that remain consistent with the previous conversation.
+
+    # Processing Web Information
+    - If a "Page Context" section exists, consider the content of that webpage when answering.
+    - Use the webpage information as supplementary, referring only to parts directly related to the user's question.
+    ```
+
+---
+
+## 6.2 Context Processing System
+
+### Retrieving Webpage Information
+
+- **Implementation for Token Optimization**
+  - Retrieve the webpage content anew for each query (not saved in history).
+  - Reduce token usage by optimizing the HTML.
+  - Remove unnecessary elements (such as `<script>`, `<style>`, `<iframe>`, etc.).
+- **Page Context Toggle Feature**
+  - Allows users to toggle the feature on or off.
+  - Automatically enabled when using the Local API.
+
+### Form Reading Functionality
+
+- Automatically recognizes form elements.
+- **Integration with PDF Parsing Functionality**
+  - Automatic detection of PDF files.
+  - Text extraction process.
+  - Integration with the original form context.
+
+---
+
+## 6.3 Provider Management System
+
+### Provider-Specific Implementations
+
 - **OpenAI / Deepseek**
-  - Bearer認証方式
-  - モデル自動取得機能
+  - Uses Bearer authentication.
+  - Supports automatic model retrieval.
 - **Anthropic**
-  - x-api-key認証方式
-  - バージョン指定必須（2023-06-01）
+  - Uses x-api-key authentication.
+  - Requires version specification (e.g., 2023-06-01).
 - **Google Gemini**
-  - APIキーによる認証
-  - 独自のレスポンス形式対応
+  - Authenticates using an API key.
+  - Supports a unique response format.
 - **OpenAI Compatible**
-  - カスタムエンドポイント設定
-  - モデル名手動設定
-  - 認証方式のカスタマイズ
+  - Supports custom endpoint configuration.
+  - Requires manual model name setting.
+  - Allows customizable authentication methods.
 - **Local API**
-  - カスタムエンドポイント対応
-  - 独自認証システム
+  - Supports custom endpoints.
+  - Uses a proprietary authentication system.
 
-#### プロバイダー切り替え機能
-- 単一プロバイダーのみ有効化可能
-- 設定の完全性チェック
-  - APIキーの形式検証
-  - 必須設定項目の確認
-  - モデル選択状態の確認
+### Provider Switching Functionality
 
-### 6.4 履歴管理システム
-#### 実装された保存機能
-- 最大30件の会話履歴保持
-- 保存データ：
-  - プロバイダー情報
-  - 選択モデル
-  - タイムスタンプ
-  - メッセージ履歴
+- Only one provider can be enabled at a time.
+- Performs an integrity check of the configuration:
+  - Validates the API key format.
+  - Checks for required configuration items.
+  - Verifies that a model has been selected.
 
-#### Chrome Storage APIとの連携
-- 拡張機能間でのデータ共有
-- フォールバックとしてのローカルストレージ
+---
 
-#### 履歴機能
-- 会話の編集機能
-  - メッセージの編集
-  - 編集後の再生成
-  - 以降のメッセージの自動更新
-- 履歴のフィルタリング
-  - プロバイダー互換性チェック
-  - モデルの一致確認
-  - 互換性警告の表示
+## 6.4 History Management System
 
-### 6.5 チャットウィジェットの実装
-#### UI/UX機能
-- iframe方式での実装
-  - 親ページとの分離
-  - メッセージングによる通信
-- レスポンシブ対応
-  - 画面サイズに応じた表示調整
-  - 入力エリアの自動調整
+### Implemented Saving Functionality
 
-#### 特殊機能
-- サイト情報表示
-- HTMLコンテンツの表示
-- フォーム内容の表示
+- Retains up to 30 conversation histories.
+- **Saved data includes:**
+  - Provider information
+  - Selected model
+  - Timestamp
+  - Message history
+- **Integration with the Chrome Storage API:**
+  - Enables data sharing between extensions.
+  - Uses local storage as a fallback.
 
-#### メッセージ管理
-- 新規チャット作成
-- チャットの編集・再送信（ただしWeb情報の再利用は不可）
-- 履歴表示/非表示
+### History Features
 
-### 6.6 セキュリティ実装
-#### API管理
-- APIキーの安全な保存
-  - Chrome Storage APIの利用
-  - キー表示時のマスキング
+- **Conversation Editing Feature**
+  - Allows editing of messages.
+  - Regenerates responses after edits.
+  - Automatically updates subsequent messages.
+- History filtering.
+- **Provider Compatibility Check**
+  - Verifies that the selected model matches the provider.
+  - Displays compatibility warnings if needed.
 
-#### データ保護
-- ページコンテキストの制限
-  - 必要な情報のみ取得
-  - センシティブ情報の除外
-- ローカルデータの管理
-- セッション管理
+---
 
-### 6.7 デバックログ
-下記のデバッグログを出力しています。
+## 6.5 Implementation of the Chat Widget
 
-```javascript
-console.group('外部API送信デバッグ情報');
-console.log('送信メッセージ:', message);
-console.log('API設定:', {
-  provider: apiConfig.provider,
-  model: apiConfig.model,
-  customSettings: apiConfig.customSettings
-});
-console.log('APIレスポンス:', result);
-console.groupEnd();
-```
+### UI/UX Features
+
+- **Implemented using iframes**
+  - Isolated from the parent page.
+  - Communicates via messaging.
+- **Responsive Design**
+  - Adjusts display based on screen size.
+  - Automatically resizes the input area.
+
+### Special Features
+
+- **Displaying Site Information**
+  - Renders HTML content.
+  - Displays form content.
+- **Message Management**
+  - Create a new chat.
+  - Edit and resend chats (note: reuse of web information is not permitted).
+  - Toggle the display of chat history.
+
+---
+
+## 6.6 Security Implementations
+
+### API Management
+
+- **Secure storage of API keys**
+  - Uses the Chrome Storage API.
+  - Masks keys when they are displayed.
+
+### Data Protection
+
+- **Limiting Page Context**
+  - Retrieves only the necessary information.
+  - Excludes sensitive data.
+- **Local Data Management**
+  - Manages session data.
+
+---
+
+## 6.7 Debug Log
+
+- The following debug log is output:
+
+  ```javascript
+  console.group('External API Transmission Debug Info');
+  console.log('Sent message:', message);
+  console.log('API configuration:', {
+      provider: apiConfig.provider,
+      model: apiConfig.model,
+      customSettings: apiConfig.customSettings
+  });
+  console.log('API response:', result);
+  console.groupEnd();
