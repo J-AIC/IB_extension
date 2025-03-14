@@ -1,0 +1,31 @@
+# Open Source License
+
+InputBuddy is licensed under a modified version of the Apache License 2.0 with the following additional conditions.
+
+1. InputBuddy may be used commercially, including as a backend service for other applications or as an application development platform for enterprises. However, a commercial license must be obtained from the producer if any of the following conditions are met:
+
+"a. Logo and Copyright Information
+When using the InputBuddy frontend, if you modify the code and provide it to a third party, you must not use the logo. On the other hand, you may not remove the ""Powered by InputBuddy"" notice from the UI.
+
+""Powered by InputBuddy®""
+""InputBuddy is a registered trademark of Japan AI Consulting Corporation.""
+This restriction does not apply to the use of InputBuddy that does not involve the frontend."
+
+For inquiries regarding the license, please contact service@j-aic.com via email.
+
+"2. Contributor Agreements
+As a contributor, you must agree to the following terms:"
+
+a. The producer reserves the right to modify the open-source license terms as deemed necessary.
+b. Submitted code may be used for commercial purposes, including but not limited to cloud business operations.
+
+"3. Disclaimer and Liability Limitations
+In addition to the disclaimers set forth in the Apache License 2.0, the following disclaimers apply:"
+a. The producer assumes no liability for any direct or indirect damages resulting from the use of InputBuddy.
+
+If there is any conflict between these additional terms and the Apache License 2.0, the additional terms shall take precedence.
+
+"Except for the specific conditions outlined above, all other rights and restrictions follow the Apache License 2.0. For more details about the Apache License 2.0, please visit:
+http://www.apache.org/licenses/LICENSE-2.0 ."
+
+©2025 Japan AI Consulting Corporation
