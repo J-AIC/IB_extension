@@ -7,8 +7,8 @@ IB_extension is licensed under a modified version of the Apache License 2.0 with
 "a. Logo and Copyright Information
 When using the IB_extension, if you modify the code and provide it to a third party, you must not use the logo. On the other hand, you may not remove the ""Powered by InsightBuddy"" notice from the UI.
 
-""Powered by InsightBuddy®""
-""InsightBuddy is a registered trademark of Japan AI Consulting Corporation.""
+"Powered by InsightBuddy®"
+InsightBuddy is a registered trademark of Japan AI Consulting Corporation."
 
 For inquiries regarding the license, please contact service@j-aic.com via email.
 
