@@ -1,7 +1,7 @@
 # 1. Einführung
 
 Keine Registrierung erforderlich, einfache Einrichtung!  
-InsightBuddy Chat ist ein KI-Chat-Assistent, der auf Webseiten verwendet werden kann. Sie können ihn sofort nutzen, indem Sie einfach den API-Schlüssel Ihres bevorzugten KI-Anbieters eingeben – egal ob OpenAI, Anthropic, Google oder ein anderer Anbieter – ganz ohne Registrierung.  
+IB_extension ist ein KI-Chat-Assistent, der auf Webseiten verwendet werden kann. Sie können ihn sofort nutzen, indem Sie einfach den API-Schlüssel Ihres bevorzugten KI-Anbieters eingeben – egal ob OpenAI, Anthropic, Google oder ein anderer Anbieter – ganz ohne Registrierung.  
 Darüber hinaus kann er auch mit Ihrer selbstgehosteten, OpenAI-kompatiblen Umgebung verbunden werden.
 
 - Ab Februar 2025 ist Googles Gemini teilweise kostenlos verfügbar, sodass Sie generative KI kostenlos nutzen können, wenn Sie diese Option ausnutzen.

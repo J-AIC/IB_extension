@@ -1,7 +1,7 @@
 # 1. はじめに
 
 登録不要・設定簡単！  
-InsightBuddyチャットは、Webサイト上で利用できるAIチャットアシスタントです。OpenAI、Anthropic、Google など、お好みのAIプロバイダーのAPIキーを設定するだけで、すぐに利用を開始できます。  
+IB_extensionは、Webサイト上で利用できるAIチャットアシスタントです。OpenAI、Anthropic、Google など、お好みのAIプロバイダーのAPIキーを設定するだけで、すぐに利用を開始できます。  
 さらに、自分で立てたOpenAI互換の環境にも接続が可能です。
 
 - 2025年2月現在、Google社のGeminiが一部無料となっており、これをご利用頂ければ無料で生成AIをお使い頂けます
