@@ -5,7 +5,7 @@ IB_extension is a Chrome extension that provides AI chat assistant functionality
 Furthermore, it can also connect to your own self-hosted OpenAI-compatible environment.
 
 - As of February 2025, Google's Gemini is partially free, so you can use generative AI for free if you take advantage of it.
-- The following article summarizes how to set up an account ( https://j-aic.com/techblog/-PSfeaXS ).
+- The following article summarizes how to set up an account ( https://j-aic.com/techblog/google-ai-studio-api-free).
 
 ## 1.1 Key Features
 
