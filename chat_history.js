@@ -1,30 +1,19 @@
 // chat_history.js
+
 class ChatHistory {
     constructor() {
-        // 定数定義
         this.MAX_HISTORY = 30;
-
-        // 使用するストレージキー
         this.storageKey = 'chat_history';
-        this.recentConversationKey = 'recent_conversation';  // 追加: 必須の定義
-
-        // 現在アクティブなタブ
+        this.recentConversationKey = 'recent_conversation';
         this.currentTab = 'chat';
-
-        // UI初期化
         this.initializeUI();
     }
 
-    // -------------------------------------------------------------------------
-    // UI 初期化とイベント設定
-    // -------------------------------------------------------------------------
     async initializeUI() {
-        // DOM取得
         this.historyList = document.getElementById('historyList');
         this.template = document.getElementById('historyItemTemplate');
         this.historyTab = document.getElementById('history-tab');
 
-        // モーダルのクローズボタン設定
         const closeModalButton = document.getElementById('closeModalButton');
         if (closeModalButton) {
             closeModalButton.addEventListener('click', () => {
@@ -35,28 +24,23 @@ class ChatHistory {
             });
         }
 
-        // タブ切り替えイベントのリスナーを追加
         document.querySelectorAll('button[data-bs-toggle="tab"]').forEach(button => {
             button.addEventListener('shown.bs.tab', (event) => {
                 if (event.target.id === 'history-tab') {
-                    // 履歴タブが表示されたときに履歴を再描画
                     this.renderHistoryList();
                 }
                 this.currentTab = event.target.id;
             });
         });
 
-        // 履歴の読み込み
         await this.loadHistory();
 
-        // 直近の会話を復元
         const recentConversation = await this.getRecentConversation();
         if (recentConversation) {
             const currentConfig = await this.getCurrentApiConfig();
             const recentProvider = recentConversation.provider;
             const recentModel = recentConversation.model;
 
-            // プロバイダーとモデルの互換性をチェック
             const isCompatible = (
                 currentConfig.provider === recentProvider &&
                 (recentProvider === 'local' || recentProvider === 'azureOpenai' || currentConfig.model === recentModel)
@@ -70,9 +54,6 @@ class ChatHistory {
         }
     }
 
-    // -------------------------------------------------------------------------
-    // ストレージとのやり取り（共通ヘルパー）
-    // -------------------------------------------------------------------------
     static isChromeStorageAvailable() {
         return (typeof chrome !== 'undefined' && chrome.storage);
     }
@@ -105,11 +86,6 @@ class ChatHistory {
         }
     }
 
-    /**
-     * 複数キーの取得用ヘルパー
-     * @param {string[]} keys 
-     * @returns {object} { key: value }
-     */
     static async getItems(keys) {
         if (ChatHistory.isChromeStorageAvailable()) {
             return new Promise(resolve => {
@@ -122,7 +98,7 @@ class ChatHistory {
                 try {
                     value = JSON.parse(value);
                 } catch {
-                    // 文字列としてそのまま格納
+                    value = value;
                 }
                 result[key] = value;
             });
@@ -130,12 +106,9 @@ class ChatHistory {
         }
     }
 
-    // -------------------------------------------------------------------------
-    // ストレージとのやり取り（履歴・直近会話の保存／取得）
-    // -------------------------------------------------------------------------
     async getHistory() {
         const stored = await ChatHistory.getItem(this.storageKey);
-        return stored || []; // 履歴が何もない場合は空配列
+        return stored || [];
     }
 
     async setHistory(history) {
@@ -151,9 +124,6 @@ class ChatHistory {
         await ChatHistory.setItem(this.recentConversationKey, conversation);
     }
 
-    // -------------------------------------------------------------------------
-    // 履歴のロード・表示
-    // -------------------------------------------------------------------------
     async loadHistory() {
         try {
             const history = await this.getHistory();
@@ -173,7 +143,6 @@ class ChatHistory {
 
         const history = await this.getHistory();
 
-        // timestampで降順ソート
         const sortedHistory = history.sort((a, b) => {
             return new Date(b.timestamp) - new Date(a.timestamp);
         });
@@ -186,7 +155,6 @@ class ChatHistory {
         if (sortedHistory.length === 0) {
             const emptyMessage = document.createElement('div');
             emptyMessage.className = 'p-3 text-muted';
-            // i18nの初期化を待つ
             await new Promise(resolve => {
                 const checkI18n = () => {
                     if (chrome.i18n && chrome.i18n.getMessage('noHistory')) {
@@ -227,7 +195,6 @@ class ChatHistory {
             const titleInput = historyItem.querySelector('.history-title-input');
             const deleteButton = historyItem.querySelector('.delete-button');
 
-            // タイトル（ダブルクリックで編集）
             titleInput.addEventListener('dblclick', () => {
                 titleInput.readOnly = false;
                 titleInput.focus();
@@ -244,13 +211,11 @@ class ChatHistory {
                 }
             });
 
-            // 削除ボタン
             deleteButton.addEventListener('click', async (e) => {
                 e.stopPropagation();
                 await this.deleteHistory(item.id);
             });
 
-            // 履歴アイテム全体クリック時（会話ロード）
             historyItem.addEventListener('click', (e) => {
                 if (
                     !e.target.classList.contains('history-title-input') &&
@@ -265,18 +230,13 @@ class ChatHistory {
         });
     }
 
-    // -------------------------------------------------------------------------
-    // 履歴への保存・タイトル更新・削除
-    // -------------------------------------------------------------------------
     async saveHistory(conversation) {
-        // 直近の会話として保存
         await this.saveRecentConversation(conversation);
 
         const history = await this.getHistory();
         const firstMessage = conversation.messages[0];
         if (!firstMessage) return;
 
-        // 既存の同一会話があるかチェック
         const existingIndex = history.findIndex(h => {
             const firstHistoryMessage = h.conversation.messages[0];
             return firstHistoryMessage &&
@@ -284,10 +244,8 @@ class ChatHistory {
                 firstHistoryMessage.timestamp === firstMessage.timestamp;
         });
 
-        // タイトル自動生成
         const title = await this.generateTitle(conversation.messages);
 
-        // 新しい履歴項目
         const historyItem = {
             id: existingIndex >= 0 ? history[existingIndex].id : Date.now(),
             title: title,
@@ -297,18 +255,15 @@ class ChatHistory {
             conversation: conversation
         };
 
-        // 既存更新 or 新規追加
         if (existingIndex >= 0) {
             history[existingIndex] = historyItem;
         } else {
             history.unshift(historyItem);
         }
 
-        // 履歴数をオーバーしないようにカット
         const trimmedHistory = history.slice(0, this.MAX_HISTORY);
         await this.setHistory(trimmedHistory);
 
-        // ---- 変更点: タブのアクティブ状態に関わらず再描画 ----
         await this.renderHistoryList();
     }
 
@@ -333,22 +288,17 @@ class ChatHistory {
         await this.renderHistoryList();
     }
 
-    // -------------------------------------------------------------------------
-    // 履歴からの会話ロード
-    // -------------------------------------------------------------------------
     async loadConversation(historyItem) {
         const currentConfig = await this.getCurrentApiConfig();
         const historyProvider = historyItem.provider;
         const historyModel = historyItem.model;
 
-        // チャットタブに切り替え
         const chatTabButton = document.querySelector('[data-bs-target="#chatTab"]');
         if (chatTabButton) {
             const tab = new bootstrap.Tab(chatTabButton);
             tab.show();
         }
 
-        // イベントの detail 構造を修正
         window.dispatchEvent(new CustomEvent('loadConversation', {
             detail: {
                 provider: historyProvider,
@@ -358,7 +308,6 @@ class ChatHistory {
             }
         }));
 
-        // プロバイダーの一致チェック
         if (currentConfig.provider === historyProvider) {
             if (historyProvider === 'local' || historyProvider === 'azureOpenai') {
                 //toggleChatInput(true);
@@ -395,9 +344,6 @@ class ChatHistory {
         }
     }
 
-    // -------------------------------------------------------------------------
-    // タイトル生成ヘルパー
-    // -------------------------------------------------------------------------
     async generateTitle(messages) {
         if (!messages || messages.length === 0) {
             return chrome.i18n.getMessage('newConversation');
@@ -412,9 +358,6 @@ class ChatHistory {
         return title + (firstUserMessage.content.length > 20 ? '...' : '');
     }
 
-    // -------------------------------------------------------------------------
-    // 現在の API 設定取得
-    // -------------------------------------------------------------------------
     async getCurrentApiConfig() {
         const result = await this.getStorageData([
             'apiProvider',
@@ -427,14 +370,10 @@ class ChatHistory {
     }
 
     async getStorageData(keys) {
-        // 複数キーの同時取得
         return ChatHistory.getItems(keys);
     }
 }
 
-// -----------------------------------------------------------------------------
-// スタイルの追加
-// -----------------------------------------------------------------------------
 const style = document.createElement('style');
 style.textContent = `
     .history-title-input {
@@ -476,13 +415,18 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// -----------------------------------------------------------------------------
-// メインの処理
-// -----------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
     const chatHistory = new ChatHistory();
 
     window.addEventListener('saveConversation', (event) => {
         chatHistory.saveHistory(event.detail);
+    });
+
+    // Optional: Clear recentConversation on CLEAR_CHAT
+    window.addEventListener('message', (event) => {
+        if (event.data.type === 'CLEAR_CHAT') {
+            console.log('[ChatHistory] Received CLEAR_CHAT message at 04:27 AM EAT, May 22, 2025, clearing recent conversation');
+            chatHistory.saveRecentConversation(null);
+        }
     });
 });

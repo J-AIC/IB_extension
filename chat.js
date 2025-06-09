@@ -1,10 +1,17 @@
-// chat.js
 //=======================================================
 // ■メイン: チャット画面の制御スクリプト
+// chat.js
 //=======================================================
 
-// [追加] 共通モジュールをインポート
+// Import common modules
 import { sendChatRequest } from './apiClient.js';
+
+// secureLogger is globally available via loggerSetup.js
+// but we'll add an explicit reference for ESM compatibility
+const logger = (typeof secureLogger !== 'undefined') ? secureLogger : console;
+
+// Log initialization
+logger.log('Chat module initialized');
 
 /*****************************************************
  * 1. グローバル変数および定数
@@ -54,11 +61,10 @@ class ChatController {
         };
         this.turns = [];
         this.currentUserMessage = null;
-        this.isProcessing = false;  // メッセージ処理中フラグ
-        this.abortController = null;  // 処理中断用のコントローラー
+        this.isProcessing = false;
+        this.abortController = null;
     }
 
-    // --- 既存のメソッド群 ---
     addMessage(message) {
         if (message.role === 'user') {
             this.currentUserMessage = message;
@@ -117,7 +123,6 @@ class ChatController {
         }
     }
 
-    // --- 新しいメソッド群 ---
     setProcessing(isProcessing) {
         this.isProcessing = isProcessing;
         if (isProcessing) {
@@ -166,24 +171,38 @@ function stripHTML(htmlString) {
  * ストレージアクセス用のヘルパー
  */
 const storage = {
-    get: async function (keys) {
-        if (typeof chrome !== 'undefined' && chrome.storage) {
-            return new Promise((resolve) => {
+    get: (keys) => {
+        return new Promise((resolve) => {
+            if (typeof chrome !== 'undefined' && chrome.storage) {
                 chrome.storage.local.get(keys, resolve);
-            });
-        } else {
-            // 非Chrome環境用フォールバック
-            const result = {};
-            keys.forEach(key => {
-                const value = localStorage.getItem(key);
-                try {
-                    result[key] = JSON.parse(value);
-                } catch {
-                    result[key] = value;
-                }
-            });
-            return result;
-        }
+            } else {
+                const result = {};
+                keys.forEach(key => {
+                    result[key] = localStorage.getItem(key);
+                    try {
+                        result[key] = JSON.parse(result[key]);
+                    } catch (e) {
+                        // it's a string, leave as is
+                    }
+                });
+                resolve(result);
+            }
+        });
+    },
+    set: (items) => {
+        return new Promise((resolve) => {
+            if (typeof chrome !== 'undefined' && chrome.storage) {
+                chrome.storage.local.set(items, resolve);
+            } else {
+                Object.keys(items).forEach(key => {
+                    const value = typeof items[key] === 'object'
+                        ? JSON.stringify(items[key])
+                        : items[key];
+                    localStorage.setItem(key, value);
+                });
+                resolve();
+            }
+        });
     }
 };
 
@@ -318,7 +337,6 @@ function addUserMessage(content, pageHTML = '', timestamp = null) {
             }
         });
 
-        // 編集可能性をチェック
         canEditMessage(timestamp || new Date().toISOString())
             .then(canEdit => {
                 editBtn.style.display = canEdit ? 'inline-block' : 'none';
@@ -389,7 +407,7 @@ function enableEditMode(messageId) {
     const messageDiv = document.getElementById(messageId);
     if (!messageDiv) return;
 
-    if (messageDiv.classList.contains('editing')) return; // すでに編集中なら何もしない
+    if (messageDiv.classList.contains('editing')) return;
 
     messageDiv.classList.add('editing');
     const textarea = messageDiv.querySelector('.edit-area textarea');
@@ -441,11 +459,9 @@ function enableEditMode(messageId) {
  * メッセージが編集可能かどうかをチェック
  */
 async function canEditMessage(messageTimestamp) {
-    // ❶ 履歴からロードした会話のプロバイダー・モデル（グローバル）
     const conversationProvider = currentProvider;
     const conversationModel = currentModel;
 
-    // ❷ 現在ストレージから取得したプロバイダー・モデル
     const result = await storage.get([
         'apiProvider',
         'selectedModels',
@@ -454,12 +470,10 @@ async function canEditMessage(messageTimestamp) {
     const actualProvider = result.apiProvider;
     const actualModel = result.selectedModels?.[actualProvider];
 
-    // ❸ プロバイダーが不一致なら false
     if (conversationProvider !== actualProvider) {
         return false;
     }
 
-    // ❹ local 以外ならモデルもチェック
     if (conversationProvider !== 'local' && conversationModel !== actualModel) {
         return false;
     }
@@ -489,13 +503,11 @@ async function handleMessageEdit(messageId, newContent) {
             });
         }
 
-        // メッセージ配列の更新
         const messageIndex = messages.findIndex(msg =>
             msg.role === 'user' && msg.content === originalContent
         );
 
         if (messageIndex !== -1) {
-            // 後続メッセージを削除
             const nextMessages = Array.from(messageDiv.parentElement.children)
                 .slice(Array.from(messageDiv.parentElement.children).indexOf(messageDiv) + 1);
             nextMessages.forEach(el => el.remove());
@@ -504,7 +516,6 @@ async function handleMessageEdit(messageId, newContent) {
             messages[messageIndex].content = newContent;
             messages[messageIndex].timestamp = newTimestamp;
 
-            // コントローラーを再構成
             chatController.clear();
             messages.forEach(msg => chatController.addMessage(msg));
 
@@ -544,7 +555,6 @@ async function regenerateResponse(messageIndex, newContent, newTimestamp, pageHT
             abortController: chatController.abortController
         };
 
-        // 送信
         const responseText = await sendChatRequest(apiConfig, unifiedPrompt);
 
         const assistantMessage = {
@@ -557,7 +567,6 @@ async function regenerateResponse(messageIndex, newContent, newTimestamp, pageHT
         chatController.addMessage(assistantMessage);
         addSystemMessage(responseText, [], assistantMessage.timestamp);
 
-        // 履歴更新用イベント
         const conversation = {
             provider: result.apiProvider,
             model: result.selectedModels?.[result.apiProvider] ?? ' ',
@@ -636,9 +645,7 @@ async function checkUrlAndDisplayGuides() {
 
     console.log('Full storage data:', storage_result);
 
-    // 1. Local API Case
     if (storage_result.apiProvider === 'local') {
-        console.log('Checking Local API case');
         const localApiKey = storage_result.apiKeys?.local;
         const localUrl = storage_result.customSettings?.local?.url;
 
@@ -671,7 +678,6 @@ async function checkUrlAndDisplayGuides() {
                         .filter(g => g.title)
                         .map(g => g.title);
 
-                    console.log('Filtered Guide Titles:', titles);
                     if (titles.length > 0) {
                         addSystemMessage(
                             chrome.i18n.getMessage("guideListTitle", [pageTitle]),
@@ -689,7 +695,6 @@ async function checkUrlAndDisplayGuides() {
         }
     }
 
-    // 2. Guides (extension internal) Case
     try {
         console.log('Starting guides check');
         if (storage_result.guides) {
@@ -715,8 +720,6 @@ async function checkUrlAndDisplayGuides() {
                         .map(card => card.title)
                         .slice(0, 5);
 
-                    console.log('Matched guide titles:', titles);
-
                     if (titles.length > 0) {
                         addSystemMessage(
                             chrome.i18n.getMessage("guideListTitle", [pageTitle]),
@@ -734,7 +737,6 @@ async function checkUrlAndDisplayGuides() {
         console.error('Error processing guides:', error);
     }
 
-    // 3. Base Guides (global base) Case
     try {
         console.log('Starting guides_base check');
         if (storage_result.guides_base) {
@@ -748,8 +750,6 @@ async function checkUrlAndDisplayGuides() {
                 .filter(guide => guide.title)
                 .map(guide => guide.title)
                 .slice(0, 5);
-
-            console.log('Base guide titles:', titles);
 
             if (titles.length > 0) {
                 addSystemMessage(
@@ -800,7 +800,6 @@ async function updateApiStatus() {
 
     apiStatus.textContent = statusText;
 
-    // メッセージ編集ボタンの表示状態を更新
     const currentProvider = result.apiProvider;
     const currentModel = result.selectedModels?.[currentProvider];
 
@@ -820,14 +819,11 @@ async function updateApiStatus() {
  *****************************************************/
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // タブ切り替えイベント
     document.querySelectorAll('button[data-bs-toggle="tab"]').forEach(button => {
         button.addEventListener('shown.bs.tab', event => {
-            // いったん全タブ非表示に
             document.querySelectorAll('.tab-pane').forEach(pane => {
                 pane.classList.add('d-none');
             });
-            // クリックされたタブに対応するpaneを表示
             const targetPane = document.querySelector(event.target.getAttribute('data-bs-target'));
             targetPane.classList.remove('d-none');
 
@@ -840,7 +836,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
-    // アクティブなタブを見て該当paneを表示
     const activeTab = document.querySelector('.nav-link.active');
     if (activeTab) {
         const targetPane = document.querySelector(activeTab.getAttribute('data-bs-target'));
@@ -852,7 +847,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // DOM要素取得
     messageInput = document.getElementById('messageInput');
     sendButton = document.getElementById('sendButton');
     chatMessages = document.getElementById('chatMessages');
@@ -862,10 +856,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     historyTabContent = document.getElementById('historyTab');
     newChatButton = document.getElementById('newChatButton');
 
-    // ChatControllerインスタンス生成
     window.chatController = new ChatController();
 
-    // メインのメッセージ送信処理
     const sendMessage = async () => {
         if (chatController.isProcessing) {
             console.log('メッセージ処理中のため、新しいメッセージは送信できません');
@@ -878,7 +870,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         let pageHTML = '';
         if (pageContextToggle?.checked && chrome?.tabs) {
             try {
-                // ▼ ページ内容取得ロジック
                 const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
                 const contentTypeResults = await chrome.scripting.executeScript({
                     target: { tabId: tab.id },
@@ -891,11 +882,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 });
 
                 const pageInfo = contentTypeResults?.[0]?.result || {};
-                const isPDF = pageInfo.url.toLowerCase().endsWith('.pdf')
-                    || pageInfo.contentType.toLowerCase() === 'application/pdf';
+                const isPDF = pageInfo.url.toLowerCase().endsWith('.pdf') ||
+                    pageInfo.contentType.toLowerCase() === 'application/pdf';
 
                 if (isPDF) {
-                    // PDFのテキスト抽出
                     await chrome.scripting.executeScript({
                         target: { tabId: tab.id },
                         files: ['assets/js/pdf.min.js']
@@ -904,34 +894,26 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const pdfResult = await chrome.scripting.executeScript({
                         target: { tabId: tab.id },
                         func: async () => {
-                            try {
-                                pdfjsLib.GlobalWorkerOptions.workerSrc = chrome.runtime.getURL('assets/js/pdf.worker.min.js');
-                                const response = await fetch(window.location.href);
-                                const pdfData = await response.arrayBuffer();
+                            pdfjsLib.GlobalWorkerOptions.workerSrc = chrome.runtime.getURL('assets/js/pdf.worker.min.js');
+                            const response = await fetch(window.location.href);
+                            const pdfData = await response.arrayBuffer();
 
-                                const loadingTask = pdfjsLib.getDocument({
-                                    data: pdfData
-                                });
-                                const pdf = await loadingTask.promise;
-                                let textAll = '';
-                                for (let i = 1; i <= pdf.numPages; i++) {
-                                    const page = await pdf.getPage(i);
-                                    const textContent = await page.getTextContent();
-                                    const pageText = textContent.items.map(item => item.str).join(' ');
-                                    textAll += pageText + '\n';
-                                }
-                                return textAll;
-                            } catch (e) {
-                                return `PDF読み込み失敗: ${e}`;
+                            const loadingTask = pdfjsLib.getDocument({ data: pdfData });
+                            const pdf = await loadingTask.promise;
+                            let textAll = '';
+                            for (let i = 1; i <= pdf.numPages; i++) {
+                                const page = await pdf.getPage(i);
+                                const textContent = await page.getTextContent();
+                                const pageText = textContent.items.map(item => item.str).join(' ');
+                                textAll += pageText + '\n';
                             }
+                            return textAll;
                         }
                     });
 
                     pageHTML = pdfResult?.[0]?.result || '';
                     pageTitle = 'PDF Document';
-
                 } else {
-                    // HTMLの場合
                     await chrome.scripting.executeScript({
                         target: { tabId: tab.id },
                         files: ['assets/js/Readability.js']
@@ -964,7 +946,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
 
-        // ユーザーメッセージを表示
         addUserMessage(rawMessage, pageHTML);
         const userMessage = {
             role: 'user',
@@ -974,11 +955,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         messages.push(userMessage);
         chatController.addMessage(userMessage);
 
-        // 入力クリア
         messageInput.value = '';
         adjustTextareaHeight(messageInput);
 
-        // ストレージからAPI設定取得
         const result = await storage.get([
             'apiProvider',
             'apiKeys',
@@ -994,7 +973,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             chatController.setProcessing(true);
 
-            // 会話 + Web情報をMarkdownに
             const unifiedPrompt = chatController.buildMarkdownPrompt({
                 includeWebInfo: !!pageHTML,
                 webContent: pageHTML
@@ -1009,10 +987,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 abortController: chatController.abortController
             };
 
-            // 共通モジュールで送信
             const responseText = await sendChatRequest(apiConfig, unifiedPrompt);
 
-            // アシスタントメッセージを表示
             const assistantMessage = {
                 role: 'assistant',
                 content: responseText,
@@ -1023,7 +999,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             chatController.addMessage(assistantMessage);
             addSystemMessage(responseText);
 
-            // 履歴保存イベント
             const conversation = {
                 provider: result.apiProvider,
                 model: result.selectedModels?.[result.apiProvider] ?? ' ',
@@ -1041,13 +1016,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
-    // テキストエリアの高さ調整
     function adjustTextareaHeight(element) {
         element.style.height = 'auto';
         element.style.height = element.scrollHeight + 'px';
     }
 
-    // 送信ボタンのEnterキー対応
     messageInput.addEventListener('keydown', function (e) {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -1059,7 +1032,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
     sendButton.addEventListener('click', sendMessage);
 
-    // 推奨候補(ボタン) クリック時
     chatMessages.addEventListener('click', (e) => {
         const recommendationButton = e.target.closest('.recommendation-button');
         if (recommendationButton) {
@@ -1070,33 +1042,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // 履歴から会話ロード
     window.addEventListener('loadConversation', async (event) => {
         const conversation = event.detail;
         const isFromHistoryTab = conversation.source === 'historyTab';
 
         if (isFromHistoryTab) {
-            // 履歴タブからのロード時
             chatMessages.innerHTML = '';
             messages = [];
 
-            // グローバルに現在の provider, model をセット
             currentProvider = conversation.provider;
             currentModel = conversation.model;
 
-            // 現在の設定と一致するかチェック
             const currentStorage = await storage.get(['apiProvider', 'selectedModels']);
             const actualProvider = currentStorage.apiProvider;
             const actualModel = currentStorage.selectedModels?.[actualProvider] ?? '';
 
             if (actualProvider === currentProvider) {
                 if (actualProvider === 'local' || actualProvider === 'azureOpenai') {
-                    // local / azureOpenai はモデルチェック不要
                     toggleChatInput(true);
                 } else if (actualModel === currentModel) {
                     toggleChatInput(true);
                 } else {
-                    // モデル不一致
                     const message = chrome.i18n.getMessage('modelMismatchError', [
                         currentProvider.toUpperCase(),
                         currentModel,
@@ -1105,7 +1071,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     toggleChatInput(false, message);
                 }
             } else {
-                // プロバイダー不一致
                 let message;
                 if (currentProvider === 'local') {
                     message = chrome.i18n.getMessage('localApiChatError', [
@@ -1117,7 +1082,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                         currentModel
                     ]);
                 } else {
-                    // fallback
                     message = chrome.i18n.getMessage('chatContinuationError', [
                         currentProvider.toUpperCase(),
                         currentModel,
@@ -1128,7 +1092,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 toggleChatInput(false, message);
             }
 
-            // メッセージ描画
             conversation.messages.forEach(msg => {
                 if (msg.role === 'user') {
                     addUserMessage(msg.content, '', msg.timestamp);
@@ -1138,14 +1101,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 messages.push(msg);
             });
 
-            // ChatControllerに再ロード
             chatController.clear();
             conversation.messages.forEach(msg => chatController.addMessage(msg));
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
     });
 
-    // 設定ボタン
     const settingsButton = document.getElementById('settingsButton');
     if (settingsButton) {
         settingsButton.addEventListener('click', () => {
@@ -1157,14 +1118,30 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // APIコンフィグ更新イベント
     window.addEventListener('message', async function (event) {
         if (event.data.type === 'API_CONFIG_UPDATED') {
             await updateApiStatus();
+        } else if (event.data.type === 'CLEAR_CHAT') {
+            console.log('[Chat] Received CLEAR_CHAT message at 04:27 AM EAT, May 22, 2025, resetting chat');
+            messages = [];
+            if (window.chatController) {
+                window.chatController.clear();
+            }
+            if (chatMessages) {
+                chatMessages.innerHTML = '';
+            }
+            const warningMessage = document.getElementById('modelMismatchWarning');
+            if (warningMessage) {
+                warningMessage.remove();
+            }
+            toggleChatInput(true);
+            const chatTabButton = document.getElementById('chat-tab');
+            if (chatTabButton) {
+                chatTabButton.click();
+            }
         }
     });
 
-    // DOM変更の監視
     const observer = new MutationObserver(mutations => {
         const locationChanged = mutations.some(mutation =>
             mutation.target.nodeType === Node.ELEMENT_NODE &&
@@ -1176,7 +1153,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
     observer.observe(document.body, { childList: true, subtree: true });
 
-    // ページコンテキスト取得用チェックボックス
     if (pageContextToggle) {
         pageContextToggle.addEventListener('change', function () {
             if (this.checked && chrome?.tabs) {
@@ -1226,7 +1202,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // 親ページ情報の取得
     async function getParentPageInfo() {
         return new Promise((resolve) => {
             window.parent.postMessage({ type: 'GET_PAGE_INFO' }, '*');
@@ -1235,10 +1210,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     pageTitle = event.data.title;
                     pageUrl = event.data.url;
 
-                    // guides 表示
                     checkUrlAndDisplayGuides();
 
-                    // localAPI + URLマッチで #htmlTab 切り替え
                     const isMatched = await checkLocalApiUrlMatch(pageUrl);
                     toggleHtmlTabVisibility(isMatched);
 
@@ -1264,7 +1237,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // 新しいチャットボタン
     if (newChatButton) {
         newChatButton.addEventListener('click', () => {
             chatMessages.innerHTML = '';
@@ -1283,7 +1255,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // 初期化処理
     async function initialize() {
         await updateApiStatus();
 
@@ -1295,7 +1266,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (pageContextToggle) {
             const result = await storage.get(['apiProvider']);
-            // localに限定せず、常にページ情報取得可能
             pageContextToggle.checked = (result.apiProvider === 'local');
             getParentPageInfo();
         }
@@ -1310,7 +1280,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
 
-        // 履歴タブ初期化
         if (historyTabContent) {
             const stored = await storage.get(['conversations']);
             const conversations = stored.conversations;
@@ -1320,9 +1289,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    /**
-     * 履歴一覧を描画
-     */
     function renderConversationHistory(conversations) {
         const historyList = document.createElement('div');
         historyList.className = 'conversation-history';
@@ -1360,7 +1326,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // Local APIでURLマッチ判定
     async function checkLocalApiUrlMatch(currentUrl) {
         const { apiKeys, customSettings } = await chrome.storage.local.get(["apiKeys", "customSettings"]);
         if (!apiKeys?.local || !customSettings?.local?.url) {

@@ -1,0 +1,236 @@
+{
+  "extensionName": {
+    "message": "InsightBuddy Extension"
+  },
+  "extensionDescription": {
+    "message": "Бүртгэл шаардалгүй, дурын AI үйлчилгээ үзүүлэгчийн API түлхүүрийг оруулаад шууд ашиглах боломжтой AI чат туслах. OpenAI, Anthropic, Google зэрэг гол үйлчилгээ үзүүлэгчдийг дэмжиж, вэб-сайтын агуулгыг ойлгон нарийн зөвлөгөө өгнө."
+  },
+  "apiSettings": {
+    "message": "API тохиргоо"
+  },
+  "home": {
+    "message": "Нүүр"
+  },
+  "languageSettings": {
+    "message": "Хэлний тохиргоо"
+  },
+  "displayLanguage": {
+    "message": "Дэлгэцийн хэл"
+  },
+  "systemDefault": {
+    "message": "Системийн анхдагч"
+  },
+  "apiKey": {
+    "message": "API түлхүүр"
+  },
+  "save": {
+    "message": "Хадгалах"
+  },
+  "cancel": {
+    "message": "Цуцлах"
+  },
+  "modelName": {
+    "message": "Моделийн нэр"
+  },
+  "selectModel": {
+    "message": "Модель сонгох"
+  },
+  "loadingModels": {
+    "message": "Моделиуд ачааллаж байна..."
+  },
+  "noModelsFound": {
+    "message": "Модель олдсонгүй"
+  },
+  "errorLoadingModels": {
+    "message": "Алдаа: моделиудыг ачааллахад амжилтгүй"
+  },
+  "chatMessage": {
+    "message": "Мессежийг оруулна уу"
+  },
+  "send": {
+    "message": "Илгээх"
+  },
+  "readForm": {
+    "message": "Формын агуулгыг унших"
+  },
+  "insertForm": {
+    "message": "Формд оруулах"
+  },
+  "getCurrentSite": {
+    "message": "Одоогийн сайтаас авах"
+  },
+  "formContent": {
+    "message": "Формын агуулга"
+  },
+  "close": {
+    "message": "Хаах"
+  },
+  "apiConfigRequired": {
+    "message": "API үйлчилгээ үзүүлэгчийн тохиргоог хийнэ үү"
+  },
+  "newChat": {
+    "message": "Шинэ чат"
+  },
+  "baseSettings": {
+    "message": "Тохиргоо"
+  },
+  "english": {
+    "message": "Англи"
+  },
+  "japanese": {
+    "message": "Япон"
+  },
+  "mongolian": {
+    "message": "Монгол"
+  },
+  "languageSettingDescription": {
+    "message": "Өөрчлөлтүүдийг хэрэгжүүлэхийн тулд хуудсыг дахин ачаална уу"
+  },
+  "contentReload": {
+    "message": "Агуулгыг ачааллаж байна"
+  },
+  "url": {
+    "message": "URL"
+  },
+  "error": {
+    "message": "Алдаа"
+  },
+  "notSet": {
+    "message": "Тохироогүй"
+  },
+  "invalidApiKeyPrefix": {
+    "message": "API түлхүүр нь \"$prefix\"-ээр эхлэх ёстой"
+  },
+  "incompleteSettings": {
+    "message": "$provider -ийн тохиргоо дутуу байна.\nТохиргоогоо шалгана уу."
+  },
+  "newConversation": {
+    "message": "Шинэ харилцалт"
+  },
+  "untitledConversation": {
+    "message": "Гарчиггүй харилцалт"
+  },
+  "noHistory": {
+    "message": "Түүх алга"
+  },
+  "localApi": {
+    "message": "Local API"
+  },
+  "chatContinuationError": {
+    "message": "Энэ чат түүхийг $1 $2 ашиглан үүсгэсэн. Одоогийн тохиргоо ($3 $4)-оор үргэлжлүүлэх боломжгүй."
+  },
+  "localApiChatError": {
+    "message": "Энэ чат түүхийг Local API-тай үүсгэсэн. Одоогийн тохиргоо ($1)-оор үргэлжлүүлэх боломжгүй."
+  },
+  "providerChatError": {
+    "message": "Энэ чат түүхийг $1 $2 ашиглан үүсгэсэн. Одоогийн Local API тохиргоотой үргэлжлүүлэх боломжгүй."
+  },
+  "modelMismatchError": {
+    "message": "Энэ чат түүхийг $1 $2 ашиглан үүсгэсэн. Одоогийн тохиргоонд $3 ашиглан үргэлжлүүлэх боломжгүй."
+  },
+  "loadingContent": {
+    "message": "Агуулгыг ачааллаж байна..."
+  },
+  "guideURL": {
+    "message": "Гарын авлагын URL"
+  },
+  "extension_name": {
+    "message": "URL Гарын Авлага Менежер"
+  },
+  "extension_description": {
+    "message": "Вэб сайтынхаа суурь болон URL-ийн гарын авлагыг удирдах"
+  },
+  "importButton": {
+    "message": "Импорт"
+  },
+  "exportButton": {
+    "message": "Экспорт"
+  },
+  "baseGuideTitle": {
+    "message": "Суурь гарын авлага"
+  },
+  "urlGuideTitle": {
+    "message": "URL гарын авлага"
+  },
+  "newRegistration": {
+    "message": "Шинээр бүртгэх"
+  },
+  "newUrlGuideRegistration": {
+    "message": "Шинэ URL гарын авлага бүртгэх"
+  },
+  "confirm": {
+    "message": "Батлах"
+  },
+  "addGuide": {
+    "message": "Гарын авлага нэмэх"
+  },
+  "guideUrl": {
+    "message": "Гарын авлагын URL:"
+  },
+  "importExportTitle": {
+    "message": "Импорт/Экспорт"
+  },
+  "importExportData": {
+    "message": "Импорт/Экспортын өгөгдөл"
+  },
+  "dropYamlFile": {
+    "message": "YAML файлыг энд чирж эсвэл товшоод сонгоно уу"
+  },
+  "editBaseCard": {
+    "message": "Суурь карт засах"
+  },
+  "newBaseCard": {
+    "message": "Шинэ суурь карт"
+  },
+  "requiredFields": {
+    "message": "Шаардлагатай талбаруудыг бөглөнө үү"
+  },
+  "maxBaseCards": {
+    "message": "Дээд тал нь 5 суурь карт байж болно"
+  },
+  "confirmDeleteBaseCard": {
+    "message": "Энэ суурь картын устгахдаа итгэлтэй байна уу?"
+  },
+  "confirmDeleteGuide": {
+    "message": "Энэ URL гарын авлагыг устгахдаа итгэлтэй байна уу?"
+  },
+  "invalidUrlFormat": {
+    "message": "URL формат буруу"
+  },
+  "duplicateUrl": {
+    "message": "Энэ URL загвар хэдийнэ бүртгэгдсэн"
+  },
+  "minimumOneCard": {
+    "message": "Дор хаяж нэг гарын авлага шаардлагатай"
+  },
+  "fillRequiredFields": {
+    "message": "Бүх шаардлагатай талбарыг бөглөнө үү"
+  },
+  "importComplete": {
+    "message": "Импорт дууслаа"
+  },
+  "importError": {
+    "message": "Импортын алдаа:"
+  },
+  "invalidYamlFormat": {
+    "message": ".yml эсвэл .yaml өргөтгөлтэй YAML файл сонгоно уу"
+  },
+  "guideDescription": {
+    "message": "Гарын авлагын тохиргоо"
+  },
+  "baseGuideDescriptionTitle": {
+    "message": "Суурь гарын авлага гэж юу вэ?"
+  },
+  "baseGuideDescriptionContent": {
+    "message": "Суурь гарын авлага нь нийтлэг зааврын хэв маягийг хадгалах загвар юм. Та 5 хүртэл суурь гарын авлага бүртгэж, өөр-өөр URL дээр дахин ашиглаж болно."
+  },
+  "urlGuideDescriptionTitle": {
+    "message": "URL гарын авлага гэж юу вэ?"
+  },
+  "urlGuideDescriptionContent": {
+    "message": "URL гарын авлага нь тодорхой URL-үүдэд зориулсан зааврын хэв маягийг үүсгэх боломж олгоно. Та URL загварыг зааж, түүнд олон гарын авлагын карт холбож болно."
+  },
+  "guideListTitle": {
+    "message": "$1-ийн гарын авлагын жагсаалт"
+  }
+}

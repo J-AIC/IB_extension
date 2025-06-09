@@ -4,13 +4,17 @@
 // -------------------------------------------------------
 const DEBUG = true;
 
+// Using global secureLogger without fallback implementation
+// secureLogger is initialized and made available by utils/loggerSetup.js
+// No more fallback needed as it's guaranteed to be available
+
 function debugLog(section, message, data = null) {
   if (!DEBUG) return;
   const timestamp = new Date().toISOString();
   const log = `[GPTService][${section}][${timestamp}] ${message}`;
-  console.log(log);
+  secureLogger.log(log);
   if (data) {
-    console.log('Data:', JSON.stringify(data, null, 2));
+    secureLogger.log('Data:', JSON.stringify(data, null, 2));
   }
 }
 

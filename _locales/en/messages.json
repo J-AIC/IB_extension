@@ -1,6 +1,6 @@
 {
     "extensionName": {
-        "message": "InsightBuddy Chat"
+        "message": "InsightBuddy Extension"
     },
     "extensionDescription": {
         "message": "An AI chat assistant that can be used immediately by simply entering your preferred AI provider's API key without registration. Supports major AI providers such as OpenAI, Anthropic, and Google, providing accurate support by understanding website content."
@@ -79,6 +79,9 @@
     },
     "japanese": {
         "message": "Japanese"
+    },
+    "mongolian": {
+        "message": "Mongolian"
     },
     "languageSettingDescription": {
         "message": "Changes will take effect after reloading the page"

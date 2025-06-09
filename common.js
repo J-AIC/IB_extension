@@ -11,7 +11,7 @@ window.LanguageManager = class {
   /**
    * 対応言語リスト
    */
-  static supportedLangs = ['en', 'ja'];
+  static supportedLangs = ['en', 'ja', 'mn'];
 
   /**
    * 翻訳データのキャッシュ（初回読み込み後は再利用）

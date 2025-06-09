@@ -1,37 +1,62 @@
 // content.js
+
 (() => {
     'use strict';
 
     // =====================
     // グローバル変数
     // =====================
-    let isOpen = false;        // チャットパネルが開いているかどうか
-    let container;             // チャット用のコンテナ要素
+    let isOpen = false;
+    let container;
+
+    // =====================
+    // Wait for document.body to be available
+    // =====================
+    function waitForBody() {
+        return new Promise((resolve, reject) => {
+            const checkBody = () => {
+                if (document.body) {
+                    resolve();
+                } else {
+                    setTimeout(checkBody, 100);
+                }
+            };
+            checkBody();
+
+            // Timeout after 5 seconds to prevent infinite loop
+            setTimeout(() => reject(new Error('document.body not available after 5 seconds')), 5000);
+        });
+    }
 
     // =====================
     // チャットコンテナの作成
     // =====================
-    function createContainer() {
-        container = document.createElement('div');
-        container.id = "my-extension-chat-container";
-        container.style.position = "fixed";
-        container.style.top = "0";
-        container.style.right = "0";
-        container.style.width = "0";
-        container.style.height = "100vh";
-        container.style.zIndex = "999999";
-        container.style.border = "none";
-        container.style.overflow = "hidden";
-        container.style.transition = "width 0.3s ease";
+    async function createContainer() {
+        try {
+            await waitForBody();
+            container = document.createElement('div');
+            container.id = "my-extension-chat-container";
+            container.style.position = "fixed";
+            container.style.top = "0";
+            container.style.right = "0";
+            container.style.width = "0";
+            container.style.height = "100vh";
+            container.style.zIndex = "999999";
+            container.style.border = "none";
+            container.style.overflow = "hidden";
+            container.style.transition = "width 0.3s ease";
 
-        const iframe = document.createElement("iframe");
-        iframe.src = chrome.runtime.getURL("chat.html");
-        iframe.style.width = "100%";
-        iframe.style.height = "100%";
-        iframe.style.border = "none";
+            const iframe = document.createElement("iframe");
+            iframe.src = chrome.runtime.getURL("chat.html");
+            iframe.style.width = "100%";
+            iframe.style.height = "100%";
+            iframe.style.border = "none";
 
-        container.appendChild(iframe);
-        document.body.appendChild(container);
+            container.appendChild(iframe);
+            document.body.appendChild(container);
+        } catch (error) {
+            console.error('[ContentScript] Failed to create container:', error.message);
+        }
     }
 
     // =====================
@@ -55,72 +80,64 @@
     }
 
     // =====================
-    // スタイルシートの追加（現在未使用）
-    // =====================
-    // 必要に応じて呼び出すことを想定した関数です。
-    function addStylesheet() {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = chrome.runtime.getURL('api_settings.css');
-        document.head.appendChild(link);
-    }
-
-    // =====================
     // トグルボタンの初期化
     // =====================
-    function initializeToggleButton() {
-        const toggleButton = document.createElement('button');
-        toggleButton.className = 'chat-toggle-button';
-        toggleButton.innerHTML = `<span class="toggle-icon">‹</span>`;
+    async function initializeToggleButton() {
+        try {
+            await waitForBody();
+            const toggleButton = document.createElement('button');
+            toggleButton.className = 'chat-toggle-button';
+            toggleButton.innerHTML = `<span class="toggle-icon">‹</span>`;
 
-        // トグルボタン用のスタイルを定義
-        const styles = document.createElement('style');
-        styles.textContent = `
-            .chat-toggle-button {
-                position: fixed;
-                top: 50%;
-                right: 0;
-                transform: translateY(-50%);
-                width: 24px;
-                height: 120px;
-                background: #2196F3;
-                border: none;
-                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-                cursor: pointer;
-                z-index: 999999;
-                transition: all 0.3s ease;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-            }
-            .chat-toggle-button:hover {
-                background: #1976D2;
-                box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-            }
-            .chat-toggle-button.active {
-                background: #1565C0;
-            }
-            .toggle-icon {
-                font-size: 20px;
-                line-height: 1;
-                transition: transform 0.3s ease;
-            }
-            .chat-toggle-button.active .toggle-icon {
-                transform: rotate(180deg);
-            }
-        `;
+            const styles = document.createElement('style');
+            styles.textContent = `
+                .chat-toggle-button {
+                    position: fixed;
+                    top: 50%;
+                    right: 0;
+                    transform: translateY(-50%);
+                    width: 24px;
+                    height: 120px;
+                    background: #2196F3;
+                    border: none;
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                    cursor: pointer;
+                    z-index: 999999;
+                    transition: all 0.3s ease;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                }
+                .chat-toggle-button:hover {
+                    background: #1976D2;
+                    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+                }
+                .chat-toggle-button.active {
+                    background: #1565C0;
+                }
+                .toggle-icon {
+                    font-size: 20px;
+                    line-height: 1;
+                    transition: transform 0.3s ease;
+                }
+                .chat-toggle-button.active .toggle-icon {
+                    transform: rotate(180deg);
+                }
+            `;
 
-        document.head.appendChild(styles);
-        document.body.appendChild(toggleButton);
-        toggleButton.addEventListener('click', toggleChat);
+            document.head.appendChild(styles);
+            document.body.appendChild(toggleButton);
+            toggleButton.addEventListener('click', toggleChat);
+        } catch (error) {
+            console.error('[ContentScript] Failed to initialize toggle button:', error.message);
+        }
     }
 
     // =====================
     // URLチェック処理（Local API用）
     // =====================
     async function checkParentURL(settings) {
-        // Local API の場合
         if (settings.apiProvider === 'local') {
             try {
                 const customSettings = settings.customSettings?.local || {};
@@ -128,7 +145,6 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        //'Authorization': `Bearer ${settings.apiKey}`
                         'Authorization': `Bearer ${settings.apiKeys.local}`
                     },
                     body: JSON.stringify({ current_url: window.location.href })
@@ -137,11 +153,10 @@
                 const data = await response.json();
                 return data.allowed;
             } catch (error) {
-                console.error('URL check failed for Local API:', error);
+                console.error('[ContentScript] URL check failed for Local API:', error);
                 return false;
             }
         }
-        // その他のAPIの場合は常に表示
         return true;
     }
 
@@ -149,16 +164,21 @@
     // ホームコンテンツの読み込み
     // =====================
     async function loadHomeContent() {
-        const result = await chrome.storage.local.get([
-            'apiProvider',
-            'apiKeys',
-            'customSettings'
-        ]);
+        let result;
+        try {
+            result = await chrome.storage.local.get([
+                'apiProvider',
+                'apiKeys',
+                'customSettings'
+            ]);
+        } catch (error) {
+            console.error('[ContentScript] Failed to access chrome.storage for home content:', error);
+            return;
+        }
 
         const iframe = document.querySelector('#my-extension-chat-container iframe');
         if (!iframe) return;
 
-        // Local APIの場合
         if (result.apiProvider === 'local') {
             const customSettings = result.customSettings?.local;
             if (!customSettings?.url || !result.apiKeys?.local) return;
@@ -185,15 +205,13 @@
                     }, '*');
                 }
             } catch (error) {
-                console.error('Failed to load home content:', error);
+                console.error('[ContentScript] Failed to load home content:', error);
                 iframe.contentWindow.postMessage({
                     type: 'LOAD_ERROR',
                     error: 'コンテンツの読み込みに失敗しました'
                 }, '*');
             }
-        }
-        // その他のAPIの場合
-        else {
+        } else {
             iframe.contentWindow.postMessage({
                 type: 'LOAD_HOME_CONTENT',
                 isLocal: false
@@ -216,27 +234,28 @@
     // コンテナの初期化
     // =====================
     async function initializeContainer() {
-        // 既にコンテナが存在する場合は何もしない
         if (document.getElementById("my-extension-chat-container")) return;
-        
-        const settings = await chrome.storage.local.get([
-            'apiProvider',
-            'apiKeys',
-            'customSettings'
-        ]);
 
-        // 認証チェック
+        let settings;
+        try {
+            settings = await chrome.storage.local.get([
+                'apiProvider',
+                'apiKeys',
+                'customSettings'
+            ]);
+        } catch (error) {
+            console.error('[ContentScript] Failed to access chrome.storage (context may be invalidated):', error);
+            return;
+        }
+
         if (!isAuthenticated(settings)) return;
 
-        // URL許可チェック
         const isAllowed = await checkParentURL(settings);
         if (!isAllowed) return;
 
-        // コンテナとボタンの作成
-        createContainer();
-        initializeToggleButton();
+        await createContainer();
+        await initializeToggleButton();
 
-        // 初期状態は閉じたままにする
         isOpen = false;
         const createdContainer = document.getElementById("my-extension-chat-container");
         const toggleButton = document.querySelector('.chat-toggle-button');
@@ -249,55 +268,62 @@
             toggleButton.classList.remove('active');
         }
 
-        // ホームコンテンツの読み込み
         await loadHomeContent();
     }
 
     // =====================
     // ストレージ変更イベントの監視
     // =====================
-    chrome.storage.onChanged.addListener((changes, namespace) => {
-        if (namespace === 'local') {
-            const relevantKeys = ['apiProvider', 'apiKeys', 'customSettings'];
-            const hasRelevantChanges = relevantKeys.some(key => changes[key]);
-            
-            if (hasRelevantChanges) {
-                // 既存のチャットコンテナとトグルボタンを削除
-                const existingContainer = document.getElementById("my-extension-chat-container");
-                if (existingContainer) {
-                    existingContainer.remove();
+    try {
+        chrome.storage.onChanged.addListener((changes, namespace) => {
+            if (namespace === 'local') {
+                const relevantKeys = ['apiProvider', 'apiKeys', 'customSettings'];
+                const hasRelevantChanges = relevantKeys.some(key => changes[key]);
+
+                if (hasRelevantChanges) {
+                    const existingContainer = document.getElementById("my-extension-chat-container");
+                    if (existingContainer) {
+                        existingContainer.remove();
+                    }
+                    const existingButton = document.querySelector('.chat-toggle-button');
+                    if (existingButton) {
+                        existingButton.remove();
+                    }
+
+                    initializeContainer();
                 }
-                const existingButton = document.querySelector('.chat-toggle-button');
-                if (existingButton) {
-                    existingButton.remove();
-                }
-                
-                // 再初期化
-                initializeContainer();
             }
-        }
-    });
+        });
+    } catch (error) {
+        console.error('[ContentScript] Failed to set up chrome.storage.onChanged listener (context may be invalidated):', error);
+    }
 
     // =====================
     // 拡張機能の初期化チェック
     // =====================
-    chrome.storage.local.get(['apiProvider', 'apiKeys', 'customSettings'], function(settings) {
-        if (isAuthenticated(settings)) {
-            initializeContainer();
-        }
-    });
+    try {
+        chrome.storage.local.get(['apiProvider', 'apiKeys', 'customSettings'], function(settings) {
+            if (isAuthenticated(settings)) {
+                initializeContainer();
+            }
+        });
+    } catch (error) {
+        console.error('[ContentScript] Failed to initialize (context may be invalidated):', error);
+    }
 
     // =====================
     // 拡張機能からのメッセージハンドラ
-    // （getPageContentリクエストに対応）
     // =====================
-    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-        if (request.action === "getPageContent") {
-            // ページのHTML全体を取得して返す
-            sendResponse({ content: document.body.innerHTML });
-        }
-        return true; // 非同期レスポンスを有効にする
-    });
+    try {
+        chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+            if (request.action === "getPageContent") {
+                sendResponse({ content: document.body ? document.body.innerHTML : '' });
+            }
+            return true;
+        });
+    } catch (error) {
+        console.error('[ContentScript] Failed to set up chrome.runtime.onMessage listener (context may be invalidated):', error);
+    }
 
     // =====================
     // ページ情報取得・フォーム情報取得メッセージのハンドラ
@@ -338,4 +364,36 @@
                 break;
         }
     });
+
+    // =====================
+    // SPAナビゲーション検出とチャットリセット
+    // =====================
+    let lastUrl = window.location.href;
+
+    // URL変更をポーリングで検出
+    setInterval(() => {
+        const currentUrl = window.location.href;
+        if (currentUrl !== lastUrl) {
+            console.log('[ContentScript][spaTransition] URL change detected via polling', { old: lastUrl, new: currentUrl });
+            lastUrl = currentUrl;
+            handleNavigation();
+        }
+    }, 500);
+
+    // Popstateイベントでナビゲーションを検出
+    window.addEventListener('popstate', () => {
+        console.log('[ContentScript][spaTransition] Popstate event detected');
+        handleNavigation();
+    });
+
+    // ナビゲーション処理
+    function handleNavigation() {
+        const iframe = document.querySelector('#my-extension-chat-container iframe');
+        if (iframe) {
+            console.log('[ContentScript][handleNavigation] Sending CLEAR_CHAT message to iframe at 04:27 AM EAT, May 22, 2025');
+            iframe.contentWindow.postMessage({
+                type: 'CLEAR_CHAT'
+            }, '*');
+        }
+    }
 })();

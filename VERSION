@@ -1,0 +1,10 @@
+# --- VERSION ---------------------------------
+# Format:
+#   MAJOR=<MAJOR>
+#   MINOR=<MAJOR>.<MINOR>
+#   PATCH=<MAJOR>.<MINOR>.<PATCH>
+# ---------------------------------------------
+
+MAJOR=1
+MINOR=1.307
+PATCH=1.307.00

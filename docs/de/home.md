@@ -1,11 +1,11 @@
 # 1. Einführung
 
 Keine Registrierung erforderlich, einfache Einrichtung!  
-IB_extension ist ein KI-Chat-Assistent, der auf Webseiten verwendet werden kann. Sie können ihn sofort nutzen, indem Sie einfach den API-Schlüssel Ihres bevorzugten KI-Anbieters eingeben – egal ob OpenAI, Anthropic, Google oder ein anderer Anbieter – ganz ohne Registrierung.  
+InsightBuddy Extension ist ein KI-Chat-Assistent, der auf Webseiten verwendet werden kann. Sie können ihn sofort nutzen, indem Sie einfach den API-Schlüssel Ihres bevorzugten KI-Anbieters eingeben – egal ob OpenAI, Anthropic, Google oder ein anderer Anbieter – ganz ohne Registrierung.  
 Darüber hinaus kann er auch mit Ihrer selbstgehosteten, OpenAI-kompatiblen Umgebung verbunden werden.
 
 - Ab Februar 2025 ist Googles Gemini teilweise kostenlos verfügbar, sodass Sie generative KI kostenlos nutzen können, wenn Sie diese Option ausnutzen.
-- Der folgende Artikel fasst zusammen, wie Sie ein Konto einrichten können ( https://j-aic.com/techblog/-PSfeaXS ).
+- Der folgende Artikel fasst zusammen, wie Sie ein Konto einrichten können ( https://j-aic.com/techblog/google-ai-studio-api-free ).
 
 ## 1.1 Hauptfunktionen
 

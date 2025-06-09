@@ -1,6 +1,6 @@
 {
     "extensionName": {
-        "message": "InsightBuddy Chat"
+        "message": "InsightBuddy Extension"
     },
     "extensionDescription": {
         "message": "一个无需注册，只需输入您首选 AI 提供商的 API 密钥即可立即使用的 AI 聊天助手。支持 OpenAI、Anthropic 和 Google 等主要 AI 提供商，通过理解网站内容提供准确的支持。"

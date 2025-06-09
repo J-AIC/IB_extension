@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecureLogger for Web Pages</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.5;
+      margin: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    .card {
+      margin-bottom: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    pre {
+      background-color: #f5f5f5;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    button {
+      padding: 8px 12px;
+      margin-right: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+  
+  <!-- IMPORTANT: Load the scripts in the correct order -->
+  
+  <!-- Recommended approach: Load secureLogger and loggerSetup in the correct order -->
+  <script src="../utils/secureLogger.js"></script>
+  <script src="../utils/loggerSetup.js"></script>
+  
+  <!-- Load optional log viewer -->
+  <script src="../utils/logViewer.js"></script>
+</head>
+<body>
+  <h1>SecureLogger for Web Pages</h1>
+  <p>This page demonstrates how to use the secure logger in different web page contexts.</p>
+
+  <div class="card">
+    <h2>Method 1: Recommended Approach</h2>
+    <p>Include the scripts in your HTML head in the proper order:</p>
+    <pre>
+&lt;!-- Load secureLogger first --&gt;
+&lt;script src="./utils/secureLogger.js"&gt;&lt;/script&gt;
+
+&lt;!-- Then load loggerSetup to ensure global availability --&gt;
+&lt;script src="./utils/loggerSetup.js"&gt;&lt;/script&gt;
+
+&lt;!-- Then load other scripts that depend on it --&gt;
+&lt;script src="./utils/logViewer.js"&gt;&lt;/script&gt;
+&lt;script src="./your-script.js"&gt;&lt;/script&gt;
+</pre>
+    <p>This is the recommended approach that ensures secureLogger is available everywhere.</p>
+    <button onclick="testStandardLogging()">Test Standard Logging</button>
+  </div>
+
+  <div class="card">
+    <h2>Method 2: Using HTML Template</h2>
+    <p>For simpler integration, use the HTML template include:</p>
+    <pre>
+&lt;!-- Include logger scripts through template --&gt;
+&lt;include src="html_templates/logger_include.html"&gt;&lt;/include&gt;
+
+&lt;!-- Then load your scripts --&gt;
+&lt;script src="./your-script.js"&gt;&lt;/script&gt;
+</pre>
+    <p>This approach helps maintain consistency across multiple HTML files.</p>
+    <button onclick="testStandardLogging()">Test Template Logging</button>
+  </div>
+
+  <div class="card">
+    <h2>Method 3: For Module-based Applications</h2>
+    <p>For module-based applications:</p>
+    <pre>
+// In your module-based code, secureLogger is globally available
+// Just use it directly:
+
+// Use it
+secureLogger.log('Logging from module');
+
+// If you prefer importing:
+// import { secureLogger } from './utils/loggerSetup.js';
+</pre>
+    <p>This approach works best for modern JavaScript applications.</p>
+    <button onclick="testStandardLogging()">Test Module Logging</button>
+  </div>
+
+  <div class="card">
+    <h2>Current Log Viewer</h2>
+    <div id="logViewerContainer"></div>
+  </div>
+
+  <script>
+    // Create log viewer for demonstration
+    let logViewer;
+    if (typeof createLogViewer !== 'undefined') {
+      logViewer = createLogViewer(
+        document.getElementById('logViewerContainer'),
+        {
+          title: 'Web Page Logs',
+          expandable: true,
+          startCollapsed: false,
+          maxItems: 20
+        }
+      );
+    }
+
+    // Test Functions
+    function testStandardLogging() {
+      if (typeof secureLogger !== 'undefined') {
+        secureLogger.log('Standard Logging Test:', { 
+          method: 'Using loggerSetup.js',
+          timestamp: new Date().toISOString()
+        });
+        if (logViewer) logViewer.refresh();
+      } else {
+        console.error('secureLogger not found! Make sure utils/secureLogger.js and utils/loggerSetup.js are loaded properly.');
+      }
+    }
+    
+    // Initial log
+    if (typeof secureLogger !== 'undefined') {
+      secureLogger.log('Web page loaded at ' + new Date().toISOString());
+      
+      // Add some sensitive data to test redacting
+      secureLogger.log('Testing sensitive data redaction:', { 
+        apiKey: 'sk-1234567890abcdefghijk',
+        token: 'Bearer eyJhbGciOiJIUzI1NiJ9.example-token',
+        user: 'test@example.com'
+      });
+      
+      if (logViewer) logViewer.refresh();
+    }
+  </script>
+</body>
+</html> 

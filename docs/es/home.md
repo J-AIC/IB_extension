@@ -1,11 +1,11 @@
 # 1. Introducción
 
 ¡No se requiere registro, configuración sencilla!  
-IB_extension es un asistente de chat basado en IA que se puede utilizar en sitios web. Simplemente configurando la clave API de tu proveedor de IA preferido —ya sea OpenAI, Anthropic, Google u otro— puedes empezar a usarlo de inmediato.  
+InsightBuddy Extension es un asistente de chat basado en IA que se puede utilizar en sitios web. Simplemente configurando la clave API de tu proveedor de IA preferido —ya sea OpenAI, Anthropic, Google u otro— puedes empezar a usarlo de inmediato.  
 Además, también puede conectarse a tu propio entorno autohospedado compatible con OpenAI.
 
 - A partir de febrero de 2025, el Gemini de Google es parcialmente gratuito, por lo que, si lo aprovechas, podrás utilizar la IA generativa de forma gratuita.
-- El siguiente artículo resume cómo configurar una cuenta ( https://j-aic.com/techblog/-PSfeaXS ).
+- El siguiente artículo resume cómo configurar una cuenta ( https://j-aic.com/techblog/google-ai-studio-api-free ).
 
 ## 1.1 Características clave
 

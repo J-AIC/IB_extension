@@ -1,10 +1,10 @@
 {
   "name": "__MSG_extensionName__",
-  "version": "1.303",
+  "version": "1.307",
   "manifest_version": 3,
   "description": "__MSG_extensionDescription__",
   "default_locale": "ja",
-  "author": "Japan AI Consluting Corporation",
+  "author": "Japan AI Consulting Corporation",
   "host_permissions": [
     "*://*/*"
   ],
@@ -17,7 +17,15 @@
   ],
   "content_scripts": [{
     "matches": ["<all_urls>"],
-    "js": ["content.js","forms/content.js","html/content.js"]
+    "js": [
+      "utils/secureLogger.js",
+      "utils/loggerSetup.js",
+      "js/loggerImport.js",
+      "content.js",
+      "forms/content.js",
+      "html/content.js"
+    ],
+    "run_at": "document_start"
   }],
   "web_accessible_resources": [{
     "resources": [
@@ -42,7 +50,9 @@
       "html/*",
       "_locales/*/messages.json",
       "docs/*/*.md",
-      "lib/marked/marked.min.js"
+      "lib/marked/marked.min.js",
+      "utils/secureLogger.js",
+      "utils/loggerSetup.js"
     ],
     "matches": ["<all_urls>"]
   }],
@@ -66,5 +76,6 @@
   },
   "background": {
     "service_worker": "background.js"
-  }
+  },
+  "options_page": "api_settings.html"
 }

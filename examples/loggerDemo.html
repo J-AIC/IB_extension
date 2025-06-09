@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecureLogger Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    .card {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 15px;
+      margin-bottom: 20px;
+      background-color: #f9f9f9;
+    }
+    code {
+      background-color: #f0f0f0;
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    .controls {
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 8px 12px;
+      margin-right: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    input[type="text"] {
+      padding: 8px;
+      width: 250px;
+      margin-right: 10px;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 8px;
+      margin-bottom: 10px;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <h1>SecureLogger Demo</h1>
+  <p>This page demonstrates how to use the secure logger in a non-module environment.</p>
+
+  <div class="card">
+    <h2>Log Controls</h2>
+    <div class="controls">
+      <button id="logSimpleBtn">Simple Log</button>
+      <button id="logObjectBtn">Log Object</button>
+      <button id="logErrorBtn">Log Error</button>
+      <button id="logSensitiveBtn">Log with Sensitive Data</button>
+    </div>
+
+    <div class="controls">
+      <input type="text" id="customLogInput" placeholder="Enter custom log message">
+      <button id="customLogBtn">Log Custom Message</button>
+    </div>
+
+    <div class="controls">
+      <textarea id="jsonObjectInput" placeholder='{"user": "test", "apiKey": "sk-1234abcd", "data": {"token": "Bearer xyz123"}}'></textarea>
+      <button id="logJsonBtn">Log JSON Object</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Advanced Features</h2>
+    <div class="controls">
+      <button id="exportLogsBtn">Export Logs (JSON)</button>
+      <button id="downloadLogsBtn">Download Logs</button>
+      <button id="clearLogsBtn">Clear Logs</button>
+    </div>
+  </div>
+
+  <div id="logViewerContainer"></div>
+
+  <div class="card">
+    <h2>How it Works</h2>
+    <p>This demo uses the following files:</p>
+    <ul>
+      <li><code>utils/secureLogger.js</code> - The secure logging utility</li>
+      <li><code>utils/logViewer.js</code> - The log viewer component</li>
+    </ul>
+    <p>The secure logger automatically redacts sensitive information like API keys, tokens, and passwords.</p>
+    <p>Try logging sensitive data to see how it gets redacted!</p>
+  </div>
+
+  <!-- Include scripts -->
+  <script src="../utils/secureLogger.js"></script>
+  <script src="../utils/logViewer.js"></script>
+
+  <script>
+    // Initialize the log viewer
+    const logViewer = createLogViewer(document.getElementById('logViewerContainer'), {
+      title: 'Log Output',
+      expandable: true,
+      startCollapsed: false,
+      maxItems: 100
+    });
+
+    // Sample data with sensitive information
+    const sampleData = {
+      user: "john_doe",
+      apiKey: "sk-12345abcdefg67890hijklmnop",
+      settings: {
+        token: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0",
+        theme: "dark"
+      },
+      authorization: "Basic dXNlcjpwYXNzd29yZA=="
+    };
+
+    // Button event listeners
+    document.getElementById('logSimpleBtn').addEventListener('click', () => {
+      secureLogger.log('Simple log message at ' + new Date().toISOString());
+      logViewer.refresh();
+    });
+
+    document.getElementById('logObjectBtn').addEventListener('click', () => {
+      secureLogger.log('Logging an object:', { 
+        id: 123, 
+        name: 'Test Object', 
+        timestamp: new Date().toISOString() 
+      });
+      logViewer.refresh();
+    });
+
+    document.getElementById('logErrorBtn').addEventListener('click', () => {
+      secureLogger.error('This is an error message', new Error('Sample error'));
+      logViewer.refresh();
+    });
+
+    document.getElementById('logSensitiveBtn').addEventListener('click', () => {
+      secureLogger.log('Data with sensitive info:', sampleData);
+      secureLogger.log('API Key: ' + sampleData.apiKey);
+      secureLogger.log('Token: ' + sampleData.settings.token);
+      logViewer.refresh();
+    });
+
+    document.getElementById('customLogBtn').addEventListener('click', () => {
+      const message = document.getElementById('customLogInput').value;
+      if (message) {
+        secureLogger.log('Custom message:', message);
+        logViewer.refresh();
+      }
+    });
+
+    document.getElementById('logJsonBtn').addEventListener('click', () => {
+      const jsonText = document.getElementById('jsonObjectInput').value;
+      try {
+        const jsonObject = JSON.parse(jsonText);
+        secureLogger.log('Parsed JSON object:', jsonObject);
+        logViewer.refresh();
+      } catch (e) {
+        secureLogger.error('Invalid JSON:', e);
+        logViewer.refresh();
+      }
+    });
+
+    document.getElementById('exportLogsBtn').addEventListener('click', () => {
+      const json = secureLogger.exportLogs();
+      document.getElementById('jsonObjectInput').value = json;
+      alert('Logs exported to JSON textarea');
+    });
+
+    document.getElementById('downloadLogsBtn').addEventListener('click', () => {
+      secureLogger.downloadLogs();
+    });
+
+    document.getElementById('clearLogsBtn').addEventListener('click', () => {
+      secureLogger.clearLogs();
+      logViewer.refresh();
+    });
+
+    // Initial log
+    secureLogger.log('Logger demo initialized', { timestamp: new Date().toISOString() });
+    logViewer.refresh();
+  </script>
+</body>
+</html> 

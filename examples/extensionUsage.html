@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecureLogger Extension Usage Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    pre {
+      background-color: #f5f5f5;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    h2 {
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>SecureLogger for Chrome Extensions</h1>
+  <p>This page demonstrates the proper way to use the secure logger in a Chrome extension.</p>
+
+  <div class="card">
+    <h2>1. Script Loading Order</h2>
+    <p>In your manifest.json, ensure proper script loading order:</p>
+    <pre>
+{
+  "manifest_version": 3,
+  "name": "IB Extension",
+  "version": "1.0.0",
+  "description": "Extension with secure logging",
+  "permissions": ["storage"],
+  "content_scripts": [
+    {
+      "matches": ["&lt;all_urls&gt;"],
+      "js": [
+        "utils/secureLogger.js",
+        "js/loggerImport.js",
+        "your-script.js"
+      ]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}
+</pre>
+  </div>
+
+  <div class="card">
+    <h2>2. Using in Content Scripts</h2>
+    <p>In your content script (your-script.js):</p>
+    <pre>
+// The secureLogger is already available globally
+secureLogger.log('Content script initialized');
+
+document.addEventListener('click', function(e) {
+  secureLogger.log('Document clicked at:', { x: e.clientX, y: e.clientY });
+});
+
+// Using debug (only logs when DEBUG is true)
+const DEBUG = true;
+secureLogger.debug(DEBUG, 'Debug information:', { url: window.location.href });
+
+// Logging errors
+try {
+  // Some operation
+} catch (error) {
+  secureLogger.error('An error occurred:', error);
+}
+</pre>
+  </div>
+
+  <div class="card">
+    <h2>3. Using in Background Scripts</h2>
+    <p>In your background script (background.js), import the logger first:</p>
+    <pre>
+// Import secureLogger
+importScripts('utils/secureLogger.js', 'js/loggerImport.js');
+
+// Now you can use it
+secureLogger.log('Background script initialized');
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  secureLogger.log('Message received:', message, 'from:', sender.tab?.url);
+  
+  // Your message handling logic here
+  
+  sendResponse({ success: true });
+  return true; // Keep the message channel open for async response
+});
+</pre>
+  </div>
+
+  <div class="card">
+    <h2>4. Using in Popup/Options Pages</h2>
+    <p>In your HTML files (popup.html, options.html), include the scripts:</p>
+    <pre>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Extension Popup&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;!-- Your popup content here --&gt;
+  
+  &lt;!-- Include logger scripts --&gt;
+  &lt;script src="../utils/secureLogger.js"&gt;&lt;/script&gt;
+  &lt;script src="../js/loggerImport.js"&gt;&lt;/script&gt;
+  
+  &lt;!-- Then your application scripts --&gt;
+  &lt;script src="popup.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+  </div>
+
+  <div class="card">
+    <h2>5. Viewing Logs</h2>
+    <p>To include the log viewer in your extension pages:</p>
+    <pre>
+&lt;!-- Include logger scripts --&gt;
+&lt;script src="../utils/secureLogger.js"&gt;&lt;/script&gt;
+&lt;script src="../utils/logViewer.js"&gt;&lt;/script&gt;
+&lt;script src="../js/loggerImport.js"&gt;&lt;/script&gt;
+
+&lt;!-- Add a container for the log viewer --&gt;
+&lt;div id="logViewerContainer"&gt;&lt;/div&gt;
+
+&lt;script&gt;
+  // Initialize the log viewer
+  const logViewer = createLogViewer(
+    document.getElementById('logViewerContainer'),
+    {
+      title: 'Extension Logs',
+      expandable: true,
+      startCollapsed: false,
+      maxItems: 100
+    }
+  );
+  
+  // You can refresh it manually after new logs
+  document.getElementById('refreshLogsBtn').addEventListener('click', () => {
+    logViewer.refresh();
+  });
+&lt;/script&gt;
+</pre>
+  </div>
+
+  <div class="card">
+    <h2>6. Using Chrome Storage for Log Persistence</h2>
+    <p>The secureLogger automatically stores logs in chrome.storage.local for persistence. To retrieve them in another part of your extension:</p>
+    <pre>
+// Get logs from chrome.storage.local
+chrome.storage.local.get('secureLogger_logs', (result) => {
+  const logs = result.secureLogger_logs || [];
+  console.log('Retrieved logs count:', logs.length);
+  
+  // Use the logs as needed
+  if (logViewer) {
+    logViewer.render(logs);
+  }
+});
+</pre>
+  </div>
+
+  <div id="logViewerContainer"></div>
+
+  <!-- Include scripts for demonstration -->
+  <script src="../utils/secureLogger.js"></script>
+  <script src="../utils/logViewer.js"></script>
+  <script src="../js/loggerImport.js"></script>
+
+  <script>
+    // This script logs a few example messages
+    secureLogger.log('Example page loaded at ' + new Date().toISOString());
+    
+    secureLogger.log('Testing object logging:', { 
+      page: 'extensionUsage.html',
+      timestamp: Date.now(),
+      browser: navigator.userAgent
+    });
+    
+    // Initialize the log viewer
+    if (typeof createLogViewer !== 'undefined') {
+      const logViewer = createLogViewer(
+        document.getElementById('logViewerContainer'),
+        {
+          title: 'Example Extension Logs',
+          expandable: true,
+          startCollapsed: false,
+          maxItems: 10
+        }
+      );
+      
+      // Add some sample logs
+      secureLogger.log('Log viewer initialized');
+      secureLogger.error('Example error message');
+      
+      const DEBUG = true;
+      secureLogger.debug(DEBUG, 'Debug message with data:', { 
+        apiKey: 'sk-1234567890abcdef',
+        token: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
+      });
+      
+      // Refresh to show new logs
+      setTimeout(() => logViewer.refresh(), 100);
+    }
+  </script>
+</body>
+</html> 

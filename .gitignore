@@ -1,0 +1,13 @@
+# Git ignore file for InsightBuddy Extension
+
+# Ignore scripts folder
+/scripts/
+
+# Ignore tasks.md
+/docs/tasks.md
+
+# Node modules
+/node_modules/
+
+# Environment variables
+.env

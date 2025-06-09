@@ -3,6 +3,11 @@
 // 複数プロバイダに対応したチャットAPI送信用の共通モジュール
 // -------------------------------------------------------
 
+// Using global secureLogger without fallback implementation
+// secureLogger is initialized and made available by utils/loggerSetup.js
+// Add a fallback in case it's not loaded properly in the module context
+const logger = (typeof secureLogger !== 'undefined') ? secureLogger : console;
+
 /**
  * AWS Bedrock用 署名生成関数 (V4署名の簡易例)
  * ここではダミー実装として必要最小限だけ書いています。
@@ -31,9 +36,10 @@ async function createAWSSignature(params) {
  * @returns {Promise<string>}
  */
 export async function sendChatRequest(apiConfig, userPrompt) {
-  console.group('sendChatRequest (common module)');
-  console.log('apiConfig:', apiConfig);
-  console.log('userPrompt:', userPrompt);
+  logger.group('sendChatRequest (common module)');
+  // 安全なロギング（APIキーなどの機密情報がマスクされる）
+  logger.log('apiConfig:', apiConfig);
+  logger.log('userPrompt:', userPrompt);
 
   const {
     provider,
@@ -186,7 +192,7 @@ export async function sendChatRequest(apiConfig, userPrompt) {
     case 'local':
       // ローカルAPI
       if (!customSettings.url) {
-        console.groupEnd();
+        logger.groupEnd();
         throw new Error('Local APIのURLが設定されていません');
       }
       {
@@ -210,7 +216,7 @@ export async function sendChatRequest(apiConfig, userPrompt) {
       break;
 
     default:
-      console.groupEnd();
+      logger.groupEnd();
       throw new Error(`Unsupported provider: ${provider}`);
   }
 
@@ -223,8 +229,9 @@ export async function sendChatRequest(apiConfig, userPrompt) {
   });
 
   const data = await response.json();
-  console.log('APIレスポンス:', data);
-  console.groupEnd();
+  // 安全なロギング
+  logger.log('APIレスポンス:', data);
+  logger.groupEnd();
 
   if (!response.ok) {
     throw new Error(data.error?.message || 'API呼び出しに失敗しました');

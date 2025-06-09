@@ -4,19 +4,20 @@
 // ----------------------------
 import GPTService from './gpt.js';
 
+// Using global secureLogger without fallback implementation
+// secureLogger is initialized and made available by utils/loggerSetup.js
+// No more fallback needed as it's guaranteed to be available
+
 const DEBUG = true;
 function debugLog(section, message, data = null) {
   if (!DEBUG) return;
   const timestamp = new Date().toISOString();
-  console.log(`[FormController][${section}][${timestamp}] ${message}`);
+  secureLogger.log(`[FormController][${section}][${timestamp}] ${message}`);
   if (data) {
-    console.log('Data:', data);
+    secureLogger.log('Data:', data);
   }
 }
 
-/**
- * Chat機能で設定された "現在アクティブなAPI" を拡張機能ストレージから読み込むヘルパー関数
- */
 async function loadActiveAPISettings() {
   const data = await chrome.storage.local.get([
     'apiProvider',
@@ -39,37 +40,20 @@ class FormController {
     debugLog('Constructor', 'Initializing FormController');
     this.STATE_KEY = 'form_controller_state';
     this.processingTabId = null;
-
-    // フォーム情報
     this.cachedForms = [];
-
-    // リモートフォームを取得したかどうかのフラグ
     this.isRemoteForms = false;
-
-    // AIサジェスト管理
     this.suggestions = [];
     this.selectedValues = {};
-
-    // 状態管理
     this.status = 'idle';
     this.mode = 'normal';
-
-    // PDFテキストやWeb抽出テキスト
     this.manualRulesContent = '';
     this.processDocContent = '';
     this.webExtractContent = '';
-
-    // PDFファイル名
     this.manualRulesFileName = '';
     this.processDocFileName = '';
-
-    // 画像をBase64化したもの（画像ファイルアップロード時）
     this.processDocImageData = null;
-
-    // GPTサービスの初期化
     this.gptService = new GPTService();
 
-    // pdf.js のワーカー設定
     if (window.pdfjsLib) {
       this.pdfjsLib = window.pdfjsLib;
       this.pdfjsLib.GlobalWorkerOptions.workerSrc = chrome.runtime.getURL('assets/js/pdf.worker.min.js');
@@ -79,14 +63,10 @@ class FormController {
       this.pdfjsLib = null;
     }
 
-    // UI要素
     this.elements = {
       formControlSection: document.getElementById('formControlSection'),
-
       apiKey: document.getElementById('apiKey'),
       modelSelect: document.getElementById('modelSelect'),
-
-      // PDFアップロード
       manualPdf: document.getElementById('manualPdf'),
       processPdf: document.getElementById('processPdf'),
       manualPdfUploadSection: document.getElementById('manualPdfUploadSection'),
@@ -97,32 +77,19 @@ class FormController {
       processPdfSelectedSection: document.getElementById('processPdfSelectedSection'),
       processPdfFileName: document.getElementById('processPdfFileName'),
       processPdfRemoveBtn: document.getElementById('processPdfRemoveBtn'),
-
-      // Web抽出ボタン
       extractButton: document.getElementById('extractButton'),
-
-      // 入力プロンプト
       promptInput: document.getElementById('promptInput'),
       gptButton: document.getElementById('gptButton'),
-
-      // ステータス表示
       statusDisplay: document.getElementById('statusDisplay'),
       statusIcon: document.getElementById('statusIcon'),
       statusText: document.getElementById('statusText'),
-
-      // フォーム要素
       formContainer: document.getElementById('formElementsContainer'),
       selectedSection: document.getElementById('selectedValuesSection'),
       selectedContainer: document.getElementById('selectedValuesContainer'),
-
-      // フォーム反映ボタン
       applyButton: document.getElementById('applyFormButton')
     };
   }
 
-  /**
-   * web_list.js が存在する場合、そこからページ抽出テキストを再取得
-   */
   syncWebExtractContent() {
     if (window.webListManager) {
       const pages = window.webListManager.getPageContents();
@@ -146,11 +113,6 @@ class FormController {
     }
   }
 
-  /**
-   * --------------------------------
-   * 状態保存
-   * --------------------------------
-   */
   async saveState() {
     const formState = {
       cachedForms: this.cachedForms,
@@ -164,7 +126,6 @@ class FormController {
       lastUpdated: new Date().toISOString()
     };
   
-    // --- 画像データを追加 ---
     const persistentState = {
       manualRulesContent: this.manualRulesContent,
       processDocContent: this.processDocContent,
@@ -174,7 +135,6 @@ class FormController {
       selectedModel: this.elements.modelSelect?.value,
       manualRulesFileName: this.manualRulesFileName,
       processDocFileName: this.processDocFileName,
-      // 画像データ(Base64)を保存。無ければnullか空文字
       processDocImageData: this.processDocImageData || ''
     };
   
@@ -187,11 +147,6 @@ class FormController {
     debugLog('saveState', 'States saved', { formState, suggestionState, persistentState });
   }
 
-  /**
-   * --------------------------------
-   * 状態読み込み
-   * --------------------------------
-   */
   async loadState() {
     const data = await chrome.storage.local.get([
       `${this.STATE_KEY}_form`,
@@ -203,7 +158,6 @@ class FormController {
     const suggestionState = data[`${this.STATE_KEY}_suggestions`];
     const persistentState = data[`${this.STATE_KEY}_persistent`];
   
-    // フォーム状態
     if (formState) {
       debugLog('loadState', 'Loading form state', formState);
       this.cachedForms = formState.cachedForms || [];
@@ -212,13 +166,11 @@ class FormController {
       this.processingTabId = formState.processingTabId || null;
     }
   
-    // サジェスト状態
     if (suggestionState) {
       debugLog('loadState', 'Loading suggestion state', suggestionState);
       this.suggestions = suggestionState.suggestions || [];
     }
   
-    // 永続的な状態
     if (persistentState) {
       debugLog('loadState', 'Loading persistent state', persistentState);
   
@@ -248,15 +200,11 @@ class FormController {
         this.processDocFileName = persistentState.processDocFileName;
       }
   
-      // --- 画像データを復元 ---
-      // もし未保存の場合は空文字やnullになる
       this.processDocImageData = persistentState.processDocImageData || null;
   
-      // PDFや画像ファイル名の表示などを更新
       this.updatePdfListDisplay();
     }
   
-    // もしフォームが復元されていれば描画
     if (this.cachedForms.length > 0) {
       this.renderFormElements();
       this.showFormControl();
@@ -281,14 +229,24 @@ class FormController {
     debugLog('cleanupState', 'Form state cleaned up');
   }
 
-  /**
-   * タブ更新の監視
-   */
   async initializeNavigationListener() {
+    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+      if (request.action === 'refreshForms' && request.success) {
+        debugLog('refreshFormsListener', 'Received refreshForms message, re-fetching forms');
+        this.autoLoadForms().then(() => {
+          sendResponse({ received: true });
+        }).catch(error => {
+          debugLog('refreshFormsListener', 'Error re-fetching forms', { error });
+          sendResponse({ error: error.message });
+        });
+        return true;
+      }
+    });
+
     chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
       if (this.processingTabId === tabId) {
-        if (changeInfo.status === 'loading') {
-          debugLog('navigationListener', 'Page navigation detected: loading');
+        if (changeInfo.url) {
+          debugLog('navigationListener', 'URL change detected', { url: changeInfo.url });
           await Promise.all([
             chrome.storage.local.remove(`${this.STATE_KEY}_form`),
             chrome.storage.local.remove(`${this.STATE_KEY}_suggestions`)
@@ -296,10 +254,9 @@ class FormController {
           this.suggestions = [];
           this.selectedValues = {};
           this.hideFormControl();
-        }
-        else if (changeInfo.status === 'complete') {
-          debugLog('navigationListener', 'Page navigation complete');
-          await this.autoLoadForms();
+          setTimeout(async () => {
+            await this.autoLoadForms();
+          }, 1000);
         }
       }
     });
@@ -314,7 +271,6 @@ class FormController {
     this.hideFormControl();
     await this.loadState();
 
-    // フォーム自動読み込み
     await this.autoLoadForms();
 
     debugLog('initialize', 'Initialization complete');
@@ -444,7 +400,7 @@ class FormController {
       await this.handleFormApply();
     });
 
-    this.elements.promptInput?.addEventListener('input', async () => {
+    this.elements.promptInput?.addEventListener('change', async () => {
       await this.saveState();
     });
 
@@ -455,9 +411,6 @@ class FormController {
     });
   }
 
-  /**
-   * PDFファイル or 画像読み込み → テキスト抽出 or Base64
-   */
   async handlePdfUpload(event, targetProperty) {
     try {
       const file = event.target.files[0];
@@ -482,7 +435,6 @@ class FormController {
       }
       else if ((file.type === "image/jpeg" || file.type === "image/png")
         && this.gptService.modelMatchesImageProcessing()) {
-        // 画像ファイルでGPTが対応モデルなら
         const base64Str = await this.convertFileToBase64(file);
         this.processDocImageData = `data:${file.type};base64,${base64Str}`;
         this.processDocFileName = file.name;
@@ -585,9 +537,6 @@ class FormController {
     }
   }
 
-  /**
-   * GPT連携ボタン
-   */
   async handleGptSuggestions() {
     debugLog('handleGptSuggestions', 'Starting GPT processing');
     try {
@@ -626,14 +575,13 @@ class FormController {
         }
       }
 
-      // GPT用の prompt 生成時に、画像データがあれば
       const prompt = await this.gptService.generatePrompt(
         this.cachedForms,
         this.manualRulesContent,
         this.processDocContent,
         this.webExtractContent,
         mergedPrompt,
-        this.processDocImageData  // ★ ここが画像データ
+        this.processDocImageData
       );
 
       await this.saveState();
@@ -707,106 +655,139 @@ class FormController {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     this.processingTabId = tab.id;
 
-    try {
-      const tabUrl = tab.url || '';
-      const { apiProvider, apiKeys, customSettings } = await chrome.storage.local.get([
-        "apiProvider",
-        "apiKeys",
-        "customSettings"
-      ]);
+    const tryFetchRemoteForms = async (retries = 2) => {
+      try {
+        const tabUrl = tab.url || '';
+        const { apiProvider, apiKeys, customSettings } = await chrome.storage.local.get([
+          'apiProvider', 'apiKeys', 'customSettings'
+        ]);
 
-      if (apiKeys?.local && customSettings?.local?.url) {
-        const baseUrl = customSettings.local.url.replace(/\/+$/, "");
-        const token = apiKeys.local;
+        if (apiKeys?.local && customSettings?.local?.url) {
+          const baseUrl = customSettings.local.url.replace(/\/+$/, '');
+          const token = apiKeys.local;
 
-        const response = await fetch(`${baseUrl}/widget/forms`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({
-            token,
-            url: tabUrl
-          })
-        });
-
-        const data = await response.json();
-        debugLog('autoLoadForms', 'Remote forms response', data);
-
-        if (response.ok && data.status === 'success' && data.forms && data.forms.length > 0) {
-          this.cachedForms = [];
-          data.forms.forEach(formData => {
-            formData.items.forEach((item, idx) => {
-              const formattedData = {
-                id: `remote-xpath-${idx}`,
-                tagName: 'input',
-                type: item.type || 'text',
-                name: item.label || `field-${idx}`,
-                label: item.label || '',
-                placeholder: '',
-                required: false,
-                value: '',
-                absolute_xpath: item.absolute_xpath,
-                prompt: item.prompt || ''
-              };
-              if (item.type === 'select' || item.type === 'radio' || item.type === 'checkbox') {
-                if (item.options) {
-                  formattedData.options = item.options.map(opt => ({
-                    value: opt.value,
-                    label: opt.label || opt.value,
-                    selected: false
-                  }));
-                }
-              }
-              this.cachedForms.push(formattedData);
-            });
+          const response = await fetch(`${baseUrl}/widget/forms`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ token, url: tabUrl })
           });
 
-          this.isRemoteForms = true;
+          const data = await response.json();
+          debugLog('autoLoadForms', 'Remote forms response', data);
+
+          if (response.ok && data.status === 'success' && data.forms && data.forms.length > 0) {
+            this.cachedForms = [];
+            data.forms.forEach(formData => {
+              formData.items.forEach((item, idx) => {
+                const formattedData = {
+                  id: `remote-xpath-${idx}`,
+                  tagName: 'input',
+                  type: item.type || 'text',
+                  name: item.label || `field-${idx}`,
+                  label: item.label || '',
+                  placeholder: '',
+                  required: false,
+                  value: '',
+                  absolute_xpath: item.absolute_xpath,
+                  prompt: item.prompt || ''
+                };
+                if (item.type === 'select' || item.type === 'radio' || item.type === 'checkbox') {
+                  if (item.options) {
+                    formattedData.options = item.options.map(opt => ({
+                      value: opt.value,
+                      label: opt.label || opt.value,
+                      selected: false
+                    }));
+                  }
+                }
+                this.cachedForms.push(formattedData);
+              });
+            });
+
+            this.isRemoteForms = true;
+            this.renderFormElements();
+            this.showFormControl();
+            this.updateStatus('ready', 'リモートフォームを取得しました');
+            this.elements.gptButton.disabled = false;
+            await this.saveState();
+            return true;
+          }
+        }
+        return false;
+      } catch (error) {
+        debugLog('autoLoadForms', `Remote forms fetch error (retries left: ${retries})`, { error });
+        if (retries > 0) {
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          return tryFetchRemoteForms(retries - 1);
+        }
+        return false;
+      }
+    };
+
+    if (await tryFetchRemoteForms()) return;
+
+    const maxRetries = 3;
+    let retryCount = 0;
+
+    const fetchForms = async () => {
+      try {
+        this.updateStatus('reading', 'フォーム読み込み中...');
+
+        const response = await new Promise((resolve, reject) => {
+          const timeout = setTimeout(() => {
+            reject(new Error('Message timeout'));
+          }, 3000); // 3-second timeout
+
+          chrome.tabs.sendMessage(tab.id, { action: 'getForms' }, (response) => {
+            clearTimeout(timeout);
+            if (chrome.runtime.lastError) {
+              reject(chrome.runtime.lastError);
+            } else {
+              resolve(response);
+            }
+          });
+        });
+
+        if (response && response.length > 0) {
+          debugLog('autoLoadForms', 'Forms loaded successfully', { formCount: response.length });
+          this.cachedForms = response;
+          this.isRemoteForms = false;
           this.renderFormElements();
           this.showFormControl();
-          this.updateStatus('ready', 'リモートフォームを取得しました');
+          this.updateStatus('ready', 'フォーム読み込み完了');
           this.elements.gptButton.disabled = false;
+
+          await chrome.tabs.sendMessage(tab.id, { action: 'highlightForms' });
           await this.saveState();
-          return;
+
+          if (this.suggestions.length > 0) {
+            this.renderSuggestions();
+          }
+        } else {
+          debugLog('autoLoadForms', 'No forms found');
+          this.hideFormControl();
+          this.updateStatus('info', 'フォーム要素が見つかりませんでした');
+          this.elements.gptButton.disabled = true;
+        }
+      } catch (error) {
+        retryCount++;
+        if (retryCount < maxRetries) {
+          debugLog('autoLoadForms', `Retrying form fetch (${retryCount}/${maxRetries})`, { error });
+          await new Promise(resolve => setTimeout(resolve, 500));
+          return fetchForms();
+        } else {
+          debugLog('autoLoadForms', 'Error loading forms after retries', { error });
+          this.hideFormControl();
+          this.updateStatus('error', 'フォーム読み込みに失敗しました');
+          this.elements.gptButton.disabled = true;
         }
       }
-    } catch (error) {
-      debugLog('autoLoadForms', 'Remote forms fetch error', { error });
-    }
+    };
 
-    try {
-      this.updateStatus('reading', 'フォーム読み込み中...');
-      const forms = await chrome.tabs.sendMessage(tab.id, { action: 'getForms' });
-
-      if (forms && forms.length > 0) {
-        debugLog('autoLoadForms', 'Forms loaded successfully', { formCount: forms.length });
-        this.cachedForms = forms;
-        this.isRemoteForms = false;
-        this.renderFormElements();
-        this.showFormControl();
-        this.updateStatus('ready', 'フォーム読み込み完了');
-        this.elements.gptButton.disabled = false;
-
-        await chrome.tabs.sendMessage(tab.id, { action: 'highlightForms' });
-        await this.saveState();
-
-        if (Object.keys(this.suggestions).length > 0) {
-          this.renderSuggestions();
-        }
-      } else {
-        debugLog('autoLoadForms', 'No forms found');
-        this.hideFormControl();
-        this.updateStatus('info', 'フォーム要素が見つかりませんでした');
-        this.elements.gptButton.disabled = true;
-      }
-    } catch (error) {
-      debugLog('autoLoadForms', 'Error loading forms', { error });
-      this.hideFormControl();
-      this.updateStatus('error', 'フォーム読み込みに失敗しました');
-      this.elements.gptButton.disabled = true;
-    }
+    await fetchForms();
   }
 
   async clearFormData() {
@@ -900,7 +881,8 @@ class FormController {
     debugLog('renderSuggestions', 'Rendering suggestions');
 
     this.suggestions.forEach(formSuggestion => {
-      const select = document.querySelector(`#select-${formSuggestion.form_id}`);
+      const escapedId = CSS.escape(`select-${formSuggestion.form_id}`);
+      const select = document.querySelector(`#${escapedId}`);
       if (!select) return;
       while (select.options.length > 1) {
         select.remove(1);

@@ -1,0 +1,24 @@
+{
+  "name": "ib-extension-dev",
+  "version": "1.0.0",
+  "description": "IB Extension Development",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/run-tests.js",
+    "test:unit": "node test/utils/secureLogger.test.js",
+    "test:integration": "node test/integration/logging-integration.test.js"
+  },
+  "keywords": [
+    "extension",
+    "security",
+    "logging"
+  ],
+  "author": "J-AIC / Keiyo Arai",
+  "license": "PROPRIETARY",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0"
+  }
+}
