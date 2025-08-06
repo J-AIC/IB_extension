@@ -1,10 +1,10 @@
 {
   "name": "__MSG_extensionName__",
-  "version": "1.307",
+  "version": "1.402",
   "manifest_version": 3,
   "description": "__MSG_extensionDescription__",
   "default_locale": "ja",
-  "author": "Japan AI Consulting Corporation",
+  "author": "Japan AI Consluting Corporation",
   "host_permissions": [
     "*://*/*"
   ],
@@ -13,32 +13,33 @@
     "activeTab",
     "tabs",
     "contextMenus",
-    "scripting"
+    "scripting",
+    "downloads",
+    "sidePanel"
   ],
   "content_scripts": [{
     "matches": ["<all_urls>"],
-    "js": [
-      "utils/secureLogger.js",
-      "utils/loggerSetup.js",
-      "js/loggerImport.js",
-      "content.js",
-      "forms/content.js",
-      "html/content.js"
-    ],
-    "run_at": "document_start"
+    "js": ["utils/secureLogger.js", "utils/loggerSetup.js", "js/loggerImport.js", "src/architecture-sw.js", "forms/content.js", "html/content.js"]
   }],
   "web_accessible_resources": [{
     "resources": [
       "api_settings.html",
       "api_settings.js",
       "api_settings.css",
-      "chat.html",
+      "system_prompts.html",
+      "system_prompts.js",
       "chat.js",
-      "form_control_basic.js",
-      "form_control.js",
+      "panel-chat.html",
+      "panel-history.html", 
+      "panel-forms.html",
+      "panel-home.html",
+      "panel-navigation.js",
+      "panel-forms-init.js",
+      "panel-home-init.js",
+      "panel-history-init.js",
+      "panel-chat-init.js",
       "guide_url.html",
       "guide_url.js",
-      "history.js",
       "form-reader.js",
       "home.html",
       "home.js",
@@ -52,13 +53,19 @@
       "docs/*/*.md",
       "lib/marked/marked.min.js",
       "utils/secureLogger.js",
-      "utils/loggerSetup.js"
+      "utils/loggerSetup.js",
+      "src/*",
+      "assets/js/p2p/*",
+      "src/p2p/*",
+      "p2p_receiver.html",
+      "p2p_sender.html",
+      "p2p_init.js"
     ],
     "matches": ["<all_urls>"]
   }],
   "content_security_policy": {
     "extension_pages": 
-      "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' *;"
+      "default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline' https://*.gstatic.com https://translate.googleapis.com; script-src 'self'; connect-src 'self' https://api.openai.com https://api.deepseek.com https://*.openai.azure.com https://*.amazonaws.com https://api.anthropic.com https://generativelanguage.googleapis.com https://* wss://* https://*.peerjs.com https://0.peerjs.com;"
   },
   "icons": {
     "16": "assets/IB_logo_16.png",
@@ -72,10 +79,13 @@
       "32": "assets/IB_logo_32.png",
       "48": "assets/IB_logo_48.png",
       "128": "assets/IB_logo_128.png"
-    }
+    },
+    "default_title": "Open InsideBuddy"
+  },
+  "side_panel": {
+    "default_path": "panel-chat.html"
   },
   "background": {
     "service_worker": "background.js"
-  },
-  "options_page": "api_settings.html"
+  }
 }

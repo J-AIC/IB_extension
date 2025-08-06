@@ -8,153 +8,346 @@
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
-        /* レイアウト構造 */
-        .sidebar {
-            width: 250px;
+        body {
+            margin: 0;
+            padding: 0;
             height: 100vh;
-            position: fixed;
-            left: 0;
-            top: 0;
-            z-index: 1000;
-            flex-shrink: 0;
-            /* 追加 */
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         }
 
-        .main-content {
-            margin-left: 250px;
-            min-height: 100vh;
-            padding: 2rem;
-            background-color: #f8f9fa;
-            width: calc(100% - 250px);
-            /* 追加 */
+        /* Modern layout structure */
+        .app-container {
+            display: flex;
+            height: 100vh;
+            background: #f8f9fa;
         }
 
-        .content-wrapper {
+        /* Modern sidebar */
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid #dee2e6;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #dee2e6;
+            text-align: center;
+        }
+
+        .sidebar-header img {
             width: 70%;
+            max-width: 180px;
+            height: auto;
+            display: block;
             margin: 0 auto;
-            max-width: 1000px;
         }
 
-        /* ナビゲーション */
+        /* Modern navigation */
+        .nav {
+            flex: 1;
+            padding: 1rem 0;
+        }
+
         .nav-link {
-            color: #333;
-            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 1.5rem;
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 500;
             transition: all 0.2s ease;
+            position: relative;
+            margin: 0.25rem 1rem;
+            border-radius: 12px;
         }
 
         .nav-link:hover {
-            background-color: #f8f9fa;
+            background: #f1f5f9;
+            color: #3b82f6;
+            transform: translateX(4px);
         }
 
         .nav-link.active {
-            background-color: #0d6efd;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .nav-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 24px;
+            background: white;
+            border-radius: 0 2px 2px 0;
+        }
+
+        .nav-link i {
+            margin-right: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        /* Main content area */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 2rem;
+        }
+
+        .content-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Welcome content */
+        .welcome-container {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .welcome-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            margin: 0 auto 2rem;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+            animation: gentle-float 3s ease-in-out infinite;
+        }
+
+        @keyframes gentle-float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .welcome-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0 0 1rem 0;
+            background: linear-gradient(135deg, #1e293b, #475569);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.25rem;
+            color: #64748b;
+            margin: 0 0 2rem 0;
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        /* Quick actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .action-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .action-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .action-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            color: #3b82f6;
+            transition: all 0.3s ease;
+        }
+
+        .action-card:hover .action-icon {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
             color: white;
         }
 
-        /* ステータスインジケーター */
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: #ccc;
+        .action-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0 0 0.5rem 0;
         }
 
-        .status-dot.active {
-            background-color: #28a745;
+        .action-description {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin: 0;
+            line-height: 1.4;
         }
 
-        /* ローディング */
+        /* Loading state */
         .loading {
-            padding: 2rem;
-            text-align: center;
-            color: #6c757d;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            color: #64748b;
         }
 
-        /* レスポンシブ対応 */
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive design */
         @media (max-width: 768px) {
             .sidebar {
-                width: 200px;
+                width: 240px;
             }
 
-            .main-content {
-                margin-left: 200px;
+            .welcome-container {
+                padding: 2rem 1.5rem;
             }
 
-            .content-wrapper {
-                width: 90%;
+            .welcome-title {
+                font-size: 2rem;
+            }
+
+            .welcome-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+                margin-top: 2rem;
             }
         }
 
         @media (max-width: 576px) {
+            .app-container {
+                flex-direction: column;
+            }
+
             .sidebar {
                 width: 100%;
                 height: auto;
-                position: relative;
+                border-right: none;
+                border-bottom: 1px solid #dee2e6;
             }
 
             .main-content {
-                margin-left: 0;
+                padding: 1rem;
             }
 
-            .content-wrapper {
-                width: 95%;
+            .welcome-container {
+                padding: 1.5rem 1rem;
             }
-        }
 
-        .icon-container {
-            margin-top: 30px;
-            text-align: center;
-            /* 中央揃え */
-            padding: 10px 0;
-            /* 上下に余白を追加 */
-        }
-
-        .icon-container img {
-            width: 80%;
-            /* 画像のサイズを80%に縮小 */
-            max-width: 200px;
-            /* 最大サイズを設定（適宜調整） */
-            height: auto;
-            /* 縦横比を維持 */
-            display: block;
-            /* 中央揃えを確実にする */
-            margin: 0 auto;
-            /* 左右中央揃え */
+            .welcome-title {
+                font-size: 1.75rem;
+            }
         }
     </style>
 </head>
 
-<body class="bg-light">
-    <div class="d-flex">
-        <!-- サイドバー -->
-        <div class="sidebar bg-light border-end">
-            <div class="d-flex flex-column h-100">
-                <div class="icon-container">
-                    <img src="assets/IB_logo_name.png" alt="InsightBuddy Logo">
-                </div>
-                <div class="nav flex-column nav-pills mt-3">
-                    <a class="nav-link active" href="home.html">
-                        <i class="bi bi-house me-2"></i><span data-i18n="home"></span>
-                    </a>
-                    <a class="nav-link" href="guide_url.html">
-                        <i class="bi bi-search me-2"></i><span data-i18n="guideURL"></span>
-                    </a>
-                    <a class="nav-link" href="api_settings.html">
-                        <i class="bi bi-gear me-2"></i><span data-i18n="apiSettings"></span>
-                    </a>
-                </div>
-
+<body>
+    <div class="app-container">
+        <!-- Modern sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="assets/IB_logo_name.png" alt="InsightBuddy Logo">
             </div>
-        </div>
+            <nav class="nav flex-column">
+                <a class="nav-link active" href="home.html">
+                    <i class="bi bi-house"></i>
+                    <span data-i18n="home">Home</span>
+                </a>
+                <a class="nav-link" href="chat-standalone.html">
+                    <i class="bi bi-chat-dots"></i>
+                    <span data-i18n="chat">Chat</span>
+                </a>
+                <a class="nav-link" href="guide_url.html">
+                    <i class="bi bi-search"></i>
+                    <span data-i18n="guideURL">Guide URL</span>
+                </a>
+                <a class="nav-link" href="api_settings.html">
+                    <i class="bi bi-gear"></i>
+                    <span data-i18n="apiSettings">API Settings</span>
+                </a>
+                <a class="nav-link" href="system_prompts.html">
+                    <i class="bi bi-chat-square-text"></i>
+                    <span data-i18n="systemPrompts">System Prompts</span>
+                </a>
+            </nav>
+        </aside>
 
-        <!-- メインコンテンツ -->
-        <div class="main-content">
+        <!-- Main content area -->
+        <main class="main-content">
             <div class="content-wrapper">
                 <div id="homeContent">
-                    <div class="loading"><span data-i18n="contentReload"></span></div>
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <span data-i18n="contentReload">Loading content...</span>
+                    </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 
     <script src="lib/marked/marked.min.js"></script>

@@ -1,11 +1,44 @@
 # 1. Einführung
 
 Keine Registrierung erforderlich, einfache Einrichtung!  
-InsightBuddy Extension ist ein KI-Chat-Assistent, der auf Webseiten verwendet werden kann. Sie können ihn sofort nutzen, indem Sie einfach den API-Schlüssel Ihres bevorzugten KI-Anbieters eingeben – egal ob OpenAI, Anthropic, Google oder ein anderer Anbieter – ganz ohne Registrierung.  
+InsightBuddy Chat ist ein KI-Chat-Assistent, der auf Webseiten verwendet werden kann. Sie können ihn sofort nutzen, indem Sie einfach den API-Schlüssel Ihres bevorzugten KI-Anbieters eingeben – egal ob OpenAI, Anthropic, Google oder ein anderer Anbieter – ganz ohne Registrierung.  
 Darüber hinaus kann er auch mit Ihrer selbstgehosteten, OpenAI-kompatiblen Umgebung verbunden werden.
 
 - Ab Februar 2025 ist Googles Gemini teilweise kostenlos verfügbar, sodass Sie generative KI kostenlos nutzen können, wenn Sie diese Option ausnutzen.
 - Der folgende Artikel fasst zusammen, wie Sie ein Konto einrichten können ( https://j-aic.com/techblog/google-ai-studio-api-free ).
+
+## Schnellzugriff
+
+<div class="quick-actions">
+    <div class="action-card" id="chatQuickAction" data-action="open-chat">
+        <div class="action-icon">
+            <i class="bi bi-chat-dots"></i>
+        </div>
+        <div class="action-title">Chat</div>
+        <div class="action-description">Vollbild-Chat öffnen</div>
+    </div>
+    <div class="action-card" data-action="api-settings">
+        <div class="action-icon">
+            <i class="bi bi-gear"></i>
+        </div>
+        <div class="action-title">API-Einstellungen</div>
+        <div class="action-description">Anbieter und API-Schlüssel konfigurieren</div>
+    </div>
+    <div class="action-card" data-action="guide-url">
+        <div class="action-icon">
+            <i class="bi bi-search"></i>
+        </div>
+        <div class="action-title">Leitfaden-URL</div>
+        <div class="action-description">Seitenspezifische Funktionen einrichten</div>
+    </div>
+    <div class="action-card" data-action="system-prompts">
+        <div class="action-icon">
+            <i class="bi bi-chat-square-text"></i>
+        </div>
+        <div class="action-title">System-Prompts</div>
+        <div class="action-description">Chat-Verhalten konfigurieren</div>
+    </div>
+</div>
 
 ## 1.1 Hauptfunktionen
 

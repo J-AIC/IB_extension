@@ -115,7 +115,7 @@
     font-size: 0.875rem;
     transition: border-color 0.2s;
   }
-  
+
   input[type="password"]:focus,
   input[type="text"]:focus,
   select:focus,
@@ -124,20 +124,20 @@
     border-color: var(--primary-color);
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
   }
-  
+
   /* ----------------------------------------------------
      ファイルアップロード系
      ---------------------------------------------------- */
   .file-upload {
     margin-top: 0.5rem;
   }
-  
+
   .file-list {
     margin-top: 0.5rem;
     font-size: 0.875rem;
     color: var(--text-secondary);
   }
-  
+
   /* ----------------------------------------------------
      ボタン
      ---------------------------------------------------- */
@@ -152,32 +152,32 @@
     cursor: pointer;
     border: 1px solid transparent;
   }
-  
+
   .btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
-  
+
   .btn-primary {
     background-color: var(--primary-color);
     color: white;
   }
-  
+
   .btn-primary:hover:not(:disabled) {
     background-color: var(--primary-hover);
   }
-  
+
   .btn-secondary {
     background-color: white;
     color: var(--primary-color);
     border-color: var(--primary-color);
   }
-  
+
   .btn-secondary:hover:not(:disabled) {
     background-color: var(--primary-color);
     color: white;
   }
-  
+
   /* ----------------------------------------------------
      ステータス表示カードなど
      ---------------------------------------------------- */
@@ -187,25 +187,25 @@
     padding: 1rem;
     margin-bottom: 1rem;
   }
-  
+
   .status-content {
     display: flex;
     align-items: center;
     gap: 0.5rem;
   }
-  
+
   /* ----------------------------------------------------
      選択された値など
      ---------------------------------------------------- */
   .selected-values {
     margin: 1rem 0;
   }
-  
+
   /* 隠し要素 */
   .hidden {
     display: none;
   }
-  
+
   /* ----------------------------------------------------
      アコーディオンやモーダルなど
      ---------------------------------------------------- */
@@ -216,7 +216,7 @@
     overflow: hidden;
     background-color: var(--card-background);
   }
-  
+
   .accordion-header {
     padding: var(--spacing-unit);
     background-color: var(--background-color);
@@ -225,17 +225,17 @@
     align-items: center;
     justify-content: space-between;
   }
-  
+
   .accordion-arrow {
     font-size: 1.25rem;
     display: inline-block;
   }
-  
+
 /* アコーディオン本文で縦スクロール＋強制改行を有効にする */
 .accordion-content {
   max-height: 150px;       /* 必要に応じて数値を調整 */
   overflow-y: auto;
-  overflow-x: hidden; 
+  overflow-x: hidden;
 }
 
 /* 文章を強制的に折り返すための設定 */
@@ -244,12 +244,12 @@
   word-break: break-word;      /* 古めのブラウザは break-all でも可 */
   overflow-wrap: break-word;
 }
-  
+
   .modal-content {
     max-height: calc(100vh - 200px);
     overflow-y: auto;
   }
-  
+
   /* スクロールバー */
   .modal-content::-webkit-scrollbar {
     width: 8px;
@@ -265,7 +265,7 @@
   .modal-content::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
-  
+
   /* ----------------------------------------------------
      テキストエリアなどの大きさ
      ---------------------------------------------------- */
@@ -279,12 +279,12 @@
     box-sizing: border-box;
     margin-bottom: 1rem;
   }
-  
+
   #apiKey {
     width: 100%;
     box-sizing: border-box;
   }
-  
+
   /* ----------------------------------------------------
      webPagesContainer の横幅対策
      ---------------------------------------------------- */
@@ -296,10 +296,10 @@
     */
     overflow-x: auto; /* 横スクロールできるように */
   }
-  
+
   /* もし #webPagesContainer が非常に長い要素を含む場合は
      overflow: auto; etc. をつける */
-  
+
   /* ----------------------------------------------------
      追加の微調整 (例: .card や .prompt-input-wrapper など)
      ---------------------------------------------------- */

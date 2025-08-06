@@ -43,7 +43,7 @@
   transform: translateY(-50%);
   width: 24px;
   height: 60px;
-  background: #0d6efd;
+  background: #1565C0;
   border-radius: 4px 0 0 4px;
   display: flex;
   align-items: center;
@@ -51,6 +51,10 @@
   cursor: pointer;
   color: white;
   z-index: 999;
+}
+
+.chat-toggle-button.active {
+    background: #1565C0;
 }
 
 .chat-container {
@@ -135,7 +139,8 @@
   font-size: 0.875rem;
 }
 
-.message.system .message-content {
+.message.system .message-content,
+.message.assistant .message-content {
   background-color: white;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
@@ -210,7 +215,6 @@
   height: 32px;
 }
 
-
 .language-selector {
   margin: 1rem 0;
   padding: 0.5rem;
@@ -227,3 +231,101 @@
 [data-i18n-dynamic] {
   transition: opacity 0.3s ease;
 }
+
+.message-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.edit-message-btn {
+  background: none;
+  border: none;
+  padding: 4px;
+  color: #ffff;
+  cursor: pointer;
+  transition: color 0.2s;
+  margin-right: 8px;
+}
+
+.edit-message-btn i {
+  font-size: 1rem;
+}
+
+.edit-message-btn:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Edit mode styles */
+.message.editing .message-text {
+  display: none;
+}
+
+.message.editing .edit-area {
+  display: block;
+}
+
+.edit-area {
+  display: none;
+  margin: 8px 0;
+}
+
+.edit-area textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  resize: vertical;
+}
+
+.edit-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.edit-buttons .btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+  padding: 4px 8px;
+  font-size: 0.875rem;
+}
+
+.edit-buttons .btn-primary {
+  color: #ffff;
+}
+
+.edit-buttons .btn-secondary {
+  color: #ffff;
+}
+
+.edit-buttons .btn:hover {
+  opacity: 0.8;
+}
+
+.message.processing {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.message.error {
+  border: 1px solid #dc3545;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background-color: rgba(220, 53, 69, 0.1);
+  border-radius: 4px;
+}
+.header-subtitle {
+    font-size: 0.75rem;
+    color: #6c757d;
+}
+

@@ -56,8 +56,6 @@ function localizeAll(root = document) {
         if (!key) return;
         const msg = chrome.i18n.getMessage(key);
         if (msg) {
-            // NOTE: innerText / textContent を置き換えるか innerHTML を置き換えるかは用途次第
-            //       ここでは textContent にしています
             el.textContent = msg;
         }
     });
@@ -266,7 +264,15 @@ function initializeEventListeners() {
             }
 
             updateImportExportModalHTML();
-            const importExportModal = new bootstrap.Modal(document.getElementById('importExportModal'));
+            const importExportModalEl = document.getElementById('importExportModal');
+            const importExportModal = new bootstrap.Modal(importExportModalEl);
+            
+            // Fix aria-hidden accessibility issue
+            importExportModalEl.addEventListener('shown.bs.modal', function () {
+                // Remove aria-hidden from the modal to fix accessibility issue
+                this.removeAttribute('aria-hidden');
+            });
+            
             importExportModal.show();
         });
     }
@@ -296,6 +302,17 @@ async function initializeApp() {
         const newGuideModalEl = document.getElementById('newGuideModal');
         if (newGuideModalEl) {
             elements.newGuideModal = new bootstrap.Modal(newGuideModalEl);
+            
+            // Fix aria-hidden accessibility issue
+            newGuideModalEl.addEventListener('shown.bs.modal', function () {
+                // Remove aria-hidden from the modal to fix accessibility issue
+                this.removeAttribute('aria-hidden');
+                // Focus the first input field
+                const firstInput = this.querySelector('#newGuideUrl');
+                if (firstInput) {
+                    firstInput.focus();
+                }
+            });
         }
 
         // Load data & render
@@ -874,6 +891,17 @@ function showBaseCardModal(card = null, editIndex = -1) {
         await storage.save(state);
         modal.hide();
         renderUI();
+    });
+
+    // Fix aria-hidden accessibility issue
+    newlyInserted.addEventListener('shown.bs.modal', function () {
+        // Remove aria-hidden from the modal to fix accessibility issue
+        this.removeAttribute('aria-hidden');
+        // Focus the first input field
+        const firstInput = this.querySelector('#baseCardTitle');
+        if (firstInput) {
+            firstInput.focus();
+        }
     });
 
     modal.show();

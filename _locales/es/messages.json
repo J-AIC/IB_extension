@@ -1,6 +1,6 @@
 {
     "extensionName": {
-      "message": "InsightBuddy Extension"
+      "message": "InsightBuddy Chat"
     },
     "extensionDescription": {
       "message": "Un asistente de chat con IA que se puede usar de inmediato simplemente ingresando la clave API de tu proveedor de IA preferido sin necesidad de registro. Soporta proveedores de IA principales como OpenAI, Anthropic y Google, ofreciendo un soporte preciso al comprender el contenido de la página web."

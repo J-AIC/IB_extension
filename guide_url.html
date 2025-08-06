@@ -3,128 +3,364 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guide URL Manager | Chat Widget</title>
+    <title>Guide Settings | Chat Widget</title>
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
-        /* ナビゲーション */
-        .nav-link {
-            color: #333;
-            padding: 0.5rem 1rem;
-            transition: all 0.2s ease;
-        }
-        .nav-link:hover {
-            background-color: #f8f9fa;
-        }
-        .nav-link.active {
-            background-color: #0d6efd;
-            color: white;
-        }
-
-        /* レイアウト構造（home.htmlから継承） */
-        .sidebar {
-            width: 250px;
+        body {
+            margin: 0;
+            padding: 0;
             height: 100vh;
-            position: fixed;
-            left: 0;
-            top: 0;
-            z-index: 1000;
-            flex-shrink: 0;
-        }
-        .main-content {
-            margin-left: 250px;
-            min-height: 100vh;
-            padding: 2rem;
-            background-color: #f8f9fa;
-            width: calc(100% - 250px);
-        }
-        .content-wrapper {
-            width: 70%;
-            margin: 0 auto;
-            max-width: 1000px;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         }
 
-        /* Guide URL固有のスタイル */
-        .card {
-            margin-bottom: 20px;
-        }
-        .guide-card {
-            border: 1px solid #dee2e6;
-            border-radius: 4px;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-        .action-buttons {
+        /* Modern layout structure */
+        .app-container {
             display: flex;
-            gap: 5px;
-        }
-        .guide-card-list {
-            padding-left: 15px;
+            height: 100vh;
+            background: #f8f9fa;
         }
 
-        /* レスポンシブ対応（home.htmlから継承） */
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 200px;
-            }
-            .main-content {
-                margin-left: 200px;
-            }
-            .content-wrapper {
-                width: 90%;
-            }
+        /* Modern sidebar */
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid #dee2e6;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
         }
-        @media (max-width: 576px) {
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-            }
-            .main-content {
-                margin-left: 0;
-            }
-            .content-wrapper {
-                width: 95%;
-            }
-        }
-        .icon-container {
-            margin-top: 30px;
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #dee2e6;
             text-align: center;
-            padding: 10px 0;
         }
-        .icon-container img {
-            width: 80%;
-            max-width: 200px;
+
+        .sidebar-header img {
+            width: 70%;
+            max-width: 180px;
             height: auto;
             display: block;
             margin: 0 auto;
         }
+
+        /* Modern navigation */
+        .nav {
+            flex: 1;
+            padding: 1rem 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 1.5rem;
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            position: relative;
+            margin: 0.25rem 1rem;
+            border-radius: 12px;
+        }
+
+        .nav-link:hover {
+            background: #f1f5f9;
+            color: #3b82f6;
+            transform: translateX(4px);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .nav-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 24px;
+            background: white;
+            border-radius: 0 2px 2px 0;
+        }
+
+        .nav-link i {
+            margin-right: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        /* Main content area */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 2rem;
+        }
+
+        .content-wrapper {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Modern cards */
+        .card {
+            background: white;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            border-radius: 20px 20px 0 0;
+            padding: 1.5rem 2rem;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0;
+        }
+
+        /* Modern buttons */
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-outline-secondary {
+            background: white;
+            color: #64748b;
+            border: 2px solid #e2e8f0;
+        }
+
+        .btn-outline-secondary:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            color: #475569;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.8125rem;
+        }
+
+        /* Guide cards */
+        .guide-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .guide-card:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+            transform: translateX(4px);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .guide-card-list {
+            padding-left: 1rem;
+        }
+
+        /* Form controls */
+        .form-control {
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+            font-size: 0.9375rem;
+        }
+
+        .form-control:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Modal styling */
+        .modal-content {
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-header {
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            border-radius: 20px 20px 0 0;
+            padding: 1.5rem 2rem;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-footer {
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            border-radius: 0 0 20px 20px;
+            padding: 1.5rem 2rem;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        /* Action buttons in modals */
+        .btn-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            opacity: 0.5;
+            transition: opacity 0.2s ease;
+        }
+
+        .btn-close:hover {
+            opacity: 0.8;
+        }
+
+        /* Description styling */
+        .text-muted {
+            color: #64748b !important;
+        }
+
+        .fw-bold {
+            font-weight: 600 !important;
+            color: #374151;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 240px;
+            }
+
+            .content-wrapper {
+                max-width: 100%;
+            }
+
+            .card-body, .card-header {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .app-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid #dee2e6;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .card-body, .card-header {
+                padding: 1rem;
+            }
+        }
     </style>
 </head>
-<body class="bg-light">
-    <div class="d-flex">
-        <!-- サイドバー -->
-        <div class="sidebar bg-light border-end">
-            <div class="d-flex flex-column h-100">
-                <div class="icon-container">
-                    <img src="assets/IB_logo_name.png" alt="InsightBuddy Logo">
-                </div>
-                <div class="nav flex-column nav-pills mt-3">
-                    <a class="nav-link" href="home.html">
-                        <i class="bi bi-house me-2"></i><span data-i18n="home"></span>
-                    </a>
-                    <a class="nav-link active" href="guide_url.html">
-                        <i class="bi bi-search me-2"></i><span data-i18n="guideURL"></span>
-                    </a>
-                    <a class="nav-link" href="api_settings.html">
-                        <i class="bi bi-gear me-2"></i><span data-i18n="apiSettings"></span>
-                    </a>
-                </div>
+<body>
+    <div class="app-container">
+        <!-- Modern sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="assets/IB_logo_name.png" alt="InsightBuddy Logo">
             </div>
-        </div>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="home.html">
+                    <i class="bi bi-house"></i>
+                    <span data-i18n="home">Home</span>
+                </a>
+                <a class="nav-link" href="chat-standalone.html">
+                    <i class="bi bi-chat-dots"></i>
+                    <span data-i18n="chat">Chat</span>
+                </a>
+                <a class="nav-link active" href="guide_url.html">
+                    <i class="bi bi-search"></i>
+                    <span data-i18n="guideURL">Guide URL</span>
+                </a>
+                <a class="nav-link" href="api_settings.html">
+                    <i class="bi bi-gear"></i>
+                    <span data-i18n="apiSettings">API Settings</span>
+                </a>
+                <a class="nav-link" href="system_prompts.html">
+                    <i class="bi bi-chat-square-text"></i>
+                    <span data-i18n="systemPrompts">System Prompts</span>
+                </a>
+            </nav>
+        </aside>
 
-        <!-- メインコンテンツ -->
-        <div class="main-content">
+        <!-- Main content area -->
+        <main class="main-content">
             <div class="content-wrapper">
                 <!-- Description Section -->
                 <div class="card mb-4">
@@ -177,7 +413,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 
     <!-- モーダル -->

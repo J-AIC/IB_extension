@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Prompts</title>
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        /* Modern layout structure */
+        .app-container {
+            display: flex;
+            height: 100vh;
+            background: #f8f9fa;
+        }
+
+        /* Modern sidebar */
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid #dee2e6;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #dee2e6;
+            text-align: center;
+        }
+
+        .sidebar-header img {
+            width: 70%;
+            max-width: 180px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* Modern navigation */
+        .nav {
+            flex: 1;
+            padding: 1rem 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 1.5rem;
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            position: relative;
+            margin: 0.25rem 1rem;
+            border-radius: 12px;
+        }
+
+        .nav-link:hover {
+            background: #f1f5f9;
+            color: #3b82f6;
+            transform: translateX(4px);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .nav-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 24px;
+            background: white;
+            border-radius: 0 2px 2px 0;
+        }
+
+        .nav-link i {
+            margin-right: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        /* Main content area */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 2rem;
+        }
+
+        .content-wrapper {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Page header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0 0 0.5rem 0;
+            background: linear-gradient(135deg, #1e293b, #475569);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: #64748b;
+            margin: 0;
+            opacity: 0.8;
+        }
+
+        /* System Prompt Cards */
+        .prompt-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 1.5rem;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .prompt-card:hover {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .prompt-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0 0 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .provider-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        /* Preset Section */
+        .preset-section {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .preset-section h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #374151;
+            margin: 0 0 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .preset-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .preset-btn {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            color: #64748b;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .preset-btn:hover {
+            background: #f8fafc;
+            border-color: #3b82f6;
+            color: #3b82f6;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        }
+
+        /* Textarea styling */
+        .prompt-textarea {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1rem;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            width: 100%;
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .prompt-textarea:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+            background: #ffffff;
+            outline: none;
+        }
+
+        .prompt-textarea::placeholder {
+            color: #94a3b8;
+        }
+
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 0.875rem;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-outline-secondary {
+            background: white;
+            color: #64748b;
+            border: 2px solid #e2e8f0;
+        }
+
+        .btn-outline-secondary:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            color: #475569;
+        }
+
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c;
+            transform: translateY(-1px);
+        }
+
+        /* Status indicators */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+
+        .status-active {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .status-inactive {
+            background: #f1f5f9;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Character counter */
+        .char-counter {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            text-align: right;
+            margin-top: 0.5rem;
+        }
+
+        /* No prompts state */
+        .no-prompts-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #64748b;
+        }
+
+        .no-prompts-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 240px;
+            }
+
+            .content-wrapper {
+                max-width: 100%;
+            }
+
+            .prompt-card {
+                padding: 1.5rem;
+            }
+
+            .preset-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .app-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid #dee2e6;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Modern sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="assets/IB_logo_name.png" alt="InsightBuddy Logo">
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="home.html">
+                    <i class="bi bi-house"></i>
+                    <span data-i18n="home">Home</span>
+                </a>
+                <a class="nav-link" href="chat-standalone.html">
+                    <i class="bi bi-chat-dots"></i>
+                    <span data-i18n="chat">Chat</span>
+                </a>
+                <a class="nav-link" href="guide_url.html">
+                    <i class="bi bi-search"></i>
+                    <span data-i18n="guideURL">Guide URL</span>
+                </a>
+                <a class="nav-link" href="api_settings.html">
+                    <i class="bi bi-gear"></i>
+                    <span data-i18n="apiSettings">API Settings</span>
+                </a>
+                <a class="nav-link active" href="system_prompts.html">
+                    <i class="bi bi-chat-square-text"></i>
+                    <span data-i18n="systemPrompts">System Prompts</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main content area -->
+        <main class="main-content">
+            <div class="content-wrapper">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="bi bi-chat-square-text me-3"></i>
+                        System Prompts
+                    </h1>
+                    <p class="page-subtitle">
+                        Customize how your AI assistants respond by setting unique system prompts for each provider
+                    </p>
+                </div>
+
+                <!-- Content Container -->
+                <div id="system-prompts-container">
+                    <!-- System prompt cards will be dynamically inserted here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Prompt Card Template -->
+    <template id="promptCardTemplate">
+        <div class="prompt-card">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <h3>
+                    <div class="provider-icon"></div>
+                    <span class="provider-name"></span>
+                </h3>
+                <span class="status-badge status-inactive">
+                    <i class="bi bi-circle-fill"></i>
+                    <span class="status-text">Inactive</span>
+                </span>
+            </div>
+
+            <!-- Preset Section -->
+            <div class="preset-section">
+                <h4>
+                    <i class="bi bi-lightning-fill"></i>
+                    Quick Presets
+                </h4>
+                <div class="preset-grid">
+                    <button class="preset-btn" data-preset="helpful">
+                        <i class="bi bi-person-check me-2"></i>
+                        Helpful Assistant
+                    </button>
+                    <button class="preset-btn" data-preset="creative">
+                        <i class="bi bi-palette me-2"></i>
+                        Creative Writer
+                    </button>
+                    <button class="preset-btn" data-preset="analytical">
+                        <i class="bi bi-graph-up me-2"></i>
+                        Analytical Thinker
+                    </button>
+                    <button class="preset-btn" data-preset="teacher">
+                        <i class="bi bi-mortarboard me-2"></i>
+                        Patient Teacher
+                    </button>
+                    <button class="preset-btn" data-preset="professional">
+                        <i class="bi bi-briefcase me-2"></i>
+                        Professional Assistant
+                    </button>
+                    <button class="preset-btn" data-preset="casual">
+                        <i class="bi bi-chat-heart me-2"></i>
+                        Casual Friend
+                    </button>
+                </div>
+            </div>
+
+            <!-- Custom Prompt Section -->
+            <div class="custom-prompt-section">
+                <label for="prompt-textarea" class="form-label fw-medium mb-2">
+                    <i class="bi bi-pencil-square me-1"></i>
+                    Custom System Prompt
+                </label>
+                <textarea 
+                    class="prompt-textarea" 
+                    placeholder="Enter a system prompt to customize how this AI assistant responds. Be specific about the tone, style, and behavior you want..."
+                    maxlength="2000"
+                ></textarea>
+                <div class="char-counter">
+                    <span class="current-count">0</span> / 2000 characters
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-outline-secondary reset-btn">
+                    <i class="bi bi-arrow-clockwise me-1"></i>
+                    Reset
+                </button>
+                <button class="btn btn-primary save-btn">
+                    <i class="bi bi-check-circle me-1"></i>
+                    Save Prompt
+                </button>
+            </div>
+        </div>
+    </template>
+
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="common.js"></script>
+    <script type="module" src="system_prompts.js"></script>
+</body>
+</html>

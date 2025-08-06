@@ -90,16 +90,13 @@
                     }
                 }
 
-                // フォーム内容とPDFテキストを結合
                 const fullContent = `フォーム内容:\n${formElement}${pdfText}`;
                 lastFormContent = fullContent;
 
-                // メッセージ入力欄に内容を表示
                 messageInput.value = fullContent;
                 messageInput.disabled = false;
                 readFormButton.disabled = false;
 
-                // テキストエリアの高さを調整
                 adjustTextareaHeight(messageInput);
 
             } catch (error) {

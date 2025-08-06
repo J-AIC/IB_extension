@@ -1,6 +1,6 @@
 {
     "extensionName": {
-      "message": "InsightBuddy Extension"
+      "message": "InsightBuddy Chat"
     },
     "extensionDescription": {
       "message": "Чат-ассистент на базе ИИ, который можно использовать сразу, просто введя API-ключ вашего предпочитаемого поставщика ИИ без регистрации. Поддерживает основных поставщиков ИИ, таких как OpenAI, Anthropic и Google, обеспечивая точную поддержку за счёт понимания содержимого сайта."

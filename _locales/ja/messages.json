@@ -1,6 +1,6 @@
 {
   "extensionName": {
-    "message": "InsightBuddy Extension"
+    "message": "InsightBuddy extension"
   },
   "extensionDescription": {
     "message": "登録不要で、お好みのAIプロバイダーのAPIキーを入力するだけですぐに利用できるAIチャットアシスタント。OpenAI、Anthropic、Google など主要なAIプロバイダーに対応し、Webサイトの内容を理解した上で的確なサポートを提供します。"
@@ -10,6 +10,9 @@
   },
   "home": {
     "message": "ホーム"
+  },
+  "chat": {
+    "message": "チャット"
   },
   "languageSettings": {
     "message": "言語設定"
@@ -43,6 +46,15 @@
   },
   "errorLoadingModels": {
     "message": "エラー: モデルの読み込みに失敗しました"
+  },
+  "systemPrompt": {
+    "message": "システムプロンプト"
+  },
+  "systemPromptHint": {
+    "message": "AIの応答をカスタマイズ"
+  },
+  "systemPrompts": {
+    "message": "システムプロンプト"
   },
   "chatMessage": {
     "message": "メッセージを入力"
@@ -80,11 +92,8 @@
   "japanese": {
     "message": "日本語"
   },
-  "mongolian": {
-    "message": "モンゴル語"
-  },
   "languageSettingDescription": {
-    "message": "変更はページの再読み込み後に反映されます"
+    "message": "変更は再読み込み後に適用されます"
   },
   "contentReload": {
     "message": "コンテンツを読み込み中"
@@ -132,7 +141,7 @@
     "message": "コンテンツを読み込み中..."
   },
   "guideURL": {
-    "message": "ガイドURL"
+    "message": "ガイド設定"
   },
   "extension_name": {
     "message": "URLガイドマネージャー"
@@ -262,5 +271,26 @@
   },
   "guideListTitle": {
     "message": "$1のガイド一覧"
+  },
+  "welcome": {
+    "message": "いらっしゃいませ！"
+  },
+  "howCanIHelp": {
+    "message": "何かお手伝いできることはありますか？"
+  },
+  "startNow": {
+    "message": "はじめる"
+  },
+  "getIdeas": {
+    "message": "アイデア"
+  },
+  "ask": {
+    "message": "質問"
+  },
+  "code": {
+    "message": "コード"
+  },
+  "translate": {
+    "message": "翻訳"
   }
 }

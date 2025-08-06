@@ -1,22 +1,17 @@
 /**
- * preloadLogger.js
+ * 異なる環境でsecureLoggerをプリロードし、グローバルに利用可能にする
  * 
- * Purpose: Preload the secureLogger in different environments and ensure it's globally available
- * 
- * This script should be included before any scripts that need to use the secureLogger.
- * It handles three scenarios:
- * 1. Extension context (content script, popup, background)
- * 2. Web pages with script tags
- * 3. Module-based web applications
+ * このスクリプトはsecureLoggerを使用する他のスクリプトよりも前にインクルードされる必要があります
+ * 以下の3つのシナリオを処理します：
+ * 1. エクステンションコンテキスト（コンテントスクリプト、ポップアップ、バックグラウンド）
+ * 2. スクリプトタグ付きのWebページ
+ * 3. モジュールベースのWebアプリケーション
  */
 
 (function() {
-  // Check if secureLogger has already been defined
   if (typeof window !== 'undefined' && window.secureLogger) {
     return;
   }
-  
-  // A minimal fallback implementation to use until the real logger is loaded
   const fallbackLogger = {
     log: console.log.bind(console),
     error: console.error.bind(console),
@@ -29,8 +24,6 @@
     downloadLogs: () => console.warn('Download logs not available in fallback'),
     clearLogs: () => {}
   };
-  
-  // Try to make the fallback available globally
   try {
     if (typeof window !== 'undefined') {
       window.secureLogger = fallbackLogger;
@@ -45,20 +38,19 @@
     console.error('Failed to initialize fallback logger:', e);
   }
   
-  // Function to load the secureLogger
+  /**
+   * secureLoggerを読み込む関数
+   */
   function loadSecureLogger() {
-    // For Chrome extension context
     if (typeof chrome !== 'undefined' && chrome.runtime) {
       try {
-        // Either load the script with fetch or inject it with a script tag
         fetch(chrome.runtime.getURL('utils/secureLogger.js'))
           .then(response => response.text())
           .then(scriptContent => {
-            // Execute the script in the global context
             const script = document.createElement('script');
             script.textContent = scriptContent;
             document.head.appendChild(script);
-            document.head.removeChild(script); // Clean up
+            document.head.removeChild(script);
             console.log('SecureLogger loaded in extension context');
           })
           .catch(error => {
@@ -68,20 +60,17 @@
         console.error('Failed to load secureLogger in extension context:', e);
       }
     }
-    // For web page context (script tags)
     else if (typeof document !== 'undefined') {
       try {
-        // Inject the script tag
         const script = document.createElement('script');
-        script.src = './utils/secureLogger.js';  // Adjust path as needed
-        script.async = false;  // Load synchronously to ensure it's available before dependent scripts
+        script.src = './utils/secureLogger.js';
+        script.async = false;
         script.onload = function() {
           console.log('SecureLogger loaded via script tag');
         };
         script.onerror = function() {
           console.error('Failed to load secureLogger via script tag');
         };
-        // Add to head if it exists, otherwise to the document
         (document.head || document).appendChild(script);
       } catch (e) {
         console.error('Failed to inject secureLogger script tag:', e);
@@ -89,10 +78,12 @@
     }
   }
   
-  // Try to load the secureLogger
   loadSecureLogger();
   
-  // Export a helper function to get the secureLogger
+  /**
+   * secureLoggerを取得するヘルパー関数
+   * @returns {Object} secureLoggerインスタンス
+   */
   function getSecureLogger() {
     if (typeof window !== 'undefined' && window.secureLogger) {
       return window.secureLogger;
@@ -106,7 +97,6 @@
     return fallbackLogger;
   }
   
-  // Make the helper function available globally
   if (typeof window !== 'undefined') {
     window.getSecureLogger = getSecureLogger;
   }
@@ -117,7 +107,6 @@
     globalThis.getSecureLogger = getSecureLogger;
   }
   
-  // Also support module environments
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = { getSecureLogger };
   }

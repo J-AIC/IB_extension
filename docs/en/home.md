@@ -1,11 +1,44 @@
 # 1. Introduction
 
 No registration required, easy setup!  
-InsightBuddy Extension is an AI chat assistant that can be used on websites. By simply setting the API key for your preferred AI provider—whether it's OpenAI, Anthropic, Google, or another—you can start using it immediately.  
+InsightBuddy Chat is an AI chat assistant that can be used on websites. By simply setting the API key for your preferred AI provider—whether it's OpenAI, Anthropic, Google, or another—you can start using it immediately.  
 Furthermore, it can also connect to your own self-hosted OpenAI-compatible environment.
 
 - As of February 2025, Google's Gemini is partially free, so you can use generative AI for free if you take advantage of it.
 - The following article summarizes how to set up an account ( https://j-aic.com/techblog/google-ai-studio-api-free ).
+
+## Quick Access
+
+<div class="quick-actions">
+    <div class="action-card" id="chatQuickAction" data-action="open-chat">
+        <div class="action-icon">
+            <i class="bi bi-chat-dots"></i>
+        </div>
+        <div class="action-title">Chat</div>
+        <div class="action-description">Open full-screen chat</div>
+    </div>
+    <div class="action-card" data-action="api-settings">
+        <div class="action-icon">
+            <i class="bi bi-gear"></i>
+        </div>
+        <div class="action-title">API Settings</div>
+        <div class="action-description">Configure providers and API keys</div>
+    </div>
+    <div class="action-card" data-action="guide-url">
+        <div class="action-icon">
+            <i class="bi bi-search"></i>
+        </div>
+        <div class="action-title">Guide URL</div>
+        <div class="action-description">Set up site-specific features</div>
+    </div>
+    <div class="action-card" data-action="system-prompts">
+        <div class="action-icon">
+            <i class="bi bi-chat-square-text"></i>
+        </div>
+        <div class="action-title">System Prompts</div>
+        <div class="action-description">Configure chat behavior</div>
+    </div>
+</div>
 
 ## 1.1 Key Features
 

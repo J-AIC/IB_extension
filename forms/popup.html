@@ -8,6 +8,26 @@
     .hidden {
       display: none !important;
     }
+    
+    #p2pImageButton:hover {
+      background: #1d4ed8 !important;
+      transform: scale(1.02);
+      transition: all 0.2s ease;
+    }
+    
+    #p2pImageButton:active {
+      background: #1e40af !important;
+      transform: scale(0.98);
+    }
+    
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.5;
+      }
+    }
   </style>
 </head>
 
@@ -72,6 +92,70 @@
               <div id="processPdfSelectedSection" class="mt-1 hidden">
                 <span id="processPdfFileName" class="text-sm text-gray-700"></span>
                 <button id="processPdfRemoveBtn" class="remove-button ml-2 text-red-500">×</button>
+              </div>
+            </div>
+
+            <!-- ▼ P2P Image Receiver -->
+            <div class="form-group">
+              <div class="p2p-divider" style="text-align: center; margin: 15px 0; position: relative;">
+                <span style="background: white; padding: 0 10px; position: relative; color: #6b7280; font-size: 14px;">または</span>
+                <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: #e5e7eb; z-index: -1;"></div>
+              </div>
+              <button id="p2pImageButton" style="background: #2563eb; color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; z-index: 9999; position: relative;">
+                📱 Shot
+              </button>
+              <div id="p2pImageStatus" class="hidden" style="margin-top: 10px;">
+                <div style="background: #dbeafe; padding: 12px; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                  <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                    <div style="
+                      width: 32px; 
+                      height: 32px; 
+                      background: linear-gradient(135deg, #3b82f6, #1d4ed8); 
+                      border-radius: 50%; 
+                      display: flex; 
+                      align-items: center; 
+                      justify-content: center;
+                      color: white;
+                      font-size: 16px;
+                    ">📸</div>
+                    <div style="flex: 1;">
+                      <div style="font-weight: 600; color: #1e40af; font-size: 14px;">
+                        P2P Shot画像 受信済み
+                      </div>
+                      <div style="font-size: 12px; color: #6b7280; margin-top: 2px;" id="p2pImageFileName"></div>
+                    </div>
+                  </div>
+                  
+                  <!-- LLM Vision Processing Status -->
+                  <div id="p2pVisionStatus" style="
+                    background: rgba(59, 130, 246, 0.1); 
+                    padding: 8px 12px; 
+                    border-radius: 6px; 
+                    margin-top: 8px;
+                    border: 1px solid rgba(59, 130, 246, 0.2);
+                  ">
+                    <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #1e40af;">
+                      <div id="p2pVisionIcon">🔍</div>
+                      <span id="p2pVisionText">LLM画像解析待機中</span>
+                    </div>
+                  </div>
+                </div>
+                <button id="p2pImageRemoveBtn" style="
+                  background: #ef4444; 
+                  color: white; 
+                  border: none; 
+                  padding: 8px 12px; 
+                  border-radius: 5px; 
+                  cursor: pointer; 
+                  font-size: 12px; 
+                  margin-top: 10px;
+                  display: flex;
+                  align-items: center;
+                  gap: 6px;
+                  transition: all 0.2s ease;
+                ">
+                  🗑️ P2P画像を削除
+                </button>
               </div>
             </div>
 
@@ -204,5 +288,8 @@
 
   <!-- ここで popup.js (または対応するJS) を読み込み -->
   <script type="module" src="forms/popup.js"></script>
+  <!-- P2P Integration will be loaded dynamically by panel-forms-init.js -->
+  
+  <!-- P2P Integration working correctly -->
 </body>
 </html>

@@ -5,10 +5,11 @@
 class WebListManager {
   constructor() {
     this.STATE_KEY = 'web_list_state';
-    this.MAX_PAGES = 5;
+    this.MAX_PAGES = 5; // TODO: Make configurable via settings
     this.pages = [];
     this.container = document.getElementById('webPagesContainer');
     this.modal = null;
+    this.processingStatusElement = null; // Cache status element
     this.initializeModal();
   }
 
@@ -99,7 +100,7 @@ class WebListManager {
   // エラー表示
   showError(message) {
     const errorDiv = document.createElement('div');
-    errorDiv.className = 'fixed bottom-4 right-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-lg transition-opacity duration-300';
+    errorDiv.className = 'fixed bottom-4 right-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-lg transition-opacity duration-300 z-50';
     errorDiv.textContent = message;
     
     document.body.appendChild(errorDiv);
@@ -108,6 +109,61 @@ class WebListManager {
       errorDiv.style.opacity = '0';
       setTimeout(() => errorDiv.remove(), 300);
     }, 3000);
+  }
+  
+  // 成功表示
+  showSuccess(message) {
+    const successDiv = document.createElement('div');
+    successDiv.className = 'fixed bottom-4 right-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded shadow-lg transition-opacity duration-300 z-50';
+    successDiv.textContent = message;
+    
+    document.body.appendChild(successDiv);
+    
+    setTimeout(() => {
+      successDiv.style.opacity = '0';
+      setTimeout(() => successDiv.remove(), 300);
+    }, 3000);
+  }
+  
+  // 情報表示
+  showInfo(message) {
+    const infoDiv = document.createElement('div');
+    infoDiv.className = 'fixed bottom-4 right-4 bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded shadow-lg transition-opacity duration-300 z-50';
+    infoDiv.textContent = message;
+    
+    document.body.appendChild(infoDiv);
+    
+    setTimeout(() => {
+      infoDiv.style.opacity = '0';
+      setTimeout(() => infoDiv.remove(), 300);
+    }, 3000);
+  }
+  
+  // 処理中ステータス表示
+  showProcessingStatus(message) {
+    // Remove existing status if any
+    this.hideProcessingStatus();
+    
+    const statusDiv = document.createElement('div');
+    statusDiv.id = 'webExtractProcessingStatus';
+    statusDiv.className = 'fixed bottom-4 right-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded shadow-lg z-50 flex items-center gap-2';
+    statusDiv.innerHTML = `
+      <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      <span>${message}</span>
+    `;
+    
+    document.body.appendChild(statusDiv);
+  }
+  
+  // 処理中ステータス非表示
+  hideProcessingStatus() {
+    const statusDiv = document.getElementById('webExtractProcessingStatus');
+    if (statusDiv) {
+      statusDiv.remove();
+    }
   }
 
   // ページ内容の表示
@@ -150,18 +206,30 @@ class WebListManager {
   // Webページ内容の抽出処理
   async handleExtract() {
     try {
+      // Show processing status
+      this.showProcessingStatus('Web画面を抽出中...');
+      
       // アクティブなタブの情報を取得
       const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
       
       // 既に保存済みかチェック
       const existingIndex = this.pages.findIndex(p => p.url === tab.url);
       if (existingIndex !== -1) {
-        throw new Error('このページは既に保存されています');
+        // Update existing content instead of throwing error
+        const updateConfirm = confirm('このページは既に保存されています。内容を更新しますか？');
+        if (!updateConfirm) {
+          this.hideProcessingStatus();
+          return;
+        }
+        // Remove existing entry
+        this.pages.splice(existingIndex, 1);
       }
 
       // 最大数チェック
       if (this.pages.length >= this.MAX_PAGES) {
-        throw new Error('保存できるページは最大5つまでです');
+        // Remove oldest page automatically
+        this.pages.pop();
+        this.showInfo('最大保存数に達したため、最も古いページを削除しました');
       }
 
       // コンテンツの取得
@@ -170,6 +238,17 @@ class WebListManager {
         content = await this.extractPdfContent(tab.url);
       } else {
         content = await this.extractWebContent(tab.id);
+      }
+      
+      // If content extraction failed (returned null), exit early
+      if (!content) {
+        this.hideProcessingStatus();
+        return;
+      }
+      
+      // Ensure content is not empty
+      if (!content.trim()) {
+        throw new Error('ページから有効なコンテンツを抽出できませんでした');
       }
 
       // ページ情報の保存
@@ -182,17 +261,27 @@ class WebListManager {
 
       await this.saveState();
       this.renderList();
+      
+      // Notify FormController to sync
+      if (window.formController && typeof window.formController.syncWebExtractContent === 'function') {
+        window.formController.syncWebExtractContent();
+      }
+      
+      this.hideProcessingStatus();
+      this.showSuccess(`「${tab.title}」のコンテンツを抽出しました`);
 
     } catch (error) {
       console.error('Extract error:', error);
-      // エラー表示の処理
+      this.hideProcessingStatus();
+      // Show user-friendly error message
+      this.showError(error.message);
     }
   }
 
   // PDF内容の抽出
   async extractPdfContent(url) {
     const pdfjsLib = window['pdfjs-dist/build/pdf'];
-    pdfjsLib.GlobalWorkerOptions.workerSrc = chrome.runtime.getURL('pdf.worker.min.js');
+    pdfjsLib.GlobalWorkerOptions.workerSrc = chrome.runtime.getURL('assets/js/pdf.worker.min.js');
 
     try {
       const pdf = await pdfjsLib.getDocument(url).promise;
@@ -214,6 +303,21 @@ class WebListManager {
   // Web内容の抽出
   async extractWebContent(tabId) {
     try {
+      // Get tab info to check if it's an extension page
+      const tab = await chrome.tabs.get(tabId);
+      
+      // Check if it's an extension page (chrome-extension://)
+      if (tab.url.startsWith('chrome-extension://')) {
+        this.showError('拡張機能のページは抽出できません');
+        return null;
+      }
+      
+      // Check if it's a restricted URL
+      if (tab.url.startsWith('chrome://') || tab.url.startsWith('edge://') || tab.url.startsWith('about:')) {
+        this.showError('このページは抽出できません（システムページ）');
+        return null;
+      }
+      
       // (A) ページ側に Readability.js を先に注入
       await chrome.scripting.executeScript({
         target: { tabId },
@@ -224,10 +328,93 @@ class WebListManager {
       const [result] = await chrome.scripting.executeScript({
         target: { tabId },
         function: () => {
-          // ここならReadabilityが使える
-          const reader = new Readability(document.cloneNode(true));
-          const article = reader.parse();
-          return article ? article.textContent : document.body.innerText;
+          try {
+            // Try Readability first for article content
+            const reader = new Readability(document.cloneNode(true));
+            const article = reader.parse();
+            
+            if (article && article.textContent && article.textContent.trim().length > 100) {
+              return article.textContent;
+            }
+            
+            // Fallback: Extract all text content with better formatting
+            const extractTextContent = (element) => {
+              let text = '';
+              
+              // Skip script and style elements
+              if (element.tagName && ['SCRIPT', 'STYLE', 'NOSCRIPT'].includes(element.tagName)) {
+                return '';
+              }
+              
+              // Extract form labels and values
+              if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                const label = element.labels?.[0]?.textContent || element.placeholder || element.name || '';
+                const value = element.value || '';
+                if (label || value) {
+                  text += `${label}: ${value}\n`;
+                }
+              }
+              
+              // Extract select options
+              if (element.tagName === 'SELECT') {
+                const label = element.labels?.[0]?.textContent || element.name || '';
+                const selectedOption = element.selectedOptions?.[0]?.textContent || '';
+                if (label || selectedOption) {
+                  text += `${label}: ${selectedOption}\n`;
+                }
+              }
+              
+              // Extract text nodes
+              if (element.nodeType === Node.TEXT_NODE) {
+                const nodeText = element.textContent.trim();
+                if (nodeText) {
+                  text += nodeText + ' ';
+                }
+              }
+              
+              // Process child nodes
+              for (const child of element.childNodes) {
+                text += extractTextContent(child);
+              }
+              
+              // Add line breaks for block elements
+              if (element.tagName && ['P', 'DIV', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'LI', 'TR', 'BR'].includes(element.tagName)) {
+                text += '\n';
+              }
+              
+              return text;
+            };
+            
+            // Extract structured data from the page
+            let content = '';
+            
+            // Get page title
+            const title = document.title;
+            if (title) {
+              content += `ページタイトル: ${title}\n\n`;
+            }
+            
+            // Get meta description
+            const metaDesc = document.querySelector('meta[name="description"]')?.content;
+            if (metaDesc) {
+              content += `説明: ${metaDesc}\n\n`;
+            }
+            
+            // Extract main content
+            const mainContent = extractTextContent(document.body);
+            content += mainContent;
+            
+            // Clean up the content
+            content = content
+              .replace(/\n{3,}/g, '\n\n') // Remove excessive line breaks
+              .replace(/\s{2,}/g, ' ')    // Remove excessive spaces
+              .trim();
+            
+            return content || document.body.innerText;
+          } catch (error) {
+            console.error('Content extraction error:', error);
+            return document.body.innerText;
+          }
         }
       });
   

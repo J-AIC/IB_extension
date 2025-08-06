@@ -11,6 +11,9 @@
     "home": {
         "message": "Home"
     },
+    "chat": {
+        "message": "Chat"
+    },
     "languageSettings": {
         "message": "Language Settings"
     },
@@ -43,6 +46,15 @@
     },
     "errorLoadingModels": {
         "message": "Error: Failed to load models"
+    },
+    "systemPrompt": {
+        "message": "System Prompt"
+    },
+    "systemPromptHint": {
+        "message": "Customize how the AI responds"
+    },
+    "systemPrompts": {
+        "message": "System Prompts"
     },
     "chatMessage": {
         "message": "Enter message"
@@ -79,9 +91,6 @@
     },
     "japanese": {
         "message": "Japanese"
-    },
-    "mongolian": {
-        "message": "Mongolian"
     },
     "languageSettingDescription": {
         "message": "Changes will take effect after reloading the page"
@@ -132,7 +141,7 @@
         "message": "Loading content..."
     },
     "guideURL": {
-        "message": "Guide URL"
+        "message": "Guide Settings"
     },
     "extension_name": {
         "message": "URL Guide Manager"
@@ -232,5 +241,29 @@
     },
     "guideListTitle": {
         "message": "Guide list for $1"
+    },
+    "importExportModalTitle": {
+        "message": "Import/Export"
+    },
+    "welcome": {
+        "message": "welcome!"
+    },
+    "howCanIHelp": {
+        "message": "How can I help you?"
+    },
+    "startNow": {
+        "message": "Start Now"
+    },
+    "getIdeas": {
+        "message": "Get Ideas"
+    },
+    "ask": {
+        "message": "Ask"
+    },
+    "code": {
+        "message": "Code"
+    },
+    "translate": {
+        "message": "Translate"
     }
 }

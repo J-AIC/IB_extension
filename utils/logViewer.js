@@ -1,16 +1,11 @@
 /**
- * logViewer.js
- * Utility to view and download logs collected by secureLogger
+ * secureLoggerによって収集されたログを表示し、ダウンロードするためのユーティリティ
  */
-
-// Try to get the secureLogger from various sources
 let secureLogger;
 try {
-  // Try to get from window for non-module environments
   if (typeof window !== 'undefined' && window.secureLogger) {
     secureLogger = window.secureLogger;
   } 
-  // For Chrome extension context
   else if (typeof chrome !== 'undefined' && chrome.runtime) {
     secureLogger = self.secureLogger;
   }
@@ -19,14 +14,14 @@ try {
 }
 
 /**
- * Creates a log viewer UI element and attaches it to the DOM
- * @param {HTMLElement} targetElement - The element to attach the log viewer to
- * @param {Object} options - Configuration options
- * @param {boolean} [options.expandable=true] - Whether the log viewer can be expanded/collapsed
- * @param {boolean} [options.startCollapsed=true] - Whether to start collapsed
- * @param {number} [options.maxItems=50] - Maximum number of log items to display
- * @param {string} [options.title='Log Viewer'] - Title for the log viewer
- * @returns {Object} - Methods to interact with the log viewer
+ * ログビューワUI要素を作成し、DOMにアタッチ
+ * @param {HTMLElement} targetElement - ログビューワをアタッチする要素
+ * @param {Object} options - 設定オプション
+ * @param {boolean} [options.expandable=true] - ログビューワが展開/折りたたみ可能かどうか
+ * @param {boolean} [options.startCollapsed=true] - 最初に折りたたんだ状態で開始するかどうか
+ * @param {number} [options.maxItems=50] - 表示するログアイテムの最大数
+ * @param {string} [options.title='Log Viewer'] - ログビューワのタイトル
+ * @returns {Object} - ログビューワとインタラクトするためのメソッド
  */
 function createLogViewer(targetElement, options = {}) {
   const {
@@ -41,7 +36,6 @@ function createLogViewer(targetElement, options = {}) {
     return null;
   }
 
-  // Create the log viewer container
   const container = document.createElement('div');
   container.className = 'log-viewer-container';
   container.style.cssText = `
@@ -56,7 +50,6 @@ function createLogViewer(targetElement, options = {}) {
     font-size: 12px;
   `;
 
-  // Create header
   const header = document.createElement('div');
   header.className = 'log-viewer-header';
   header.style.cssText = `
@@ -79,7 +72,6 @@ function createLogViewer(targetElement, options = {}) {
     </div>
   `;
 
-  // Create log content area
   const content = document.createElement('div');
   content.className = 'log-viewer-content';
   content.style.cssText = `
@@ -89,12 +81,10 @@ function createLogViewer(targetElement, options = {}) {
     display: ${startCollapsed ? 'none' : 'block'};
   `;
 
-  // Add everything to the container
   container.appendChild(header);
   container.appendChild(content);
   targetElement.appendChild(container);
 
-  // Toggle expansion
   if (expandable) {
     const toggleBtn = header.querySelector('.toggle-btn');
     toggleBtn.style.transition = 'transform 0.3s';
@@ -104,7 +94,6 @@ function createLogViewer(targetElement, options = {}) {
     }
     
     header.addEventListener('click', (e) => {
-      // Don't toggle if clicking on a button
       if (e.target.tagName === 'BUTTON') return;
       
       const isCollapsed = content.style.display === 'none';
@@ -118,11 +107,9 @@ function createLogViewer(targetElement, options = {}) {
     });
   }
 
-  // Handle refresh button
   const refreshBtn = header.querySelector('.refresh-btn');
   refreshBtn.addEventListener('click', () => refreshLogs());
 
-  // Handle download button
   const downloadBtn = header.querySelector('.download-btn');
   downloadBtn.addEventListener('click', () => {
     if (secureLogger) {
@@ -132,7 +119,6 @@ function createLogViewer(targetElement, options = {}) {
     }
   });
 
-  // Handle clear button
   const clearBtn = header.querySelector('.clear-btn');
   clearBtn.addEventListener('click', () => {
     if (secureLogger) {
@@ -143,17 +129,13 @@ function createLogViewer(targetElement, options = {}) {
     }
   });
 
-  // Function to render logs
   function renderLogs(logs) {
     if (!logs || !logs.length) {
       content.innerHTML = '<div class="log-entry">No logs to display</div>';
       return;
     }
 
-    // Take only the last 'maxItems' logs
     const logEntries = logs.slice(-maxItems);
-    
-    // Clear and populate
     content.innerHTML = '';
     logEntries.forEach(entry => {
       const logItem = document.createElement('div');
@@ -177,11 +159,9 @@ function createLogViewer(targetElement, options = {}) {
       content.appendChild(logItem);
     });
     
-    // Scroll to bottom
     content.scrollTop = content.scrollHeight;
   }
 
-  // Helper to get color based on log level
   function getColorForLevel(level) {
     switch (level.toLowerCase()) {
       case 'error': return '#e74c3c';
@@ -190,7 +170,6 @@ function createLogViewer(targetElement, options = {}) {
     }
   }
 
-  // Helper to get background color based on log level
   function getBackgroundForLevel(level) {
     switch (level.toLowerCase()) {
       case 'error': return '#ffebee';
@@ -199,7 +178,6 @@ function createLogViewer(targetElement, options = {}) {
     }
   }
 
-  // Helper to format timestamp
   function formatTimestamp(timestamp) {
     try {
       const date = new Date(timestamp);
@@ -210,7 +188,6 @@ function createLogViewer(targetElement, options = {}) {
     }
   }
 
-  // Helper to escape HTML
   function escapeHtml(unsafe) {
     return unsafe
       .replace(/&/g, "&amp;")
@@ -220,7 +197,6 @@ function createLogViewer(targetElement, options = {}) {
       .replace(/'/g, "&#039;");
   }
 
-  // Function to refresh logs
   function refreshLogs() {
     if (secureLogger) {
       const logs = secureLogger.getStoredLogs();
@@ -230,12 +206,10 @@ function createLogViewer(targetElement, options = {}) {
     }
   }
 
-  // Initial render
   if (!startCollapsed) {
     refreshLogs();
   }
 
-  // Return public methods
   return {
     refresh: refreshLogs,
     render: (logs) => renderLogs(logs),
@@ -243,21 +217,18 @@ function createLogViewer(targetElement, options = {}) {
   };
 }
 
-// Make createLogViewer available globally for browser and extension contexts
 if (typeof window !== 'undefined') {
   window.createLogViewer = createLogViewer;
 }
 
-// Special handling for Chrome extensions
 if (typeof chrome !== 'undefined' && chrome.runtime) {
   self.createLogViewer = createLogViewer;
   
-  // Support CommonJS if needed
   try {
     if (typeof module !== 'undefined' && module.exports) {
       module.exports = createLogViewer;
     }
   } catch (e) {
-    // Ignore module errors in extension context
+    
   }
 } 

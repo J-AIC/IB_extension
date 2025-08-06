@@ -1,0 +1,43 @@
+<\!DOCTYPE html>
+<html>
+<head>
+    <title>Test Guide Setup</title>
+</head>
+<body>
+    <h1>Test Guide Setup</h1>
+    <script>
+        // Test setting up a guide for testing
+        chrome.storage.local.get(['guides'], (result) => {
+            const guides = result.guides || [];
+            
+            // Add a test guide if not exists
+            const testGuide = {
+                guideUrl: "https://github.com/*",
+                guideCards: [
+                    {
+                        title: "GitHub Navigation",
+                        memo: "Ask about repository structure or code",
+                        prompt: "Help me understand this GitHub repository"
+                    }
+                ]
+            };
+            
+            // Check if test guide already exists
+            const existingIndex = guides.findIndex(g => g.guideUrl === testGuide.guideUrl);
+            if (existingIndex === -1) {
+                guides.push(testGuide);
+                chrome.storage.local.set({ guides }, () => {
+                    console.log('Test guide added');
+                    document.body.innerHTML += '<p>Test guide added for GitHub</p>';
+                });
+            } else {
+                console.log('Test guide already exists');
+                document.body.innerHTML += '<p>Test guide already exists</p>';
+            }
+            
+            document.body.innerHTML += '<pre>' + JSON.stringify(guides, null, 2) + '</pre>';
+        });
+    </script>
+</body>
+</html>
+EOF < /dev/null

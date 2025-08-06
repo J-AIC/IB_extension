@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shot Sender - Deployment Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .success { color: #16a34a; background: #dcfce7; padding: 15px; border-radius: 8px; margin: 10px 0; }
+        .warning { color: #d97706; background: #fef3c7; padding: 15px; border-radius: 8px; margin: 10px 0; }
+        .error { color: #dc2626; background: #fef2f2; padding: 15px; border-radius: 8px; margin: 10px 0; }
+        .code { background: #f3f4f6; padding: 15px; border-radius: 8px; font-family: monospace; margin: 10px 0; }
+        .button { 
+            background: #6366f1; 
+            color: white; 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            margin: 5px; 
+        }
+        .button:hover { background: #5b56f0; }
+    </style>
+</head>
+<body>
+    <h1>🚀 Shot Sender Deployment Test</h1>
+    
+    <div id="status"></div>
+    
+    <h2>📋 Deployment Checklist</h2>
+    
+    <h3>1. HTTPS Check</h3>
+    <p>Camera access requires HTTPS. Current protocol: <strong id="protocol"></strong></p>
+    
+    <h3>2. Test Camera Access</h3>
+    <button class="button" onclick="testCamera()">Test Camera</button>
+    <div id="camera-result"></div>
+    
+    <h3>3. Test PeerJS Connection</h3>
+    <button class="button" onclick="testPeerJS()">Test PeerJS</button>
+    <div id="peer-result"></div>
+    
+    <h3>4. Current URL</h3>
+    <div class="code" id="current-url"></div>
+    <p>Use this URL in your extension's P2PModel.js:</p>
+    <div class="code" id="extension-code"></div>
+    
+    <h3>5. Quick Links</h3>
+    <button class="button" onclick="window.open('index.html', '_blank')">Open Sender App</button>
+    <button class="button" onclick="window.open('index.html?peer=test-peer-id', '_blank')">Test with Sample Peer ID</button>
+    
+    <script src="https://unpkg.com/peerjs@1.5.0/dist/peerjs.min.js"></script>
+    <script>
+        // Check protocol
+        document.getElementById('protocol').textContent = window.location.protocol;
+        if (window.location.protocol === 'https:') {
+            document.getElementById('status').innerHTML = '<div class="success">✅ HTTPS detected - Camera access will work</div>';
+        } else {
+            document.getElementById('status').innerHTML = '<div class="error">❌ HTTP detected - Camera access may not work on mobile devices</div>';
+        }
+        
+        // Show current URL
+        const currentUrl = window.location.origin + window.location.pathname.replace('deploy.html', '');
+        document.getElementById('current-url').textContent = currentUrl;
+        
+        // Show extension code
+        document.getElementById('extension-code').textContent = `const SENDER_BASE_URL = '${currentUrl}'; // Change this in P2PModel.js`;
+        
+        // Test camera
+        async function testCamera() {
+            const result = document.getElementById('camera-result');
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                stream.getTracks().forEach(track => track.stop());
+                result.innerHTML = '<div class="success">✅ Camera access granted</div>';
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ Camera access failed: ${error.message}</div>`;
+            }
+        }
+        
+        // Test PeerJS
+        function testPeerJS() {
+            const result = document.getElementById('peer-result');
+            try {
+                const peer = new Peer();
+                peer.on('open', (id) => {
+                    result.innerHTML = `<div class="success">✅ PeerJS connected with ID: ${id}</div>`;
+                    peer.destroy();
+                });
+                peer.on('error', (error) => {
+                    result.innerHTML = `<div class="error">❌ PeerJS failed: ${error.message}</div>`;
+                });
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ PeerJS initialization failed: ${error.message}</div>`;
+            }
+        }
+        
+        // Auto-test on load
+        setTimeout(() => {
+            testCamera();
+            testPeerJS();
+        }, 1000);
+    </script>
+</body>
+</html>
